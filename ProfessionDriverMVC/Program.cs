@@ -10,6 +10,10 @@ builder.Services.AddDbContext<ProffesionDriverProjectContext>(options =>
 
 builder.Services.AddRazorPages();
 
+//DI
+Business.Dependencies.Register(builder.Services);
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
