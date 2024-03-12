@@ -15,12 +15,15 @@ namespace ProfessionDriverMVC.Controllers
             //_context = context;
             _manager = manager;
         }
+
+        //GET
         [HttpGet]
-        public async Task<ICollection<Entity>> Entities()
+        public async Task<ICollection<Entity>> GetEntities()
         {
-            return await _manager.Entities();
+            return await _manager.GetEntities();
         }
 
+        //POST
         [HttpPost]
         public async Task<IActionResult> PostEntity(string? name)
         {
@@ -34,12 +37,25 @@ namespace ProfessionDriverMVC.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = _manager.PostEntity(entity);
-            if (result.Result == 1)
+            int result = await _manager.PostEntity(entity);
+            if (result == 0)
             {
-                Console.Error.WriteLine(result.Result);
+                return NotFound(result);
             }
-            return Ok(entity);
+            return Ok(result);
         }
+
+        //DELETE
+        [HttpDelete]
+        public async Task<IActionResult> DeleteEntity(int entityId)
+        {
+            int result = await _manager.DeleteEntity(entityId);
+            if (result == 0)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+
     }
 }
