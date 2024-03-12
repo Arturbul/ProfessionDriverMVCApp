@@ -20,5 +20,26 @@ namespace ProfessionDriverMVC.Controllers
         {
             return await _manager.Entities();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> PostEntity(string? name)
+        {
+            var entity = new Entity()
+            {
+                EntityName = name
+            };
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _manager.PostEntity(entity);
+            if (result.Result == 1)
+            {
+                Console.Error.WriteLine(result.Result);
+            }
+            return Ok(entity);
+        }
     }
 }

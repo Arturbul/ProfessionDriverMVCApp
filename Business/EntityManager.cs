@@ -15,5 +15,10 @@ namespace Business
         {
             return await _entityRepository.Entities();
         }
+
+        public async Task<int> PostEntity(Entity entity)
+        {
+            return await _entityRepository.PostEntity(entity);
+        }
     }
 }
