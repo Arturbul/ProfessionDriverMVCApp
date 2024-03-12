@@ -1,8 +1,11 @@
 ﻿using Business.Interface;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProfessionDriverMVC.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class EntitiesController : Controller
     {
         private readonly IEntityManager _manager;
@@ -12,14 +15,10 @@ namespace ProfessionDriverMVC.Controllers
             //_context = context;
             _manager = manager;
         }
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<ICollection<Entity>> Entities()
         {
-            var entities = await _manager.Entities();
-            foreach (var item in entities)
-            {
-                Console.WriteLine(item.EntityName);
-            }
-            return View();
+            return await _manager.Entities();
         }
     }
 }
