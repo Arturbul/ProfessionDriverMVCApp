@@ -1,4 +1,3 @@
-using Domain.Data;
 using Microsoft.AspNetCore.Mvc;
 using ProfessionDriverMVC.Models;
 using System.Diagnostics;
@@ -8,12 +7,10 @@ namespace ProfessionDriverMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ProffesionDriverProjectContext _context;
 
-        public HomeController(ILogger<HomeController> logger, ProffesionDriverProjectContext context)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _context = context;
         }
 
         public IActionResult Index()
