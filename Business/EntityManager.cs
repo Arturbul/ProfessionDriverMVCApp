@@ -12,14 +12,14 @@ namespace Business
             _entityRepository = repository;
         }
         //GET
-        public async Task<ICollection<Entity>> GetEntities()
+        public async Task<ICollection<Entity>> GetEntity()
         {
-            return await _entityRepository.GetEntities();
+            return await _entityRepository.GetEntity();
         }
 
-        public async Task<Entity?> GetEntityById(int id)
+        public async Task<Entity?> GetEntity(int id)
         {
-            return await _entityRepository.GetEntityById(id);
+            return await _entityRepository.GetEntity(id);
         }
 
         //POST

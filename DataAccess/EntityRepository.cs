@@ -10,14 +10,15 @@ namespace DataAccess
         public EntityRepository(ProffesionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<Entity>> GetEntities()
+        public async Task<ICollection<Entity>> GetEntity()
         {
             return await Task.FromResult(this.Context.Entitys.ToList());
         }
 
-        public async Task<Entity?> GetEntityById(int id)
+        public async Task<Entity?> GetEntity(int id)
         {
-            var entity = await this.Context
+            using var context = this.Context;
+            var entity = await context
                                     .Entitys
                                     .Where(e => e.EntityId == id)
                                     .FirstOrDefaultAsync();
@@ -28,30 +29,25 @@ namespace DataAccess
         //POST
         public async Task<int> PostEntity(Entity entity)
         {
-            using (var context = this.Context)
-            {
-                context.Entitys.Add(entity);
-                await context.SaveChangesAsync();
+            using var context = this.Context;
+            context.Entitys.Add(entity);
+            await context.SaveChangesAsync();
 
-                return entity.EntityId;
-            }
+            return entity.EntityId;
         }
 
         //DELETE
         public async Task<int> DeleteEntity(int entityId)
         {
-            using (var context = this.Context)
+            using var context = this.Context;
+            var entity = await context.Entitys.FindAsync(entityId);
+            if (entity != null)
             {
-                var entity = await context.Entitys.FindAsync(entityId);
-                if (entity != null)
-                {
-                    context.Entitys.Remove(entity);
-                    await context.SaveChangesAsync();
-                    return entity.EntityId;
-                }
-
-                return 0;
+                context.Entitys.Remove(entity);
+                await context.SaveChangesAsync();
+                return entity.EntityId;
             }
+            return 0;
         }
 
     }

@@ -20,7 +20,13 @@ namespace ProfessionDriverMVC.Controllers
         [HttpGet]
         public async Task<ICollection<Entity>> GetEntities()
         {
-            return await _manager.GetEntities();
+            return await _manager.GetEntity();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Entity?> GetEntityById(int id)
+        {
+            return await _manager.GetEntity(id);
         }
 
         //POST
@@ -46,10 +52,10 @@ namespace ProfessionDriverMVC.Controllers
         }
 
         //DELETE
-        [HttpDelete]
-        public async Task<IActionResult> DeleteEntity(int entityId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEntity(int id)
         {
-            int result = await _manager.DeleteEntity(entityId);
+            int result = await _manager.DeleteEntity(id);
             if (result == 0)
             {
                 return NotFound(result);

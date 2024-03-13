@@ -4,8 +4,8 @@ namespace Business.Interface
 {
     public interface IEntityManager
     {
-        Task<ICollection<Entity>> GetEntities();
-        Task<Entity?> GetEntityById(int id);
+        Task<ICollection<Entity>> GetEntity();
+        Task<Entity?> GetEntity(int id);
         Task<int> PostEntity(Entity entity);
         Task<int> DeleteEntity(int entityId);
     }
