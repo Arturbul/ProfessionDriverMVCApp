@@ -6,11 +6,11 @@ namespace ProfessionDriverMVC.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EntitiesController : Controller
+    public class EntityController : Controller
     {
         private readonly IEntityManager _manager;
         //private readonly ProffesionDriverProjectContext _context;
-        public EntitiesController(/*ProffesionDriverProjectContext context,*/ IEntityManager manager)
+        public EntityController(/*ProffesionDriverProjectContext context,*/ IEntityManager manager)
         {
             //_context = context;
             _manager = manager;

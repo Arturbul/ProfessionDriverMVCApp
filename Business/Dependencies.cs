@@ -9,6 +9,7 @@ namespace Business
         {
             //add scope dependency for EntityManager to handle HTTP request and create single instance of EntityManager to handle request with same object
             services.AddScoped<IEntityManager, EntityManager>();
+            services.AddScoped<IEmployeeManager, EmployeeManager>();
 
 
             //DI for DataAccess 

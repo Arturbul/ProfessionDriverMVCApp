@@ -8,6 +8,7 @@ namespace DataAccess
         public static void Register(IServiceCollection services)
         {
             services.AddScoped<IEntityRepository, EntityRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         }
     }
 }
