@@ -12,7 +12,14 @@ namespace DataAccess
         //GET
         public async Task<ICollection<Employee>> GetEmployee()
         {
-            return await Task.FromResult(this.Context.Employees.ToList());
+            using var context = this.Context;
+            var employee = await context
+                                    .Employees
+                                    .Include(e => e.Entity)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+            return await Task.FromResult(employee);
         }
 
         public async Task<Employee?> GetEmployee(int id)
@@ -20,7 +27,9 @@ namespace DataAccess
             using var context = this.Context;
             var employee = await context
                                     .Employees
+                                    .Include(e => e.Entity)
                                     .Where(e => e.EmployeeId == id)
+                                    .AsNoTracking()
                                     .FirstOrDefaultAsync();
 
             return await Task.FromResult(employee);

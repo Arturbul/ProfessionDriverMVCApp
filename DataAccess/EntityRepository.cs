@@ -12,7 +12,13 @@ namespace DataAccess
         //GET
         public async Task<ICollection<Entity>> GetEntity()
         {
-            return await Task.FromResult(this.Context.Entitys.ToList());
+            using var context = this.Context;
+            var entity = await context
+                                    .Entitys
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+            return await Task.FromResult(entity);
         }
 
         public async Task<Entity?> GetEntity(int id)
@@ -21,6 +27,7 @@ namespace DataAccess
             var entity = await context
                                     .Entitys
                                     .Where(e => e.EntityId == id)
+                                    .AsNoTracking()
                                     .FirstOrDefaultAsync();
 
             return await Task.FromResult(entity);
