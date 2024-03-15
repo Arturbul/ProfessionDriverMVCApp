@@ -17,6 +17,7 @@ builder.Services.AddRazorPages();
 //DI
 Business.Dependencies.Register(builder.Services);
 
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
 
@@ -24,6 +25,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+}
+else
+{
+    app.UseDeveloperExceptionPage();
+    app.UseMigrationsEndPoint();
 }
 
 app.UseSwagger(options =>
