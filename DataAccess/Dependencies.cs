@@ -9,6 +9,7 @@ namespace DataAccess
         {
             services.AddScoped<IEntityRepository, EntityRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IDriverRepository, DriverRepository>();
         }
     }
 }
