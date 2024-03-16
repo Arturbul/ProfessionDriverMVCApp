@@ -1,5 +1,6 @@
 using Domain.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,11 @@ builder.Services.AddDbContext<ProffesionDriverProjectContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MsLocalDB")));
 
 //Swagger
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 //Razor Pages
 builder.Services.AddRazorPages();
@@ -32,6 +37,7 @@ else
     app.UseMigrationsEndPoint();
 }
 
+//Swagger
 app.UseSwagger(options =>
 {
     options.SerializeAsV2 = true;
