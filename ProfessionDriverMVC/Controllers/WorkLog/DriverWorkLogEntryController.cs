@@ -21,19 +21,54 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
             return await _manager.GetDriverWorkLogEntry();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{logId}")]
         public async Task<DriverWorkLogEntry?> GetDriverWorkLogEntryById(Guid logId)
         {
             return await _manager.GetDriverWorkLogEntry(logId);
         }
 
         //POST
+        /// <summary>
+        /// Adds a new driver work log entry.
+        /// </summary>
+        /// <param name="driverId">The identifier of the driver.</param>
+        /// <param name="registrationNumber">The registration number of the vehicle.</param>
+        /// <param name="time">
+        /// The date and time of the work log entry in **DateTime** format (UTC recommended).
+        /// See the **Remarks** section for the expected format.
+        /// </param>
+        /// <param name="place">The location where the work was performed (optional).</param>
+        /// <param name="mileage">The mileage of the vehicle at the time of the entry (optional).</param>
+        /// <returns>The unique identifier (GUID) of the newly created entry, or Guid.Empty if creation failed.</returns>
+        /// <remarks>
+        /// This method creates a new `DriverWorkLogEntry` object with the provided parameters and validates the data:
+        /// - If validation fails, returns BadRequest.
+        /// - If creation fails, returns NotFound.
+        /// - Otherwise, returns the newly created entry's GUID.
+        /// 
+        /// ## Remarks: Accepted format for the `time` parameter
+        /// 
+        /// The `time` parameter should be provided in **DateTime** format, preferably using Coordinated Universal Time (UTC). 
+        /// The expected format is: **"yyyy-MM-dd'T'HH:mm:ssZ"**.
+        /// 
+        /// **Example:**
+        /// 
+        /// ```json
+        /// "time": "2024-03-16T13:00:00Z"
+        /// ```
+        /// </remarks>
+
         [HttpPost]
-        public async Task<IActionResult> PostDriverWorkLogEntry(DriverWorkLogEntry entry)
+        public async Task<IActionResult> PostDriverWorkLogEntry(int driverId, string registrationNumber, DateTime time, string? place, float? mileage)
         {
-            /* var entry = new DriverWorkLogEntry()
-             {
-             };*/
+            var entry = new DriverWorkLogEntry()
+            {
+                DriverId = driverId,
+                RegistrationNumber = registrationNumber,
+                LogTime = time,
+                Place = place,
+                Mileage = mileage
+            };
 
             if (!ModelState.IsValid)
             {
