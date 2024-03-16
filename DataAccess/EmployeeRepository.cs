@@ -15,7 +15,6 @@ namespace DataAccess
             using var context = this.Context;
             var employee = await context
                                     .Employees
-                                    .Include(e => e.Entity)
                                     .AsNoTracking()
                                     .ToListAsync();
 
@@ -27,7 +26,6 @@ namespace DataAccess
             using var context = this.Context;
             var employee = await context
                                     .Employees
-                                    .Include(e => e.Entity)
                                     .Where(e => e.EmployeeId == id)
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync();

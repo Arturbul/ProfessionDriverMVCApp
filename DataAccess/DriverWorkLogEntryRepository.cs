@@ -8,15 +8,13 @@ namespace DataAccess
     public class DriverWorkLogEntryRepository : RepositoryBase, IDriverWorkLogEntryRepository
     {
         public DriverWorkLogEntryRepository(ProffesionDriverProjectContext context) : base(context) { }
+
         //GET
         public async Task<ICollection<DriverWorkLogEntry>> GetDriverWorkLogEntry()
         {
             using var context = this.Context;
             var driverWorkLogEntrys = await context
-                                .DriverWorkLogEntrys
-                                .Include(d => d.Driver)
-                                    .ThenInclude(e => e.Employee)
-                                        .ThenInclude(en => en.Entity)
+                                .DriverWorkLogEntries
                                 .AsNoTracking()
                                 .ToListAsync();
 
@@ -27,10 +25,7 @@ namespace DataAccess
         {
             using var context = this.Context;
             var driverWorkLogEntrys = await context
-                                .DriverWorkLogEntrys
-                                .Include(d => d.Driver)
-                                    .ThenInclude(e => e.Employee)
-                                        .ThenInclude(en => en.Entity)
+                                .DriverWorkLogEntries
                                 .Where(l => l.DriverWorkLogEntryId == id)
                                 .AsNoTracking()
                                 .FirstOrDefaultAsync();
@@ -42,7 +37,7 @@ namespace DataAccess
         public async Task<Guid> PostDriverWorkLogEntry(DriverWorkLogEntry log)
         {
             using var context = this.Context;
-            context.DriverWorkLogEntrys.Add(log);
+            context.DriverWorkLogEntries.Add(log);
             await context.SaveChangesAsync();
 
             return log.DriverWorkLogEntryId;
@@ -53,11 +48,11 @@ namespace DataAccess
         {
             using var context = this.Context;
             var driverWorkLogEntry = await context
-                                .DriverWorkLogEntrys
+                                .DriverWorkLogEntries
                                 .FindAsync(logId);
             if (driverWorkLogEntry != null)
             {
-                context.DriverWorkLogEntrys.Remove(driverWorkLogEntry);
+                context.DriverWorkLogEntries.Remove(driverWorkLogEntry);
                 await context.SaveChangesAsync();
 
                 return driverWorkLogEntry.DriverWorkLogEntryId;

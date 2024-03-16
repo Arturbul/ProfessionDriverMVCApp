@@ -4,6 +4,7 @@ using Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ProffesionDriverProjectContext))]
-    partial class ProffesionDriverProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240316140303_testContextChanges1")]
+    partial class testContextChanges1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,6 +80,7 @@ namespace Domain.Migrations
                         .HasColumnType("int");
 
                     b.Property<Guid?>("DriverWorkLogId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LogTime")
@@ -97,7 +101,8 @@ namespace Domain.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.HasIndex("DriverWorkLogId");
+                    b.HasIndex("DriverWorkLogId")
+                        .IsUnique();
 
                     b.ToTable("DriverWorkLogEntries");
                 });
@@ -326,8 +331,10 @@ namespace Domain.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.DriverWorkLog", "DriverWorkLog")
-                        .WithMany()
-                        .HasForeignKey("DriverWorkLogId");
+                        .WithOne("EndDriverWorkLogEntry")
+                        .HasForeignKey("Domain.Models.DriverWorkLogEntry", "DriverWorkLogId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Driver");
 
@@ -403,6 +410,12 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Models.Driver", b =>
                 {
                     b.Navigation("DriverWorkLogs");
+                });
+
+            modelBuilder.Entity("Domain.Models.DriverWorkLog", b =>
+                {
+                    b.Navigation("EndDriverWorkLogEntry")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.LargeGoodsVehicle", b =>

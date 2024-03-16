@@ -1,0 +1,63 @@
+﻿using DataAccess.Interface;
+using Domain.Data;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace DataAccess
+{
+    public class DriverWorkLogRepository : RepositoryBase, IDriverWorkLogRepository
+    {
+        public DriverWorkLogRepository(ProffesionDriverProjectContext context) : base(context) { }
+
+        //GET
+        public async Task<ICollection<DriverWorkLog>> GetDriverWorkLog()
+        {
+            using var context = this.Context;
+            var driverWorkLogs = await context
+                                .DriverWorkLogs
+                                .AsNoTracking()
+                                .ToListAsync();
+
+            return await Task.FromResult(driverWorkLogs);
+        }
+
+        public async Task<DriverWorkLog?> GetDriverWorkLog(Guid id)
+        {
+            using var context = this.Context;
+            var driverWorkLogs = await context
+                                .DriverWorkLogs
+                                .Where(l => l.DriverWorkLogId == id)
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync();
+
+            return await Task.FromResult(driverWorkLogs);
+        }
+
+        //POST
+        public async Task<Guid> PostDriverWorkLog(DriverWorkLog log)
+        {
+            using var context = this.Context;
+            context.DriverWorkLogs.Add(log);
+            await context.SaveChangesAsync();
+
+            return log.DriverWorkLogId;
+        }
+
+        //DELETE
+        public async Task<Guid> DeleteDriverWorkLog(Guid logId)
+        {
+            using var context = this.Context;
+            var driverWorkLog = await context
+                                .DriverWorkLogs
+                                .FindAsync(logId);
+            if (driverWorkLog != null)
+            {
+                context.DriverWorkLogs.Remove(driverWorkLog);
+                await context.SaveChangesAsync();
+
+                return driverWorkLog.DriverWorkLogId;
+            }
+            return Guid.Empty;
+        }
+    }
+}

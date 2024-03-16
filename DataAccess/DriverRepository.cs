@@ -15,8 +15,6 @@ namespace DataAccess
             using var context = this.Context;
             var drivers = await context
                                 .Drivers
-                                .Include(e => e.Employee)
-                                    .ThenInclude(en => en.Entity)
                                 .AsNoTracking()
                                 .ToListAsync();
 
@@ -28,8 +26,6 @@ namespace DataAccess
             using var context = this.Context;
             var drivers = await context
                                 .Drivers
-                                .Include(e => e.Employee)
-                                    .ThenInclude(en => en.Entity)
                                 .Where(d => d.DriverId == id)
                                 .AsNoTracking()
                                 .FirstOrDefaultAsync();
