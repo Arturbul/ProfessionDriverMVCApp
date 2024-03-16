@@ -29,7 +29,6 @@ namespace Domain.Data
 
             //DriverWorkLogEntry
             modelBuilder.Entity<DriverWorkLogEntry>().Navigation(d => d.Driver).AutoInclude();
-            //modelBuilder.Entity<DriverWorkLogEntry>().Navigation(d => d.DriverWorkLog).AutoInclude();
 
             //DriverWorkLog
             modelBuilder.Entity<DriverWorkLog>().Navigation(d => d.Driver).AutoInclude();

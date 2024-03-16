@@ -15,6 +15,7 @@ namespace DataAccess
             using var context = this.Context;
             var driverWorkLogEntrys = await context
                                 .DriverWorkLogEntries
+                                .Include(l => l.DriverWorkLog)
                                 .AsNoTracking()
                                 .ToListAsync();
 
@@ -26,6 +27,7 @@ namespace DataAccess
             using var context = this.Context;
             var driverWorkLogEntrys = await context
                                 .DriverWorkLogEntries
+                                .Include(l => l.DriverWorkLog)
                                 .Where(l => l.DriverWorkLogEntryId == id)
                                 .AsNoTracking()
                                 .FirstOrDefaultAsync();
