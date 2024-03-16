@@ -12,13 +12,10 @@ namespace Domain.Models
         public Guid StartDriverWorkLogEntryId { get; set; } //
         public Guid EndDriverWorkLogEntryId { get; set; } //
         public Driver Driver { get; set; } = null!;
-        //public DriverWorkLogEntry StartDriverWorkLogEntry { get; set; } = null!;
-        // public DriverWorkLogEntry EndDriverWorkLogEntry { get; set; } = null!; //this should be created instant and overwrited to prevent from loss
-
-        //Driver Pauses
-        //prop PauseLogArr?
-
-        //Location Arr
-        //prop Location Arr?
     }
 }
+//Driver Pauses
+//prop PauseLogArr?
+
+//Location Arr
+//prop Location Arr?
