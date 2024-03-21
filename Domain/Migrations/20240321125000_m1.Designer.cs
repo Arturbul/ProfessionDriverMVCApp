@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ProffesionDriverProjectContext))]
-    [Migration("20240316140303_testContextChanges1")]
-    partial class testContextChanges1
+    [Migration("20240321125000_m1")]
+    partial class m1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,7 +80,6 @@ namespace Domain.Migrations
                         .HasColumnType("int");
 
                     b.Property<Guid?>("DriverWorkLogId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LogTime")
@@ -101,8 +100,7 @@ namespace Domain.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.HasIndex("DriverWorkLogId")
-                        .IsUnique();
+                    b.HasIndex("DriverWorkLogId");
 
                     b.ToTable("DriverWorkLogEntries");
                 });
@@ -144,16 +142,13 @@ namespace Domain.Migrations
 
                     b.HasKey("EntityId");
 
-                    b.ToTable("Entitys");
+                    b.ToTable("Entities");
                 });
 
             modelBuilder.Entity("Domain.Models.InsurancePolicy", b =>
                 {
                     b.Property<int>("InsurancePolicyId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InsurancePolicyId"));
 
                     b.Property<string>("AccountNumber")
                         .HasColumnType("nvarchar(max)");
@@ -173,7 +168,7 @@ namespace Domain.Migrations
 
                     b.HasKey("InsurancePolicyId");
 
-                    b.ToTable("InsurancePolicys");
+                    b.ToTable("InsurancePolicies");
                 });
 
             modelBuilder.Entity("Domain.Models.LargeGoodsVehicle", b =>
@@ -331,10 +326,8 @@ namespace Domain.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.DriverWorkLog", "DriverWorkLog")
-                        .WithOne("EndDriverWorkLogEntry")
-                        .HasForeignKey("Domain.Models.DriverWorkLogEntry", "DriverWorkLogId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("DriverWorkLogId");
 
                     b.Navigation("Driver");
 
@@ -410,12 +403,6 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Models.Driver", b =>
                 {
                     b.Navigation("DriverWorkLogs");
-                });
-
-            modelBuilder.Entity("Domain.Models.DriverWorkLog", b =>
-                {
-                    b.Navigation("EndDriverWorkLogEntry")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.LargeGoodsVehicle", b =>

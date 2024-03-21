@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class init1 : Migration
+    public partial class m1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Entitys",
+                name: "Entities",
                 columns: table => new
                 {
                     EntityId = table.Column<int>(type: "int", nullable: false)
@@ -21,15 +21,14 @@ namespace Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Entitys", x => x.EntityId);
+                    table.PrimaryKey("PK_Entities", x => x.EntityId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "InsurancePolicys",
+                name: "InsurancePolicies",
                 columns: table => new
                 {
-                    InsurancePolicyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InsurancePolicyId = table.Column<int>(type: "int", nullable: false),
                     RegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateFrom = table.Column<DateOnly>(type: "date", nullable: true),
                     DateTo = table.Column<DateOnly>(type: "date", nullable: true),
@@ -38,7 +37,7 @@ namespace Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InsurancePolicys", x => x.InsurancePolicyId);
+                    table.PrimaryKey("PK_InsurancePolicies", x => x.InsurancePolicyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,9 +69,9 @@ namespace Domain.Migrations
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeId);
                     table.ForeignKey(
-                        name: "FK_Employees_Entitys_EntityId",
+                        name: "FK_Employees_Entities_EntityId",
                         column: x => x.EntityId,
-                        principalTable: "Entitys",
+                        principalTable: "Entities",
                         principalColumn: "EntityId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -91,14 +90,14 @@ namespace Domain.Migrations
                 {
                     table.PrimaryKey("PK_VehicleInsurances", x => x.VehicleInsuranceId);
                     table.ForeignKey(
-                        name: "FK_VehicleInsurances_InsurancePolicys_AC_PolicyInsurancePolicyId",
+                        name: "FK_VehicleInsurances_InsurancePolicies_AC_PolicyInsurancePolicyId",
                         column: x => x.AC_PolicyInsurancePolicyId,
-                        principalTable: "InsurancePolicys",
+                        principalTable: "InsurancePolicies",
                         principalColumn: "InsurancePolicyId");
                     table.ForeignKey(
-                        name: "FK_VehicleInsurances_InsurancePolicys_OC_PolicyInsurancePolicyId",
+                        name: "FK_VehicleInsurances_InsurancePolicies_OC_PolicyInsurancePolicyId",
                         column: x => x.OC_PolicyInsurancePolicyId,
-                        principalTable: "InsurancePolicys",
+                        principalTable: "InsurancePolicies",
                         principalColumn: "InsurancePolicyId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -140,9 +139,9 @@ namespace Domain.Migrations
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.VehicleId);
                     table.ForeignKey(
-                        name: "FK_Vehicles_Entitys_EntityId",
+                        name: "FK_Vehicles_Entities_EntityId",
                         column: x => x.EntityId,
-                        principalTable: "Entitys",
+                        principalTable: "Entities",
                         principalColumn: "EntityId");
                     table.ForeignKey(
                         name: "FK_Vehicles_VehicleInspections_VehicleInspectionId",
@@ -154,28 +153,6 @@ namespace Domain.Migrations
                         column: x => x.VehicleInsuranceId,
                         principalTable: "VehicleInsurances",
                         principalColumn: "VehicleInsuranceId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DriverWorkLogEntrys",
-                columns: table => new
-                {
-                    DriverWorkLogEntryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: false),
-                    RegistrationNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
-                    LogTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Place = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Mileage = table.Column<float>(type: "real", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DriverWorkLogEntrys", x => x.DriverWorkLogEntryId);
-                    table.ForeignKey(
-                        name: "FK_DriverWorkLogEntrys_Drivers_DriverId",
-                        column: x => x.DriverId,
-                        principalTable: "Drivers",
-                        principalColumn: "DriverId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,15 +207,48 @@ namespace Domain.Migrations
                         principalColumn: "LargeGoodsVehicleId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DriverWorkLogEntries",
+                columns: table => new
+                {
+                    DriverWorkLogEntryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DriverWorkLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DriverId = table.Column<int>(type: "int", nullable: false),
+                    RegistrationNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    LogTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Place = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mileage = table.Column<float>(type: "real", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DriverWorkLogEntries", x => x.DriverWorkLogEntryId);
+                    table.ForeignKey(
+                        name: "FK_DriverWorkLogEntries_DriverWorkLogs_DriverWorkLogId",
+                        column: x => x.DriverWorkLogId,
+                        principalTable: "DriverWorkLogs",
+                        principalColumn: "DriverWorkLogId");
+                    table.ForeignKey(
+                        name: "FK_DriverWorkLogEntries_Drivers_DriverId",
+                        column: x => x.DriverId,
+                        principalTable: "Drivers",
+                        principalColumn: "DriverId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_EmployeeId",
                 table: "Drivers",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DriverWorkLogEntrys_DriverId",
-                table: "DriverWorkLogEntrys",
+                name: "IX_DriverWorkLogEntries_DriverId",
+                table: "DriverWorkLogEntries",
                 column: "DriverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DriverWorkLogEntries_DriverWorkLogId",
+                table: "DriverWorkLogEntries",
+                column: "DriverWorkLogId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DriverWorkLogs_DriverId",
@@ -295,7 +305,7 @@ namespace Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DriverWorkLogEntrys");
+                name: "DriverWorkLogEntries");
 
             migrationBuilder.DropTable(
                 name: "DriverWorkLogs");
@@ -313,7 +323,7 @@ namespace Domain.Migrations
                 name: "Vehicles");
 
             migrationBuilder.DropTable(
-                name: "Entitys");
+                name: "Entities");
 
             migrationBuilder.DropTable(
                 name: "VehicleInspections");
@@ -322,7 +332,7 @@ namespace Domain.Migrations
                 name: "VehicleInsurances");
 
             migrationBuilder.DropTable(
-                name: "InsurancePolicys");
+                name: "InsurancePolicies");
         }
     }
 }

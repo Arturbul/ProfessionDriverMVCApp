@@ -11,8 +11,8 @@ namespace Domain.Data
         public DbSet<DriverWorkLog> DriverWorkLogs { get; set; } = null!;
         public DbSet<DriverWorkLogEntry> DriverWorkLogEntries { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
-        public DbSet<Entity> Entitys { get; set; } = null!;
-        public DbSet<InsurancePolicy> InsurancePolicys { get; set; } = null!;
+        public DbSet<Entity> Entities { get; set; } = null!;
+        public DbSet<InsurancePolicy> InsurancePolicies { get; set; } = null!;
         public DbSet<LargeGoodsVehicle> LargeGoodsVehicles { get; set; } = null!;
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
         public DbSet<VehicleInspection> VehicleInspections { get; set; } = null!;

@@ -139,16 +139,13 @@ namespace Domain.Migrations
 
                     b.HasKey("EntityId");
 
-                    b.ToTable("Entitys");
+                    b.ToTable("Entities");
                 });
 
             modelBuilder.Entity("Domain.Models.InsurancePolicy", b =>
                 {
                     b.Property<int>("InsurancePolicyId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InsurancePolicyId"));
 
                     b.Property<string>("AccountNumber")
                         .HasColumnType("nvarchar(max)");
@@ -168,7 +165,7 @@ namespace Domain.Migrations
 
                     b.HasKey("InsurancePolicyId");
 
-                    b.ToTable("InsurancePolicys");
+                    b.ToTable("InsurancePolicies");
                 });
 
             modelBuilder.Entity("Domain.Models.LargeGoodsVehicle", b =>

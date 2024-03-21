@@ -31,11 +31,6 @@ namespace ProfessionDriverMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> PostEmployee([FromBody] Employee employee)
         {
-            /*var employee = new Employee()
-            {
-                EmployeeName = name
-            };*/
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

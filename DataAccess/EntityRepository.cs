@@ -13,19 +13,19 @@ namespace DataAccess
         public async Task<ICollection<Entity>> GetEntity()
         {
             using var context = this.Context;
-            var entity = await context
-                                    .Entitys
+            var entities = await context
+                                    .Entities
                                     .AsNoTracking()
                                     .ToListAsync();
 
-            return await Task.FromResult(entity);
+            return await Task.FromResult(entities);
         }
 
         public async Task<Entity?> GetEntity(int id)
         {
             using var context = this.Context;
             var entity = await context
-                                    .Entitys
+                                    .Entities
                                     .Where(e => e.EntityId == id)
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync();
@@ -37,7 +37,7 @@ namespace DataAccess
         public async Task<int> PostEntity(Entity entity)
         {
             using var context = this.Context;
-            context.Entitys.Add(entity);
+            context.Entities.Add(entity);
             await context.SaveChangesAsync();
 
             return entity.EntityId;
@@ -47,10 +47,10 @@ namespace DataAccess
         public async Task<int> DeleteEntity(int entityId)
         {
             using var context = this.Context;
-            var entity = await context.Entitys.FindAsync(entityId);
+            var entity = await context.Entities.FindAsync(entityId);
             if (entity != null)
             {
-                context.Entitys.Remove(entity);
+                context.Entities.Remove(entity);
                 await context.SaveChangesAsync();
                 return entity.EntityId;
             }
