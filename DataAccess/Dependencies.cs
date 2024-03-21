@@ -15,6 +15,7 @@ namespace DataAccess
             services.AddScoped<IInsurancePolicyRepository, InsurancePolicyRepository>();
             services.AddScoped<IVehicleInspectionRepository, VehicleInspectionRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<ILGVRepository, LGVRepository>();
         }
     }
 }

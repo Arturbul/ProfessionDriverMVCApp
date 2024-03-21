@@ -13,6 +13,6 @@ namespace Domain.Models
         public DateOnly? TachoExpiryDate { get; set; }
         public Vehicle Vehicle { get; set; } = null!;
         public Vehicle? Trailer { get; set; }
-        public IList<DriverWorkLog> DriverWorkLogs { get; set; } = null!;
+        public IList<DriverWorkLog>? DriverWorkLogs { get; set; }
     }
 }
