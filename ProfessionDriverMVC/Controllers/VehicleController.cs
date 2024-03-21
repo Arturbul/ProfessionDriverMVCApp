@@ -29,8 +29,25 @@ namespace ProfessionDriverMVC.Controllers
 
         //POST
         [HttpPost]
-        public async Task<IActionResult> PostVehicle([FromBody] Vehicle vehicle)
+        public async Task<IActionResult> PostVehicle(string registrationNumber,
+                                                         int? entityId,
+                                                         string? brand,
+                                                         string? model,
+                                                         int? manufactureYear,
+                                                         int? vehicleInsuranceId,
+                                                         int? vehicleInspectionId)
         {
+            var vehicle = new Vehicle()
+            {
+                RegistrationNumber = registrationNumber,
+                EntityId = entityId,
+                Brand = brand,
+                Model = model,
+                ManufactureYear = manufactureYear,
+                VehicleInsuranceId = vehicleInsuranceId,
+                VehicleInspectionId = vehicleInspectionId,
+            };
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
