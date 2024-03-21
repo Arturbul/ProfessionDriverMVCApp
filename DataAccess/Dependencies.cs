@@ -14,6 +14,7 @@ namespace DataAccess
             services.AddScoped<IDriverWorkLogRepository, DriverWorkLogRepository>();
             services.AddScoped<IInsurancePolicyRepository, InsurancePolicyRepository>();
             services.AddScoped<IVehicleInspectionRepository, VehicleInspectionRepository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
         }
     }
 }
