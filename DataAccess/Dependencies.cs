@@ -11,6 +11,7 @@ namespace DataAccess
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IDriverWorkLogEntryRepository, DriverWorkLogEntryRepository>();
             services.AddScoped<IDriverRepository, DriverRepository>();
+            services.AddScoped<IDriverWorkLogRepository, DriverWorkLogRepository>();
         }
     }
 }

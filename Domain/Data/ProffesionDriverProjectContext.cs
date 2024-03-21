@@ -21,6 +21,8 @@ namespace Domain.Data
         #region Required
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //AutoIncludes
+
             //Employee
             modelBuilder.Entity<Employee>().Navigation(en => en.Entity).AutoInclude();
 
@@ -29,9 +31,6 @@ namespace Domain.Data
 
             //DriverWorkLogEntry
             modelBuilder.Entity<DriverWorkLogEntry>().Navigation(d => d.Driver).AutoInclude();
-
-            //DriverWorkLog
-            modelBuilder.Entity<DriverWorkLog>().Navigation(d => d.Driver).AutoInclude();
 
             // Vehicle
             modelBuilder.Entity<Vehicle>().Navigation(v => v.Entity).AutoInclude();

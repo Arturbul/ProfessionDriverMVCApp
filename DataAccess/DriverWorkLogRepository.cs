@@ -7,7 +7,16 @@ namespace DataAccess
 {
     public class DriverWorkLogRepository : RepositoryBase, IDriverWorkLogRepository
     {
-        public DriverWorkLogRepository(ProffesionDriverProjectContext context) : base(context) { }
+        private readonly IDriverRepository _driverRepository;
+        private readonly IDriverWorkLogEntryRepository _logEntryRepository;
+        public DriverWorkLogRepository(ProffesionDriverProjectContext context,
+            IDriverRepository driverRepository,
+            IDriverWorkLogEntryRepository logEntryRepository)
+            : base(context)
+        {
+            _driverRepository = driverRepository;
+            _logEntryRepository = logEntryRepository;
+        }
 
         //GET
         public async Task<ICollection<DriverWorkLog>> GetDriverWorkLog()
@@ -37,7 +46,15 @@ namespace DataAccess
         public async Task<Guid> PostDriverWorkLog(DriverWorkLog log)
         {
             using var context = this.Context;
+            //Add DriverWorkLogs
             context.DriverWorkLogs.Add(log);
+
+            //Update Driver's Work Logs
+            context.Drivers
+                .Single(d => d.DriverId == log.DriverId)
+                .DriverWorkLogs
+                .Add(log);
+
             await context.SaveChangesAsync();
 
             return log.DriverWorkLogId;
