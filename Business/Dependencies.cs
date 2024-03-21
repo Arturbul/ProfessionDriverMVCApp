@@ -1,4 +1,5 @@
 ﻿using Business.Interface;
+using DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Business
@@ -12,6 +13,8 @@ namespace Business
             services.AddScoped<IEmployeeManager, EmployeeManager>();
             services.AddScoped<IDriverWorkLogEntryManager, DriverWorkLogEntryManager>();
             services.AddScoped<IDriverManager, DriverManager>();
+            services.AddScoped<IDriverWorkLogManager, DriverWorkLogManager>();
+            services.AddScoped<IInsurancePolicyManager, InsurancePolicyManager>();
 
             //DI for DataAccess 
             DataAccess.Dependencies.Register(services);
