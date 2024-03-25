@@ -29,28 +29,6 @@ namespace ProfessionDriverMVC.Controllers
 
         //POST
         [HttpPost]
-        public async Task<IActionResult> PostDriver(int employeeId)
-        {
-            var driver = new Driver()
-            {
-                EmployeeId = employeeId,
-                DriverWorkLogs = []
-            };
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            int result = await _manager.PostDriver(driver);
-            if (result == 0)
-            {
-                return NotFound(result);
-            }
-            return Ok(result);
-        }
-
-        [HttpPost("withlogs")]
         public async Task<IActionResult> PostDriverWithLogs(int employeeId, ICollection<DriverWorkLog> driverWorkLogs)
         {
             var driver = new Driver()
