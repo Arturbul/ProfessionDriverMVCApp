@@ -16,13 +16,13 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
 
         //GET
         [HttpGet]
-        public async Task<ICollection<DriverWorkLogEntry>> GetDriverWorkLogEntrys()
+        public async Task<ICollection<DriverWorkLogEntry>> Get()
         {
             return await _manager.GetDriverWorkLogEntry();
         }
 
         [HttpGet("{logId}")]
-        public async Task<DriverWorkLogEntry?> GetDriverWorkLogEntryById(Guid logId)
+        public async Task<DriverWorkLogEntry?> Get(Guid logId)
         {
             return await _manager.GetDriverWorkLogEntry(logId);
         }
@@ -59,7 +59,7 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
         /// </remarks>
 
         [HttpPost]
-        public async Task<IActionResult> PostDriverWorkLogEntry(int driverId, string registrationNumber, DateTime time, string? place, float? mileage)
+        public async Task<IActionResult> Post(int driverId, string registrationNumber, DateTime time, string? place, float? mileage, Guid? workLogDetailId)
         {
             var entry = new DriverWorkLogEntry()
             {
@@ -67,7 +67,8 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
                 RegistrationNumber = registrationNumber,
                 LogTime = time,
                 Place = place,
-                Mileage = mileage
+                Mileage = mileage,
+                DriverWorkLogDetailId = workLogDetailId
             };
 
             if (!ModelState.IsValid)
@@ -85,7 +86,7 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
 
         //DELETE
         [HttpDelete("{logId}")]
-        public async Task<IActionResult> DeleteDriverWorkLogEntry(Guid logId)
+        public async Task<IActionResult> Delete(Guid logId)
         {
             Guid result = await _manager.DeleteDriverWorkLogEntry(logId);
             if (result == Guid.Empty)

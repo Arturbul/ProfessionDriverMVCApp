@@ -16,20 +16,25 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
 
         //GET
         [HttpGet]
-        public async Task<ICollection<DriverWorkLogDetail>> GetDriverWorkLogDetails()
+        public async Task<ICollection<DriverWorkLogDetail>> Get()
         {
             return await _manager.GetDriverWorkLogDetail();
         }
 
         [HttpGet("{detailId}")]
-        public async Task<DriverWorkLogDetail?> GetDriverWorkLogDetailById(Guid detailId)
+        public async Task<DriverWorkLogDetail?> Get(Guid detailId)
         {
             return await _manager.GetDriverWorkLogDetail(detailId);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostDriverWorkLogDetail([FromBody] DriverWorkLogDetail logDetail)
+        public async Task<IActionResult> Post(Guid driverWorkLogId, ICollection<DriverWorkLogEntry>? logEntries)
         {
+            var logDetail = new DriverWorkLogDetail()
+            {
+                DriverWorkLogId = driverWorkLogId,
+                DriverWorkLogEntries = logEntries
+            };
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -45,7 +50,7 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
 
         //DELETE
         [HttpDelete("{detailId}")]
-        public async Task<IActionResult> DeleteDriverWorkLogDetail(Guid detailId)
+        public async Task<IActionResult> Delete(Guid detailId)
         {
             Guid result = await _manager.DeleteDriverWorkLogDetail(detailId);
             if (result == Guid.Empty)
