@@ -16,25 +16,25 @@ namespace ProfessionDriverMVC.Controllers
 
         //GET
         [HttpGet]
-        public async Task<ICollection<Driver>> GetDrivers()
+        public async Task<ICollection<Driver>> Get()
         {
             return await _manager.GetDriver();
         }
 
         [HttpGet("{id}")]
-        public async Task<Driver?> GetDriverById(int id)
+        public async Task<Driver?> GetById(int id)
         {
             return await _manager.GetDriver(id);
         }
 
         //POST
         [HttpPost]
-        public async Task<IActionResult> PostDriverWithLogs(int employeeId, ICollection<DriverWorkLog> driverWorkLogs)
+        public async Task<IActionResult> Post(int employeeId, ICollection<DriverWorkLog>? driverWorkLogs)
         {
             var driver = new Driver()
             {
                 EmployeeId = employeeId,
-                DriverWorkLogs = driverWorkLogs.ToList()
+                DriverWorkLogs = driverWorkLogs
             };
 
             if (!ModelState.IsValid)
@@ -52,7 +52,7 @@ namespace ProfessionDriverMVC.Controllers
 
         //DELETE
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDriver(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             int result = await _manager.DeleteDriver(id);
             if (result == 0)

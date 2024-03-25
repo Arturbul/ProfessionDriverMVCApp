@@ -11,6 +11,6 @@ namespace Domain.Models
         public int EmployeeId { get; set; }
 
         public Employee Employee { get; set; } = null!;
-        public ICollection<DriverWorkLog> DriverWorkLogs { get; set; } = null!;
+        public ICollection<DriverWorkLog>? DriverWorkLogs { get; set; }
     }
 }
