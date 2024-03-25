@@ -4,6 +4,7 @@ using Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ProffesionDriverProjectContext))]
-    partial class ProffesionDriverProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240322101051_test-2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +76,6 @@ namespace Domain.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("DriverWorkLogDetailId");
-
-                    b.HasIndex("DriverWorkLogId")
-                        .IsUnique();
 
                     b.ToTable("DriverWorkLogDetails");
                 });
@@ -320,22 +320,19 @@ namespace Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.DriverWorkLogDetail", "DriverWorkLogDetail")
+                        .WithOne("DriverWorkLog")
+                        .HasForeignKey("Domain.Models.DriverWorkLog", "DriverWorkLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Models.LargeGoodsVehicle", null)
                         .WithMany("DriverWorkLogs")
                         .HasForeignKey("LargeGoodsVehicleId");
 
                     b.Navigation("Driver");
-                });
 
-            modelBuilder.Entity("Domain.Models.DriverWorkLogDetail", b =>
-                {
-                    b.HasOne("Domain.Models.DriverWorkLog", "DriverWorkLog")
-                        .WithOne("DriverWorkLogDetail")
-                        .HasForeignKey("Domain.Models.DriverWorkLogDetail", "DriverWorkLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DriverWorkLog");
+                    b.Navigation("DriverWorkLogDetail");
                 });
 
             modelBuilder.Entity("Domain.Models.DriverWorkLogEntry", b =>
@@ -426,13 +423,11 @@ namespace Domain.Migrations
                     b.Navigation("DriverWorkLogs");
                 });
 
-            modelBuilder.Entity("Domain.Models.DriverWorkLog", b =>
-                {
-                    b.Navigation("DriverWorkLogDetail");
-                });
-
             modelBuilder.Entity("Domain.Models.DriverWorkLogDetail", b =>
                 {
+                    b.Navigation("DriverWorkLog")
+                        .IsRequired();
+
                     b.Navigation("DriverWorkLogEntries");
                 });
 

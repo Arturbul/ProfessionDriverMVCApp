@@ -59,11 +59,10 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
         /// </remarks>
 
         [HttpPost]
-        public async Task<IActionResult> PostDriverWorkLogEntry(Guid? driverWorkLogId, int driverId, string registrationNumber, DateTime time, string? place, float? mileage)
+        public async Task<IActionResult> PostDriverWorkLogEntry(int driverId, string registrationNumber, DateTime time, string? place, float? mileage)
         {
             var entry = new DriverWorkLogEntry()
             {
-                DriverWorkLogId = driverWorkLogId,
                 DriverId = driverId,
                 RegistrationNumber = registrationNumber,
                 LogTime = time,

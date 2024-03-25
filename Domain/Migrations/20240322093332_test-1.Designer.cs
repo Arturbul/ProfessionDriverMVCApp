@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ProffesionDriverProjectContext))]
-    [Migration("20240321125000_m1")]
-    partial class m1
+    [Migration("20240322093332_test-1")]
+    partial class test1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,14 +52,11 @@ namespace Domain.Migrations
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("EndDriverWorkLogEntryId")
+                    b.Property<Guid?>("DriverWorkLogDetailId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("LargeGoodsVehicleId")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("StartDriverWorkLogEntryId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("DriverWorkLogId");
 
@@ -68,6 +65,20 @@ namespace Domain.Migrations
                     b.HasIndex("LargeGoodsVehicleId");
 
                     b.ToTable("DriverWorkLogs");
+                });
+
+            modelBuilder.Entity("Domain.Models.DriverWorkLogDetail", b =>
+                {
+                    b.Property<Guid>("DriverWorkLogDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DriverWorkLogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("DriverWorkLogDetailId");
+
+                    b.ToTable("DriverWorkLogDetails");
                 });
 
             modelBuilder.Entity("Domain.Models.DriverWorkLogEntry", b =>
@@ -79,7 +90,7 @@ namespace Domain.Migrations
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("DriverWorkLogId")
+                    b.Property<Guid?>("DriverWorkLogDetailId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LogTime")
@@ -100,7 +111,7 @@ namespace Domain.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.HasIndex("DriverWorkLogId");
+                    b.HasIndex("DriverWorkLogDetailId");
 
                     b.ToTable("DriverWorkLogEntries");
                 });
@@ -310,11 +321,19 @@ namespace Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.DriverWorkLogDetail", "DriverWorkLogDetail")
+                        .WithOne("DriverWorkLog")
+                        .HasForeignKey("Domain.Models.DriverWorkLog", "DriverWorkLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Models.LargeGoodsVehicle", null)
                         .WithMany("DriverWorkLogs")
                         .HasForeignKey("LargeGoodsVehicleId");
 
                     b.Navigation("Driver");
+
+                    b.Navigation("DriverWorkLogDetail");
                 });
 
             modelBuilder.Entity("Domain.Models.DriverWorkLogEntry", b =>
@@ -325,13 +344,13 @@ namespace Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.DriverWorkLog", "DriverWorkLog")
-                        .WithMany()
-                        .HasForeignKey("DriverWorkLogId");
+                    b.HasOne("Domain.Models.DriverWorkLogDetail", "DriverWorkLogDetail")
+                        .WithMany("DriverWorkLogEntries")
+                        .HasForeignKey("DriverWorkLogDetailId");
 
                     b.Navigation("Driver");
 
-                    b.Navigation("DriverWorkLog");
+                    b.Navigation("DriverWorkLogDetail");
                 });
 
             modelBuilder.Entity("Domain.Models.Employee", b =>
@@ -403,6 +422,14 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Models.Driver", b =>
                 {
                     b.Navigation("DriverWorkLogs");
+                });
+
+            modelBuilder.Entity("Domain.Models.DriverWorkLogDetail", b =>
+                {
+                    b.Navigation("DriverWorkLog")
+                        .IsRequired();
+
+                    b.Navigation("DriverWorkLogEntries");
                 });
 
             modelBuilder.Entity("Domain.Models.LargeGoodsVehicle", b =>

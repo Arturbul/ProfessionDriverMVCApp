@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess
 {
-    public class DriverWorkLogEntryRepository : RepositoryBase, IDriverWorkLogEntryRepository
+    public class DriverWorkLogDetailRepository : RepositoryBase, IDriverWorkLogDetailRepository
     {
-        public DriverWorkLogEntryRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public DriverWorkLogDetailRepository(ProffesionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<DriverWorkLogEntry>> GetDriverWorkLogEntry()
+        public async Task<ICollection<DriverWorkLogDetail>> GetDriverWorkLogDetail()
         {
             using var context = this.Context;
             var driverWorkLogEntrys = await context
-                                .DriverWorkLogEntries
+                                .DriverWorkLogDetails
                                 //.Include(l => l.DriverWorkLog)
                                 .AsNoTracking()
                                 .ToListAsync();
@@ -22,13 +22,13 @@ namespace DataAccess
             return await Task.FromResult(driverWorkLogEntrys);
         }
 
-        public async Task<DriverWorkLogEntry?> GetDriverWorkLogEntry(Guid id)
+        public async Task<DriverWorkLogDetail?> GetDriverWorkLogDetail(Guid id)
         {
             using var context = this.Context;
             var driverWorkLogEntrys = await context
-                                .DriverWorkLogEntries
+                                .DriverWorkLogDetails
                                 //.Include(l => l.DriverWorkLog)
-                                .Where(l => l.DriverWorkLogEntryId == id)
+                                .Where(l => l.DriverWorkLogDetailId == id)
                                 .AsNoTracking()
                                 .FirstOrDefaultAsync();
 
@@ -36,28 +36,28 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<Guid> PostDriverWorkLogEntry(DriverWorkLogEntry log)
+        public async Task<Guid> PostDriverWorkLogDetail(DriverWorkLogDetail detail)
         {
             using var context = this.Context;
-            context.DriverWorkLogEntries.Add(log);
+            context.DriverWorkLogDetails.Add(detail);
             await context.SaveChangesAsync();
 
-            return log.DriverWorkLogEntryId;
+            return detail.DriverWorkLogDetailId;
         }
 
         //DELETE
-        public async Task<Guid> DeleteDriverWorkLogEntry(Guid logId)
+        public async Task<Guid> DeleteDriverWorkLogDetail(Guid detailId)
         {
             using var context = this.Context;
             var driverWorkLogEntry = await context
-                                .DriverWorkLogEntries
-                                .FindAsync(logId);
+                                .DriverWorkLogDetails
+                                .FindAsync(detailId);
             if (driverWorkLogEntry != null)
             {
-                context.DriverWorkLogEntries.Remove(driverWorkLogEntry);
+                context.DriverWorkLogDetails.Remove(driverWorkLogEntry);
                 await context.SaveChangesAsync();
 
-                return driverWorkLogEntry.DriverWorkLogEntryId;
+                return driverWorkLogEntry.DriverWorkLogDetailId;
             }
             return Guid.Empty;
         }

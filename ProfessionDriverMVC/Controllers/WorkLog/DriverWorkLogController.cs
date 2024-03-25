@@ -29,13 +29,12 @@ namespace ProfessionDriverMVC.Controllers.WorkLog
 
         // POST
         [HttpPost]
-        public async Task<IActionResult> PostDriverWorkLog(int driverId, Guid startDriverWorkLogEntryId, Guid endDriverWorkLogEntryId)
+        public async Task<IActionResult> PostDriverWorkLog(int driverId, Guid? driverWorkLogDetailId)
         {
-            var workLog = new DriverWorkLog
+            var workLog = new DriverWorkLog()
             {
                 DriverId = driverId,
-                StartDriverWorkLogEntryId = startDriverWorkLogEntryId,
-                EndDriverWorkLogEntryId = endDriverWorkLogEntryId
+                DriverWorkLogDetailId = driverWorkLogDetailId
             };
 
             if (!ModelState.IsValid)

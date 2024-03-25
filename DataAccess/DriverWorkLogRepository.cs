@@ -46,17 +46,9 @@ namespace DataAccess
         public async Task<Guid> PostDriverWorkLog(DriverWorkLog log)
         {
             using var context = this.Context;
-            //Add DriverWorkLogs
+
             context.DriverWorkLogs.Add(log);
-
-            //Update Driver's Work Logs
-            context.Drivers
-                .Single(d => d.DriverId == log.DriverId)
-                .DriverWorkLogs
-                .Add(log);
-
             await context.SaveChangesAsync();
-
             return log.DriverWorkLogId;
         }
 
