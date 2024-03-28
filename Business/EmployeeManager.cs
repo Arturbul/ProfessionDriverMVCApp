@@ -1,6 +1,7 @@
 ﻿using Business.Interface;
 using DataAccess.Interface;
 using Domain.Models;
+using Domain.Models.DTO;
 
 namespace Business
 {
@@ -13,19 +14,43 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<Employee>> GetEmployee()
+        public async Task<ICollection<EmployeeDTO>> GetEmployee()
         {
-            return await _employeeRepository.GetEmployee();
+            var employees = await _employeeRepository.GetEmployee();
+            return employees.Select(e => new EmployeeDTO
+            {
+                EmployeeId = e.EmployeeId,
+                EntityId = e.EmployeeId,
+                HireDate = e.HireDate,
+                TerminationDate = e.TerminationDate,
+            }).ToList();
         }
 
-        public async Task<Employee?> GetEmployee(int id)
+        public async Task<EmployeeDTO?> GetEmployee(int id)
         {
-            return await _employeeRepository.GetEmployee(id);
+            var employee = await _employeeRepository.GetEmployee(id);
+            if (employee == null)
+            {
+                return null;
+            }
+            return new EmployeeDTO
+            {
+                EmployeeId = employee.EmployeeId,
+                EntityId = employee.EmployeeId,
+                HireDate = employee.HireDate,
+                TerminationDate = employee.TerminationDate,
+            };
         }
 
         //POST
-        public async Task<int> PostEmployee(Employee employee)
+        public async Task<int> PostEmployee(EmployeeDTO employeeDTO)
         {
+            var employee = new Employee
+            {
+                EntityId = employeeDTO.EmployeeId,
+                HireDate = employeeDTO.HireDate,
+                TerminationDate = employeeDTO.TerminationDate
+            };
             return await _employeeRepository.PostEmployee(employee);
         }
 

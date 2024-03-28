@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ProffesionDriverProjectContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("MsLocalDB")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MsLocalDB")), ServiceLifetime.Scoped);
 
 //Swagger
 builder.Services.AddSwaggerGen(options =>

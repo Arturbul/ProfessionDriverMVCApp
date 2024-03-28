@@ -1,6 +1,7 @@
 ﻿using Business.Interface;
-using Domain.Models;
+using Domain.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using ProfessionDriverMVC.ViewModels;
 
 namespace ProfessionDriverMVC.Controllers
 {
@@ -9,35 +10,42 @@ namespace ProfessionDriverMVC.Controllers
     public class EntityController : Controller
     {
         private readonly IEntityManager _manager;
-        //private readonly ProffesionDriverProjectContext _context;
-        public EntityController(/*ProffesionDriverProjectContext context,*/ IEntityManager manager)
+        public EntityController(IEntityManager manager)
         {
-            //_context = context;
             _manager = manager;
         }
 
         //GET
         [HttpGet]
-        public async Task<ICollection<Entity>> GetEntities()
+        public async Task<IEnumerable<EntityViewModel>> GetEntities()
         {
-            return await _manager.GetEntity();
+            var entitiesDTO = await _manager.GetEntity();
+            return entitiesDTO.Select(e => new EntityViewModel
+            {
+                EntityId = e.EntityId,
+                EntityName = e.EntityName
+            }).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<Entity?> GetEntityById(int id)
+        public async Task<EntityViewModel?> GetEntityById(int id)
         {
-            return await _manager.GetEntity(id);
+            var entity = await _manager.GetEntity(id);
+            if (entity == null)
+            {
+                return null;
+            }
+            return new EntityViewModel
+            {
+                EntityId = entity.EntityId,
+                EntityName = entity.EntityName
+            };
         }
 
         //POST
         [HttpPost]
-        public async Task<IActionResult> PostEntity(string? name)
+        public async Task<IActionResult> PostEntity(EntityDTO entity)
         {
-            var entity = new Entity()
-            {
-                EntityName = name
-            };
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

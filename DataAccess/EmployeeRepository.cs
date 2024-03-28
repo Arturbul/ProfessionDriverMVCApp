@@ -12,25 +12,23 @@ namespace DataAccess
         //GET
         public async Task<ICollection<Employee>> GetEmployee()
         {
-            using var context = this.Context;
-            var employee = await context
+            var employee = await this.Context
                                     .Employees
                                     .AsNoTracking()
                                     .ToListAsync();
 
-            return await Task.FromResult(employee);
+            return employee;
         }
 
         public async Task<Employee?> GetEmployee(int id)
         {
-            using var context = this.Context;
-            var employee = await context
+            var employee = await this.Context
                                     .Employees
                                     .Where(e => e.EmployeeId == id)
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync();
 
-            return await Task.FromResult(employee);
+            return employee;
         }
 
         //POST

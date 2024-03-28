@@ -1,6 +1,6 @@
-﻿namespace ProfessionDriverMVC.ViewModels
+﻿namespace Domain.Models.DTO
 {
-    public class Entity
+    public class EntityDTO
     {
         public int EntityId { get; set; }
         public string? EntityName { get; set; }

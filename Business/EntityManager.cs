@@ -1,6 +1,7 @@
 ﻿using Business.Interface;
 using DataAccess.Interface;
 using Domain.Models;
+using Domain.Models.DTO;
 
 namespace Business
 {
@@ -12,19 +13,37 @@ namespace Business
             _entityRepository = repository;
         }
         //GET
-        public async Task<ICollection<Entity>> GetEntity()
+        public async Task<ICollection<EntityDTO>> GetEntity()
         {
-            return await _entityRepository.GetEntity();
+            var entities = await _entityRepository.GetEntity();
+            return entities.Select(e => new EntityDTO
+            {
+                EntityId = e.EntityId,
+                EntityName = e.EntityName
+            }).ToList();
         }
 
-        public async Task<Entity?> GetEntity(int id)
+        public async Task<EntityDTO?> GetEntity(int id)
         {
-            return await _entityRepository.GetEntity(id);
+            var entity = await _entityRepository.GetEntity(id);
+            if (entity == null)
+            {
+                return null;
+            }
+            return new EntityDTO
+            {
+                EntityId = entity.EntityId,
+                EntityName = entity.EntityName
+            };
         }
 
         //POST
-        public async Task<int> PostEntity(Entity entity)
+        public async Task<int> PostEntity(EntityDTO entityDTO)
         {
+            var entity = new Entity
+            {
+                EntityName = entityDTO.EntityName
+            };
             return await _entityRepository.PostEntity(entity);
         }
 

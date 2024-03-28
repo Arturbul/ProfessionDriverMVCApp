@@ -1,12 +1,11 @@
-﻿using Domain.Models;
-
+﻿using Domain.Models.DTO;
 namespace Business.Interface
 {
     public interface IEmployeeManager
     {
-        Task<ICollection<Employee>> GetEmployee();
-        Task<Employee?> GetEmployee(int id);
-        Task<int> PostEmployee(Employee employee);
+        Task<ICollection<EmployeeDTO>> GetEmployee();
+        Task<EmployeeDTO?> GetEmployee(int id);
+        Task<int> PostEmployee(EmployeeDTO employee);
         Task<int> DeleteEmployee(int employeeId);
     }
 }
