@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class VehicleRepository : RepositoryBase, IVehicleRepository
     {
-        public VehicleRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public VehicleRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
         public async Task<ICollection<Vehicle>> GetVehicle()

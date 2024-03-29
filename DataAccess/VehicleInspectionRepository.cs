@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class VehicleInspectionRepository : RepositoryBase, IVehicleInspectionRepository
     {
-        public VehicleInspectionRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public VehicleInspectionRepository(ProfessionDriverProjectContext context) : base(context) { }
         //GET
         public async Task<ICollection<VehicleInspection>> GetVehicleInspection()
         {

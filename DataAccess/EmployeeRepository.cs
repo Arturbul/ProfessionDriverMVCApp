@@ -7,7 +7,7 @@ namespace DataAccess
 {
     internal class EmployeeRepository : RepositoryBase, IEmployeeRepository
     {
-        public EmployeeRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public EmployeeRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
         public async Task<ICollection<Employee>> GetEmployee()

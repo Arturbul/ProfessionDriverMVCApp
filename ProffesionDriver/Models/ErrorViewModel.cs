@@ -1,4 +1,4 @@
-namespace ProffesionDriver.Models
+namespace ProfessionDriver.Models
 {
     public class ErrorViewModel
     {

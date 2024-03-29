@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class EntityRepository : RepositoryBase, IEntityRepository
     {
-        public EntityRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public EntityRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
         public async Task<ICollection<Entity>> GetEntity()

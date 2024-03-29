@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
-    [DbContext(typeof(ProffesionDriverProjectContext))]
-    partial class ProffesionDriverProjectContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ProfessionDriverProjectContext))]
+    partial class ProfessionDriverProjectContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

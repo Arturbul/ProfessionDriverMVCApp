@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Data
 {
-    public class ProffesionDriverProjectContext : DbContext
+    public class ProfessionDriverProjectContext : DbContext
     {
-        public ProffesionDriverProjectContext(DbContextOptions<ProffesionDriverProjectContext> options)
+        public ProfessionDriverProjectContext(DbContextOptions<ProfessionDriverProjectContext> options)
         : base(options) { }
         public DbSet<Driver> Drivers { get; set; } = null!;
         public DbSet<DriverWorkLog> DriverWorkLogs { get; set; } = null!;

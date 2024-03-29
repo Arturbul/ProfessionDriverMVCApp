@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class DriverRepository : RepositoryBase, IDriverRepository
     {
-        public DriverRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public DriverRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
         public async Task<ICollection<Driver>> GetDriver()

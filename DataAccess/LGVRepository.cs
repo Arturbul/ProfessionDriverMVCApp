@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class LGVRepository : RepositoryBase, ILGVRepository
     {
-        public LGVRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public LGVRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
         public async Task<ICollection<LargeGoodsVehicle>> GetLargeGoodsVehicle()

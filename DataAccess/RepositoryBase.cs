@@ -4,11 +4,11 @@ namespace DataAccess
 {
     public class RepositoryBase
     {
-        private readonly ProffesionDriverProjectContext _context;
-        public RepositoryBase(ProffesionDriverProjectContext context)
+        private readonly ProfessionDriverProjectContext _context;
+        public RepositoryBase(ProfessionDriverProjectContext context)
         {
             _context = context;
         }
-        public ProffesionDriverProjectContext Context { get => _context; }
+        public ProfessionDriverProjectContext Context { get => _context; }
     }
 }

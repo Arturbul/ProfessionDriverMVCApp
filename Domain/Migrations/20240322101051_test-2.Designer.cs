@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
-    [DbContext(typeof(ProffesionDriverProjectContext))]
+    [DbContext(typeof(ProfessionDriverProjectContext))]
     [Migration("20240322101051_test-2")]
     partial class test2
     {

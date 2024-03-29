@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class InsurancePolicyRepository : RepositoryBase, IInsurancePolicyRepository
     {
-        public InsurancePolicyRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public InsurancePolicyRepository(ProfessionDriverProjectContext context) : base(context) { }
         //GET
         public async Task<ICollection<InsurancePolicy>> GetInsurancePolicy()
         {

@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class DriverWorkLogDetailRepository : RepositoryBase, IDriverWorkLogDetailRepository
     {
-        public DriverWorkLogDetailRepository(ProffesionDriverProjectContext context) : base(context) { }
+        public DriverWorkLogDetailRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
         public async Task<ICollection<DriverWorkLogDetail>> GetDriverWorkLogDetail()

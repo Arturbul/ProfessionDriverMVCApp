@@ -9,7 +9,7 @@ namespace DataAccess
     {
         private readonly IDriverRepository _driverRepository;
         private readonly IDriverWorkLogEntryRepository _logEntryRepository;
-        public DriverWorkLogRepository(ProffesionDriverProjectContext context,
+        public DriverWorkLogRepository(ProfessionDriverProjectContext context,
             IDriverRepository driverRepository,
             IDriverWorkLogEntryRepository logEntryRepository)
             : base(context)

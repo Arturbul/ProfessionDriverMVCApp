@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProffesionDriver.Models;
+using ProfessionDriver.Models;
 using System.Diagnostics;
 
-namespace ProffesionDriver.Controllers
+namespace ProfessionDriver.Controllers
 {
     public class HomeController : Controller
     {
