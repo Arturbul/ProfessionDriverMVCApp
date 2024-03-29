@@ -15,10 +15,8 @@ namespace ProfessionDriverMVC.Controllers.ViewControllers
         }
         public async Task<IActionResult> Index()
         {
-            var entities = await _manager.GetEntity();
-            var result = entities.Cast<EntityViewModel?>();
-
-            return View(result);
+            var result = await _manager.GetEntity();
+            return View(result.Select(e => (EntityViewModel?)e));
         }
     }
 }
