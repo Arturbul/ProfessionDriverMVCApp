@@ -76,5 +76,31 @@ namespace ProfessionDriver.Controllers.ViewControllers
             }
             return View(entity);
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound(id);
+            }
+            var entity = (EntityViewModel?)await _manager.GetEntity((int)id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            return View(entity);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var entity = await _manager.GetEntity(id);
+            int result;
+            if (entity != null)
+            {
+                result = await _manager.DeleteEntity(id);
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

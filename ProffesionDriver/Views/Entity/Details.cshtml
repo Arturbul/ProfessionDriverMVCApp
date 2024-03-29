@@ -5,7 +5,9 @@
 }
 
 <h1>@ViewBag.Title</h1>
-
+<div>
+    <a asp-action="Add">Create new</a>
+</div>
 <div>
     <p>
         <strong>
@@ -22,9 +24,8 @@
 </div>
 <div>
     <h6>Manage item</h6>
-    <a asp-action="Add">Create new</a>
-
-
+    <a asp-action="Edit" asp-route-id="@Model.EntityId">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.EntityId">Delete</a>
 </div>
 <div>
     <a asp-action="Index">Go back</a>

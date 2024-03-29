@@ -25,7 +25,8 @@
                     <td>@entity.EntityName</td>
                     <td>
                         <a asp-action="Details" asp-route-id="@entity.EntityId">Details</a>
-
+                        <a asp-action="Edit" asp-route-id="@entity.EntityId">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@entity.EntityId">Delete</a>
                     </td>
                 </tr>
             }
