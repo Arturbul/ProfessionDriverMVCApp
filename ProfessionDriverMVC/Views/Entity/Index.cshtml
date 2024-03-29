@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ProfessionDriverMVC.ViewModels.EntityViewModel>
+@{
+    ViewBag.Title = "Entities";
+}
+
+<h1>@ViewBag.Title</h1>
+<table>
+    <thead>
+        <tr>
+            <th>EntityID</th>
+            <th>EntityName</th>
+            <th>Manage item</th>
+        </tr>
+    </thead>
+     <tbody>
+         @if(Model!=null)
+        {
+            @foreach (var entity in Model)
+            {
+                <tr>
+                    <th>@entity.EntityId</th>
+                    <td>@entity.EntityName</td>
+                    <td>
+                        @* manage  *@
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>
