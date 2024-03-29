@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ProfessionDriverMVC.Controllers.Api.WorkLog
+namespace ProfessionDriver.Controllers.Api.WorkLog
 {
     [ApiController]
     [Route("api/[controller]")]

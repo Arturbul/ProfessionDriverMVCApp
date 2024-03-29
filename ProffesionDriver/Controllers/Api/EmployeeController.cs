@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProfessionDriverMVC.Controllers.Api
+namespace ProfessionDriver.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,10 +1,10 @@
 ﻿using Business.Interface;
 using Microsoft.AspNetCore.Mvc;
-using ProfessionDriverMVC.ViewModels;
+using ProfessionDriver.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProfessionDriverMVC.Controllers.ViewControllers
+namespace ProfessionDriver.Controllers.ViewControllers
 {
     public class EntityController : Controller
     {
@@ -17,6 +17,20 @@ namespace ProfessionDriverMVC.Controllers.ViewControllers
         {
             var result = await _manager.GetEntity();
             return View(result.Select(e => (EntityViewModel?)e));
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var result = await _manager.GetEntity((int)id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return View((EntityViewModel?)result);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Domain.Models.DTO;
 using System;
 
-namespace ProfessionDriverMVC.ViewModels
+namespace ProfessionDriver.ViewModels
 {
     public class EmployeeViewModel
     {

@@ -3,7 +3,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-namespace ProfessionDriverMVC.Controllers.Api
+namespace ProfessionDriver.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]
