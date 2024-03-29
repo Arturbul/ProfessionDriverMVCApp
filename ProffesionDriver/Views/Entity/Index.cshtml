@@ -4,6 +4,9 @@
 }
 
 <h1>@ViewBag.Title</h1>
+<div>
+    <a asp-action="Add">Create new</a>
+</div>
 <table>
     <thead>
         <tr>
@@ -21,11 +24,12 @@
                     <th>@entity.EntityId</th>
                     <td>@entity.EntityName</td>
                     <td>
-                        @* manage  *@
+                        <a asp-action="Details" asp-route-id="@entity.EntityId">Details</a>
+
                     </td>
                 </tr>
             }
         }
     </tbody>
-
 </table>
+

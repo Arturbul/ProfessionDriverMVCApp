@@ -1,4 +1,5 @@
 ﻿using Business.Interface;
+using Domain.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using ProfessionDriver.ViewModels;
 using System.Linq;
@@ -31,6 +32,49 @@ namespace ProfessionDriver.Controllers.ViewControllers
                 return NotFound();
             }
             return View((EntityViewModel?)result);
+        }
+        public IActionResult Add()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(EntityViewModel entity)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _manager.PostEntity((EntityDTO)entity);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(entity);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound(id);
+            }
+            var entity = (EntityViewModel?)await _manager.GetEntity((int)id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            return View(entity);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, [Bind("EntityId,EntityName")] EntityViewModel entity)
+        {
+            if (id != entity.EntityId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                // todo
+                return RedirectToAction(nameof(Index));
+            }
+            return View(entity);
         }
     }
 }

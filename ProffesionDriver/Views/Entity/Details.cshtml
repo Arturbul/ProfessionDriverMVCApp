@@ -5,3 +5,27 @@
 }
 
 <h1>@ViewBag.Title</h1>
+
+<div>
+    <p>
+        <strong>
+            @Html.DisplayNameFor(m=>m.EntityId)
+        </strong>
+        @Html.DisplayFor(m => m.EntityId)
+    </p>
+    <p>
+        <strong>
+            @Html.DisplayNameFor(m => m.EntityName)
+        </strong>
+        @Html.DisplayFor(m => m.EntityName)
+    </p>
+</div>
+<div>
+    <h6>Manage item</h6>
+    <a asp-action="Add">Create new</a>
+
+
+</div>
+<div>
+    <a asp-action="Index">Go back</a>
+</div>
