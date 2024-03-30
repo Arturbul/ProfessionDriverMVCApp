@@ -4,9 +4,10 @@ namespace DataAccess.Interface
 {
     public interface IEntityRepository
     {
-        Task<ICollection<Entity>> GetEntity();
-        Task<Entity?> GetEntity(int id);
-        Task<int> PostEntity(Entity entity);
-        Task<int> DeleteEntity(int entityId);
+        Task<ICollection<Entity>> Get();
+        Task<Entity?> Get(int id);
+        Task<int> Create(Entity entity);
+        Task<int> Update(Entity entity);
+        Task<int> Delete(int entityId);
     }
 }

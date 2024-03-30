@@ -10,7 +10,7 @@ namespace DataAccess
         public EntityRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<Entity>> GetEntity()
+        public async Task<ICollection<Entity>> Get()
         {
             var entities = await this.Context
                                     .Entities
@@ -20,7 +20,7 @@ namespace DataAccess
             return entities;
         }
 
-        public async Task<Entity?> GetEntity(int id)
+        public async Task<Entity?> Get(int id)
         {
             var entity = await this.Context
                                     .Entities
@@ -32,7 +32,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<int> PostEntity(Entity entity)
+        public async Task<int> Create(Entity entity)
         {
             using var context = this.Context;
             context.Entities.Add(entity);
@@ -40,9 +40,17 @@ namespace DataAccess
 
             return entity.EntityId;
         }
+        public async Task<int> Update(Entity entity)
+        {
+            using var context = this.Context;
+            context.Entities.Update(entity);
+            await context.SaveChangesAsync();
+
+            return entity.EntityId;
+        }
 
         //DELETE
-        public async Task<int> DeleteEntity(int entityId)
+        public async Task<int> Delete(int entityId)
         {
             using var context = this.Context;
             var entity = await context.Entities.FindAsync(entityId);

@@ -6,7 +6,9 @@
 
 <h1>@ViewBag.Title</h1>
 <div>
-    <a asp-action="Add">Create new</a>
+    <form>
+        <button asp-action="Add" class="btn btn-success">Create new</button>
+    </form>
 </div>
 <div>
     <p>
@@ -24,9 +26,13 @@
 </div>
 <div>
     <h6>Manage item</h6>
-    <a asp-action="Edit" asp-route-id="@Model.EntityId">Edit</a>
-    <a asp-action="Delete" asp-route-id="@Model.EntityId">Delete</a>
+    <form>
+        <button asp-action="Edit" asp-route-id="@Model.EntityId" class="btn btn-warning">Edit</button>
+        <button asp-action="Remove" asp-route-id="@Model.EntityId" class="btn btn-danger">Remove</button>
+    </form>
 </div>
 <div>
-    <a asp-action="Index">Go back</a>
+    <form>
+        <button asp-action="Index" class="btn btn-secondary">Go back</button>
+    </form>
 </div>

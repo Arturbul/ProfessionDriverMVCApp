@@ -19,8 +19,14 @@
         @Html.DisplayFor(m => m.EntityName)
     </p>
 </div> 
-<form asp-action="Delete">
+<form asp-action="Remove">
     <input type="hidden" asp-for="EntityId"/>
-    <input type="submit" value="Delete" class="btn btn-danger"/>
+    <input type="submit" value="Remove" class="btn btn-danger" />
     <button asp-action="Index" class="btn btn-primary">Cancel</button>
 </form>
+
+<div>
+    <form>
+        <button asp-action="Index" class="btn btn-secondary">Go back</button>
+    </form>
+</div>

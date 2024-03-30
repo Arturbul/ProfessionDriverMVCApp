@@ -21,9 +21,9 @@ namespace ProfessionDriver.Controllers.Api
 
         //GET
         [HttpGet]
-        public async Task<IEnumerable<EntityViewModel>> GetEntities()
+        public async Task<IEnumerable<EntityViewModel>> Get()
         {
-            var entitiesDTO = await _manager.GetEntity();
+            var entitiesDTO = await _manager.Get();
             return entitiesDTO.Select(e => new EntityViewModel
             {
                 EntityId = e.EntityId,
@@ -32,9 +32,9 @@ namespace ProfessionDriver.Controllers.Api
         }
 
         [HttpGet("{id}")]
-        public async Task<EntityViewModel?> GetEntityById(int id)
+        public async Task<EntityViewModel?> Get(int id)
         {
-            var entity = await _manager.GetEntity(id);
+            var entity = await _manager.Get(id);
             if (entity == null)
             {
                 return null;
@@ -48,14 +48,14 @@ namespace ProfessionDriver.Controllers.Api
 
         //POST
         [HttpPost]
-        public async Task<IActionResult> PostEntity(EntityDTO entity)
+        public async Task<IActionResult> Create(EntityDTO entity)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            int result = await _manager.PostEntity(entity);
+            int result = await _manager.Create(entity);
             if (result == 0)
             {
                 return NotFound(result);
@@ -65,9 +65,9 @@ namespace ProfessionDriver.Controllers.Api
 
         //DELETE
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEntity(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            int result = await _manager.DeleteEntity(id);
+            int result = await _manager.Delete(id);
             if (result == 0)
             {
                 return NotFound(result);

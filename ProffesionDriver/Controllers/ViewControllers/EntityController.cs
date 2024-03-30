@@ -16,7 +16,7 @@ namespace ProfessionDriver.Controllers.ViewControllers
         }
         public async Task<IActionResult> Index()
         {
-            var result = await _manager.GetEntity();
+            var result = await _manager.Get();
             return View(result.Select(e => (EntityViewModel?)e));
         }
 
@@ -26,7 +26,7 @@ namespace ProfessionDriver.Controllers.ViewControllers
             {
                 return NotFound();
             }
-            var result = await _manager.GetEntity((int)id);
+            var result = await _manager.Get((int)id);
             if (result == null)
             {
                 return NotFound();
@@ -42,8 +42,12 @@ namespace ProfessionDriver.Controllers.ViewControllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _manager.PostEntity((EntityDTO)entity);
-                return RedirectToAction(nameof(Index));
+                var e = (EntityDTO?)entity;
+                if (e != null)
+                {
+                    var result = await _manager.Create(e);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(entity);
         }
@@ -54,7 +58,7 @@ namespace ProfessionDriver.Controllers.ViewControllers
             {
                 return NotFound(id);
             }
-            var entity = (EntityViewModel?)await _manager.GetEntity((int)id);
+            var entity = (EntityViewModel?)await _manager.Get((int)id);
             if (entity == null)
             {
                 return NotFound();
@@ -71,19 +75,23 @@ namespace ProfessionDriver.Controllers.ViewControllers
             }
             if (ModelState.IsValid)
             {
-                // todo
-                return RedirectToAction(nameof(Index));
+                var e = (EntityDTO?)entity;
+                if (e != null)
+                {
+                    var result = await _manager.Update(e);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(entity);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Remove(int? id)
         {
             if (id == null)
             {
                 return NotFound(id);
             }
-            var entity = (EntityViewModel?)await _manager.GetEntity((int)id);
+            var entity = (EntityViewModel?)await _manager.Get((int)id);
             if (entity == null)
             {
                 return NotFound();
@@ -91,14 +99,14 @@ namespace ProfessionDriver.Controllers.ViewControllers
             return View(entity);
         }
 
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost, ActionName("Remove")]
+        public async Task<IActionResult> RemoveConfirmed(int id)
         {
-            var entity = await _manager.GetEntity(id);
+            var entity = await _manager.Get(id);
             int result;
             if (entity != null)
             {
-                result = await _manager.DeleteEntity(id);
+                result = await _manager.Delete(id);
             }
             return RedirectToAction(nameof(Index));
         }

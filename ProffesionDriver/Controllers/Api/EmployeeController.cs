@@ -29,7 +29,7 @@ namespace ProfessionDriver.Controllers.Api
             var entitiesDTO = new List<EntityDTO?>();
             foreach (var employee in employeesDTO)
             {
-                var entity = await _entityManager.GetEntity(employee.EntityId);
+                var entity = await _entityManager.Get(employee.EntityId);
                 entitiesDTO.Add(entity);
             }
 
@@ -51,7 +51,7 @@ namespace ProfessionDriver.Controllers.Api
             {
                 return null;
             }
-            var entity = await _entityManager.GetEntity(employee.EntityId);
+            var entity = await _entityManager.Get(employee.EntityId);
             return new Employee
             {
                 EmployeeId = employee.EmployeeId,

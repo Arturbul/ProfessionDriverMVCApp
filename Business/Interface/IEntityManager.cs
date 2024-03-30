@@ -3,9 +3,10 @@ namespace Business.Interface
 {
     public interface IEntityManager
     {
-        Task<ICollection<EntityDTO>> GetEntity();
-        Task<EntityDTO?> GetEntity(int id);
-        Task<int> PostEntity(EntityDTO entity);
-        Task<int> DeleteEntity(int entityId);
+        Task<ICollection<EntityDTO>> Get();
+        Task<EntityDTO?> Get(int id);
+        Task<int> Create(EntityDTO entity);
+        Task<int> Update(EntityDTO entity);
+        Task<int> Delete(int entityId);
     }
 }

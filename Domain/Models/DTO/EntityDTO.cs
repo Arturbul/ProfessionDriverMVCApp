@@ -9,5 +9,8 @@ namespace Domain.Models.DTO
 
         public static explicit operator Entity?(EntityDTO? obj)
             => JsonConvert.DeserializeObject<Entity?>(JsonConvert.SerializeObject(obj));
+
+        public static explicit operator EntityDTO?(Entity? obj)
+           => JsonConvert.DeserializeObject<EntityDTO?>(JsonConvert.SerializeObject(obj));
     }
 }

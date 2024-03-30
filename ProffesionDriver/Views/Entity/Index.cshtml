@@ -5,7 +5,9 @@
 
 <h1>@ViewBag.Title</h1>
 <div>
-    <a asp-action="Add">Create new</a>
+    <form>
+        <button asp-action="Add" class="btn btn-success">Create new</button>
+    </form>
 </div>
 <table>
     <thead>
@@ -24,9 +26,11 @@
                     <th>@entity.EntityId</th>
                     <td>@entity.EntityName</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@entity.EntityId">Details</a>
-                        <a asp-action="Edit" asp-route-id="@entity.EntityId">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entity.EntityId">Delete</a>
+                        <form>
+                            <button asp-action="Details" asp-route-id="@entity.EntityId" class="btn btn-primary">Details</button>
+                            <button asp-action="Edit" asp-route-id="@entity.EntityId" class="btn btn-warning">Edit</button>
+                            <button asp-action="Remove" asp-route-id="@entity.EntityId" class="btn btn-danger">Remove</button>
+                        </form>
                     </td>
                 </tr>
             }

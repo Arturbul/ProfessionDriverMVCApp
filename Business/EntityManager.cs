@@ -13,9 +13,9 @@ namespace Business
             _entityRepository = repository;
         }
         //GET
-        public async Task<ICollection<EntityDTO>> GetEntity()
+        public async Task<ICollection<EntityDTO>> Get()
         {
-            var entities = await _entityRepository.GetEntity();
+            var entities = await _entityRepository.Get();
             return entities.Select(e => new EntityDTO
             {
                 EntityId = e.EntityId,
@@ -23,34 +23,40 @@ namespace Business
             }).ToList();
         }
 
-        public async Task<EntityDTO?> GetEntity(int id)
+        public async Task<EntityDTO?> Get(int id)
         {
-            var entity = await _entityRepository.GetEntity(id);
+            var entity = await _entityRepository.Get(id);
             if (entity == null)
             {
                 return null;
             }
-            return new EntityDTO
-            {
-                EntityId = entity.EntityId,
-                EntityName = entity.EntityName
-            };
+            return (EntityDTO?)entity;
         }
 
         //POST
-        public async Task<int> PostEntity(EntityDTO entityDTO)
+        public async Task<int> Create(EntityDTO entityDTO)
         {
-            var entity = new Entity
+            var entity = (Entity?)entityDTO;
+            if (entity == null)
             {
-                EntityName = entityDTO.EntityName
-            };
-            return await _entityRepository.PostEntity(entity);
+                return 0;
+            }
+            return await _entityRepository.Create(entity);
+        }
+        public async Task<int> Update(EntityDTO entityDTO)
+        {
+            var entity = (Entity?)entityDTO;
+            if (entity == null)
+            {
+                return 0;
+            }
+            return await _entityRepository.Update(entity);
         }
 
         //DELETE
-        public async Task<int> DeleteEntity(int entityId)
+        public async Task<int> Delete(int entityId)
         {
-            return await _entityRepository.DeleteEntity(entityId);
+            return await _entityRepository.Delete(entityId);
         }
     }
 }
