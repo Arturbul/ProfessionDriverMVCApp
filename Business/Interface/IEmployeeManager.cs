@@ -3,9 +3,10 @@ namespace Business.Interface
 {
     public interface IEmployeeManager
     {
-        Task<ICollection<EmployeeDTO>> GetEmployee();
-        Task<EmployeeDTO?> GetEmployee(int id);
-        Task<int> PostEmployee(EmployeeDTO employee);
-        Task<int> DeleteEmployee(int employeeId);
+        Task<IEnumerable<EmployeeDTO?>> Get();
+        Task<EmployeeDTO?> Get(int id);
+        Task<int> Create(EmployeeDTO employee);
+        Task<int> Update(EmployeeDTO employee);
+        Task<int> Delete(int employeeId);
     }
 }

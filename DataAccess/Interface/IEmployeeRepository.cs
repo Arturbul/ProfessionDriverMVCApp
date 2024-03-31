@@ -4,9 +4,10 @@ namespace DataAccess.Interface
 {
     public interface IEmployeeRepository
     {
-        Task<ICollection<Employee>> GetEmployee();
-        Task<Employee?> GetEmployee(int id);
-        Task<int> PostEmployee(Employee employee);
-        Task<int> DeleteEmployee(int employeeId);
+        Task<IEnumerable<Employee>> Get();
+        Task<Employee?> Get(int id);
+        Task<int> Create(Employee employee);
+        Task<int> Update(Employee employee);
+        Task<int> Delete(int employeeId);
     }
 }

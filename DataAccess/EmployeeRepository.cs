@@ -10,7 +10,7 @@ namespace DataAccess
         public EmployeeRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<Employee>> GetEmployee()
+        public async Task<IEnumerable<Employee>> Get()
         {
             var employee = await this.Context
                                     .Employees
@@ -20,7 +20,7 @@ namespace DataAccess
             return employee;
         }
 
-        public async Task<Employee?> GetEmployee(int id)
+        public async Task<Employee?> Get(int id)
         {
             var employee = await this.Context
                                     .Employees
@@ -32,7 +32,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<int> PostEmployee(Employee employee)
+        public async Task<int> Create(Employee employee)
         {
             using var context = this.Context;
             context.Employees.Add(employee);
@@ -42,8 +42,18 @@ namespace DataAccess
             return employee.EmployeeId;
         }
 
+        public async Task<int> Update(Employee employee)
+        {
+            using var context = this.Context;
+            context.Employees.Update(employee);
+
+            await context.SaveChangesAsync();
+
+            return employee.EmployeeId;
+        }
+
         //DELETE
-        public async Task<int> DeleteEmployee(int employeeId)
+        public async Task<int> Delete(int employeeId)
         {
             using var context = this.Context;
             var employee = await context

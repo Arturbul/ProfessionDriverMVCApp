@@ -24,7 +24,7 @@ namespace ProfessionDriver.Controllers.Api
         [HttpGet]
         public async Task<IEnumerable<Employee>> GetEmployees()
         {
-            var employeesDTO = await _employeeManager.GetEmployee();
+            var employeesDTO = await _employeeManager.Get();
 
             var entitiesDTO = new List<EntityDTO?>();
             foreach (var employee in employeesDTO)
@@ -46,7 +46,7 @@ namespace ProfessionDriver.Controllers.Api
         [HttpGet("{id}")]
         public async Task<Employee?> GetEmployeeById(int id)
         {
-            var employee = await _employeeManager.GetEmployee(id);
+            var employee = await _employeeManager.Get(id);
             if (employee == null)
             {
                 return null;
@@ -71,7 +71,7 @@ namespace ProfessionDriver.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            int result = await _employeeManager.PostEmployee(employee);
+            int result = await _employeeManager.Create(employee);
             if (result == 0)
             {
                 return NotFound(result);
@@ -83,7 +83,7 @@ namespace ProfessionDriver.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
-            int result = await _employeeManager.DeleteEmployee(id);
+            int result = await _employeeManager.Delete(id);
             if (result == 0)
             {
                 return NotFound(result);

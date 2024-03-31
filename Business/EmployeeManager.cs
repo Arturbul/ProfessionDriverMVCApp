@@ -14,50 +14,46 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<EmployeeDTO>> GetEmployee()
+        public async Task<IEnumerable<EmployeeDTO?>> Get()
         {
-            var employees = await _employeeRepository.GetEmployee();
-            return employees.Select(e => new EmployeeDTO
-            {
-                EmployeeId = e.EmployeeId,
-                EntityId = e.EmployeeId,
-                HireDate = e.HireDate,
-                TerminationDate = e.TerminationDate,
-            }).ToList();
+            var employees = await _employeeRepository.Get();
+            return employees.Select(e => (EmployeeDTO?)e);
         }
 
-        public async Task<EmployeeDTO?> GetEmployee(int id)
+        public async Task<EmployeeDTO?> Get(int id)
         {
-            var employee = await _employeeRepository.GetEmployee(id);
+            var employee = await _employeeRepository.Get(id);
             if (employee == null)
             {
                 return null;
             }
-            return new EmployeeDTO
-            {
-                EmployeeId = employee.EmployeeId,
-                EntityId = employee.EmployeeId,
-                HireDate = employee.HireDate,
-                TerminationDate = employee.TerminationDate,
-            };
+            return (EmployeeDTO?)employee;
         }
 
         //POST
-        public async Task<int> PostEmployee(EmployeeDTO employeeDTO)
+        public async Task<int> Create(EmployeeDTO employeeDTO)
         {
-            var employee = new Employee
+            var employee = (Employee?)employeeDTO;
+            if (employee == null)
             {
-                EntityId = employeeDTO.EmployeeId,
-                HireDate = employeeDTO.HireDate,
-                TerminationDate = employeeDTO.TerminationDate
-            };
-            return await _employeeRepository.PostEmployee(employee);
+                return 0;
+            }
+            return await _employeeRepository.Create(employee);
+        }
+        public async Task<int> Update(EmployeeDTO employeeDTO)
+        {
+            var employee = (Employee?)employeeDTO;
+            if (employee == null)
+            {
+                return 0;
+            }
+            return await _employeeRepository.Update(employee);
         }
 
         //DELETE
-        public async Task<int> DeleteEmployee(int employeeId)
+        public async Task<int> Delete(int employeeId)
         {
-            return await _employeeRepository.DeleteEmployee(employeeId);
+            return await _employeeRepository.Delete(employeeId);
         }
     }
 }
