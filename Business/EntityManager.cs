@@ -13,14 +13,10 @@ namespace Business
             _entityRepository = repository;
         }
         //GET
-        public async Task<ICollection<EntityDTO>> Get()
+        public async Task<IEnumerable<EntityDTO?>> Get()
         {
             var entities = await _entityRepository.Get();
-            return entities.Select(e => new EntityDTO
-            {
-                EntityId = e.EntityId,
-                EntityName = e.EntityName
-            }).ToList();
+            return entities.Select(e => (EntityDTO?)e);
         }
 
         public async Task<EntityDTO?> Get(int id)

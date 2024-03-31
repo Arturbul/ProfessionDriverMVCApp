@@ -10,13 +10,12 @@ namespace DataAccess
         public EntityRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<Entity>> Get()
+        public async Task<IEnumerable<Entity>> Get()
         {
             var entities = await this.Context
                                     .Entities
                                     .AsNoTracking()
                                     .ToListAsync();
-
             return entities;
         }
 

@@ -3,7 +3,7 @@ namespace Business.Interface
 {
     public interface IEntityManager
     {
-        Task<ICollection<EntityDTO>> Get();
+        Task<IEnumerable<EntityDTO?>> Get();
         Task<EntityDTO?> Get(int id);
         Task<int> Create(EntityDTO entity);
         Task<int> Update(EntityDTO entity);
