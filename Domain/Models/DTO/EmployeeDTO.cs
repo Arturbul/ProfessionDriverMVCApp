@@ -12,5 +12,8 @@ namespace Domain.Models.DTO
 
         public static explicit operator Employee?(EmployeeDTO? obj)
             => JsonConvert.DeserializeObject<Employee?>(JsonConvert.SerializeObject(obj));
+
+        public static explicit operator EmployeeDTO?(Employee? obj)
+            => JsonConvert.DeserializeObject<EmployeeDTO?>(JsonConvert.SerializeObject(obj));
     }
 }

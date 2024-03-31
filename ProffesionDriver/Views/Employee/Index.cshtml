@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ProfessionDriver.ViewModels.EmployeeViewModel>
+@{
+    ViewBag.Title = "Employees";
+}
+<h1>@ViewBag.Title</h1>
+<div>
+    <form>
+        <button asp-action="Add" class="btn btn-success">Create new</button>
+    </form>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m=>m.EmployeeId)</th>
+            <th>@Html.DisplayNameFor(m => m.HireDate)</th>
+            <th>@Html.DisplayNameFor(m => m.TerminationDate)</th>
+            <th>@Html.DisplayNameFor(m => m.Entity) brief</th>
+            <th>Manage</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model != null)
+        {
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <th>@Html.DisplayFor(m=> employee.EmployeeId)</th>
+                    <td>@Html.DisplayFor(m=> employee.HireDate)</td>
+                    <td>@Html.DisplayFor(m=> employee.TerminationDate)</td>
+                    @if(employee.Entity !=null)
+                    {
+                        <td>
+                            <a asp-controller="Entity" asp-action="Details" asp-route-id="@employee.Entity.EntityId">
+                               ID: @Html.DisplayFor(m=> employee.Entity.EntityId)
+                               Name: @Html.DisplayFor(m=> employee.Entity.EntityName)
+                            </a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>null</td>
+                    }
+                    <td>
+                        <form>
+                            <button asp-action="Details" asp-route-id="@employee.EmployeeId" class="btn btn-primary">Details</button>
+                            <button asp-action="Edit" asp-route-id="@employee.EmployeeId" class="btn btn-warning">Edit</button>
+                            <button asp-action="Remove" asp-route-id="@employee.EmployeeId" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
