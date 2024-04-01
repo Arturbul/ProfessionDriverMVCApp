@@ -4,9 +4,10 @@ namespace Business.Interface
 {
     public interface IDriverWorkLogDetailManager
     {
-        Task<ICollection<DriverWorkLogDetail>> GetDriverWorkLogDetail();
-        Task<DriverWorkLogDetail?> GetDriverWorkLogDetail(Guid detailId);
-        Task<Guid> PostDriverWorkLogDetail(DriverWorkLogDetail detail);
-        Task<Guid> DeleteDriverWorkLogDetail(Guid detailId);
+        Task<ICollection<DriverWorkLogDetail>> Get();
+        Task<DriverWorkLogDetail?> Get(Guid detailId);
+        Task<Guid> Create(DriverWorkLogDetail detail);
+        Task<Guid> Update(DriverWorkLogDetail detail);
+        Task<Guid> Delete(Guid detailId);
     }
 }

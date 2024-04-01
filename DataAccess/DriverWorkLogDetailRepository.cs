@@ -10,7 +10,7 @@ namespace DataAccess
         public DriverWorkLogDetailRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<DriverWorkLogDetail>> GetDriverWorkLogDetail()
+        public async Task<ICollection<DriverWorkLogDetail>> Get()
         {
             using var context = this.Context;
             var driverWorkLogEntrys = await context
@@ -22,7 +22,7 @@ namespace DataAccess
             return await Task.FromResult(driverWorkLogEntrys);
         }
 
-        public async Task<DriverWorkLogDetail?> GetDriverWorkLogDetail(Guid id)
+        public async Task<DriverWorkLogDetail?> Get(Guid id)
         {
             using var context = this.Context;
             var driverWorkLogEntrys = await context
@@ -36,7 +36,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<Guid> PostDriverWorkLogDetail(DriverWorkLogDetail detail)
+        public async Task<Guid> Create(DriverWorkLogDetail detail)
         {
             using var context = this.Context;
             context.DriverWorkLogDetails.Add(detail);
@@ -45,8 +45,16 @@ namespace DataAccess
             return detail.DriverWorkLogDetailId;
         }
 
+        public async Task<Guid> Update(DriverWorkLogDetail detail)
+        {
+            using var context = this.Context;
+            context.DriverWorkLogDetails.Update(detail);
+            await context.SaveChangesAsync();
+
+            return detail.DriverWorkLogDetailId;
+        }
         //DELETE
-        public async Task<Guid> DeleteDriverWorkLogDetail(Guid detailId)
+        public async Task<Guid> Delete(Guid detailId)
         {
             using var context = this.Context;
             var driverWorkLogEntry = await context
