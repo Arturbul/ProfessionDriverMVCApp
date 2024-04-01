@@ -14,26 +14,30 @@ namespace DataAccess
         }
 
         // GET
-        public async Task<ICollection<DriverWorkLog>> GetDriverWorkLog()
+        public async Task<ICollection<DriverWorkLog>> Get()
         {
-            return await _workLogRepository.GetDriverWorkLog();
+            return await _workLogRepository.Get();
         }
 
-        public async Task<DriverWorkLog?> GetDriverWorkLog(Guid logId)
+        public async Task<DriverWorkLog?> Get(Guid logId)
         {
-            return await _workLogRepository.GetDriverWorkLog(logId);
+            return await _workLogRepository.Get(logId);
         }
 
         // POST
-        public async Task<Guid> PostDriverWorkLog(DriverWorkLog log)
+        public async Task<Guid> Create(DriverWorkLog log)
         {
-            return await _workLogRepository.PostDriverWorkLog(log);
+            return await _workLogRepository.Create(log);
         }
 
-        // DELETE
-        public async Task<Guid> DeleteDriverWorkLog(Guid LogId)
+        public async Task<Guid> Update(DriverWorkLog log)
         {
-            return await _workLogRepository.DeleteDriverWorkLog(LogId);
+            return await _workLogRepository.Update(log);
+        }
+        // DELETE
+        public async Task<Guid> Delete(Guid LogId)
+        {
+            return await _workLogRepository.Delete(LogId);
         }
     }
 }
