@@ -4,9 +4,10 @@ namespace DataAccess.Interface
 {
     public interface IDriverRepository
     {
-        Task<ICollection<Driver>> GetDriver();
-        Task<Driver?> GetDriver(int id);
-        Task<int> PostDriver(Driver driver);
-        Task<int> DeleteDriver(int driverId);
+        Task<ICollection<Driver>> Get();
+        Task<Driver?> Get(int id);
+        Task<int> Create(Driver driver);
+        Task<int> Update(Driver driver);
+        Task<int> Delete(int driverId);
     }
 }

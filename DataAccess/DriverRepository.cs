@@ -10,7 +10,7 @@ namespace DataAccess
         public DriverRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<Driver>> GetDriver()
+        public async Task<ICollection<Driver>> Get()
         {
             using var context = this.Context;
             var drivers = await context
@@ -21,7 +21,7 @@ namespace DataAccess
             return await Task.FromResult(drivers);
         }
 
-        public async Task<Driver?> GetDriver(int id)
+        public async Task<Driver?> Get(int id)
         {
             using var context = this.Context;
             var drivers = await context
@@ -34,7 +34,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<int> PostDriver(Driver driver)
+        public async Task<int> Create(Driver driver)
         {
             using var context = this.Context;
             context.Drivers.Add(driver);
@@ -42,9 +42,17 @@ namespace DataAccess
 
             return driver.DriverId;
         }
+        public async Task<int> Update(Driver driver)
+        {
+            using var context = this.Context;
+            context.Drivers.Update(driver);
+            await context.SaveChangesAsync();
+
+            return driver.DriverId;
+        }
 
         //DELETE
-        public async Task<int> DeleteDriver(int driverId)
+        public async Task<int> Delete(int driverId)
         {
             using var context = this.Context;
             var driver = await context

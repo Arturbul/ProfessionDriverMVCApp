@@ -13,26 +13,30 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<Driver>> GetDriver()
+        public async Task<ICollection<Driver>> Get()
         {
-            return await _driverRepository.GetDriver();
+            return await _driverRepository.Get();
         }
 
-        public async Task<Driver?> GetDriver(int id)
+        public async Task<Driver?> Get(int id)
         {
-            return await _driverRepository.GetDriver(id);
+            return await _driverRepository.Get(id);
         }
 
         //POST
-        public async Task<int> PostDriver(Driver driver)
+        public async Task<int> Create(Driver driver)
         {
-            return await _driverRepository.PostDriver(driver);
+            return await _driverRepository.Create(driver);
+        }
+        public async Task<int> Update(Driver driver)
+        {
+            return await _driverRepository.Update(driver);
         }
 
         //DELETE
-        public async Task<int> DeleteDriver(int driverId)
+        public async Task<int> Delete(int driverId)
         {
-            return await _driverRepository.DeleteDriver(driverId);
+            return await _driverRepository.Delete(driverId);
         }
     }
 }

@@ -20,13 +20,13 @@ namespace ProfessionDriver.Controllers.Api
         [HttpGet]
         public async Task<ICollection<Driver>> Get()
         {
-            return await _manager.GetDriver();
+            return await _manager.Get();
         }
 
         [HttpGet("{id}")]
         public async Task<Driver?> GetById(int id)
         {
-            return await _manager.GetDriver(id);
+            return await _manager.Get(id);
         }
 
         //POST
@@ -44,7 +44,7 @@ namespace ProfessionDriver.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            int result = await _manager.PostDriver(driver);
+            int result = await _manager.Create(driver);
             if (result == 0)
             {
                 return NotFound(result);
@@ -56,7 +56,7 @@ namespace ProfessionDriver.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            int result = await _manager.DeleteDriver(id);
+            int result = await _manager.Delete(id);
             if (result == 0)
             {
                 return NotFound(result);
