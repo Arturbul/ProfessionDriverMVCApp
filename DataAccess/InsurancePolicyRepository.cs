@@ -9,7 +9,7 @@ namespace DataAccess
     {
         public InsurancePolicyRepository(ProfessionDriverProjectContext context) : base(context) { }
         //GET
-        public async Task<ICollection<InsurancePolicy>> GetInsurancePolicy()
+        public async Task<ICollection<InsurancePolicy>> Get()
         {
             using var context = this.Context;
             var insurancePolicy = await context
@@ -20,7 +20,7 @@ namespace DataAccess
             return await Task.FromResult(insurancePolicy);
         }
 
-        public async Task<InsurancePolicy?> GetInsurancePolicy(int id)
+        public async Task<InsurancePolicy?> Get(int id)
         {
             using var context = this.Context;
             var insurancePolicy = await context
@@ -33,7 +33,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<int> PostInsurancePolicy(InsurancePolicy insurancePolicy)
+        public async Task<int> Create(InsurancePolicy insurancePolicy)
         {
             using var context = this.Context;
             context.InsurancePolicies.Add(insurancePolicy);
@@ -41,9 +41,17 @@ namespace DataAccess
 
             return insurancePolicy.InsurancePolicyId;
         }
+        public async Task<int> Update(InsurancePolicy insurancePolicy)
+        {
+            using var context = this.Context;
+            context.InsurancePolicies.Update(insurancePolicy);
+            await context.SaveChangesAsync();
+
+            return insurancePolicy.InsurancePolicyId;
+        }
 
         //DELETE
-        public async Task<int> DeleteInsurancePolicy(int insurancePolicyId)
+        public async Task<int> Delete(int insurancePolicyId)
         {
             using var context = this.Context;
             var insurancePolicy = await context.InsurancePolicies.FindAsync(insurancePolicyId);

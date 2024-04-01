@@ -12,26 +12,30 @@ namespace Business
             _insurancePolicyRepository = repository;
         }
         //GET
-        public async Task<ICollection<InsurancePolicy>> GetInsurancePolicy()
+        public async Task<ICollection<InsurancePolicy>> Get()
         {
-            return await _insurancePolicyRepository.GetInsurancePolicy();
+            return await _insurancePolicyRepository.Get();
         }
 
-        public async Task<InsurancePolicy?> GetInsurancePolicy(int id)
+        public async Task<InsurancePolicy?> Get(int id)
         {
-            return await _insurancePolicyRepository.GetInsurancePolicy(id);
+            return await _insurancePolicyRepository.Get(id);
         }
 
         //POST
-        public async Task<int> PostInsurancePolicy(InsurancePolicy insurancePolicy)
+        public async Task<int> Create(InsurancePolicy insurancePolicy)
         {
-            return await _insurancePolicyRepository.PostInsurancePolicy(insurancePolicy);
+            return await _insurancePolicyRepository.Create(insurancePolicy);
+        }
+        public async Task<int> Update(InsurancePolicy insurancePolicy)
+        {
+            return await _insurancePolicyRepository.Update(insurancePolicy);
         }
 
         //DELETE
-        public async Task<int> DeleteInsurancePolicy(int insurancePolicyId)
+        public async Task<int> Delete(int insurancePolicyId)
         {
-            return await _insurancePolicyRepository.DeleteInsurancePolicy(insurancePolicyId);
+            return await _insurancePolicyRepository.Delete(insurancePolicyId);
         }
     }
 }

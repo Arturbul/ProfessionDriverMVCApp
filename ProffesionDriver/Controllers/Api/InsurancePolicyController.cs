@@ -19,13 +19,13 @@ namespace ProfessionDriver.Controllers.Api
         [HttpGet]
         public async Task<ICollection<InsurancePolicy>> GetInsurancePolicys()
         {
-            return await _manager.GetInsurancePolicy();
+            return await _manager.Get();
         }
 
         [HttpGet("{id}")]
         public async Task<InsurancePolicy?> GetInsurancePolicyById(int id)
         {
-            return await _manager.GetInsurancePolicy(id);
+            return await _manager.Get(id);
         }
 
         //POST
@@ -37,7 +37,7 @@ namespace ProfessionDriver.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            int result = await _manager.PostInsurancePolicy(insurancePolicy);
+            int result = await _manager.Create(insurancePolicy);
             if (result == 0)
             {
                 return NotFound(result);
@@ -49,7 +49,7 @@ namespace ProfessionDriver.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInsurancePolicy(int id)
         {
-            int result = await _manager.DeleteInsurancePolicy(id);
+            int result = await _manager.Delete(id);
             if (result == 0)
             {
                 return NotFound(result);

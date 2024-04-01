@@ -4,9 +4,10 @@ namespace DataAccess.Interface
 {
     public interface IInsurancePolicyRepository
     {
-        Task<ICollection<InsurancePolicy>> GetInsurancePolicy();
-        Task<InsurancePolicy?> GetInsurancePolicy(int id);
-        Task<int> PostInsurancePolicy(InsurancePolicy insurancePolicy);
-        Task<int> DeleteInsurancePolicy(int insurancePolicyId);
+        Task<ICollection<InsurancePolicy>> Get();
+        Task<InsurancePolicy?> Get(int id);
+        Task<int> Create(InsurancePolicy insurancePolicy);
+        Task<int> Update(InsurancePolicy insurancePolicy);
+        Task<int> Delete(int insurancePolicyId);
     }
 }
