@@ -13,26 +13,31 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<Vehicle>> GetVehicle()
+        public async Task<ICollection<Vehicle>> Get()
         {
-            return await _vehicleRepository.GetVehicle();
+            return await _vehicleRepository.Get();
         }
 
-        public async Task<Vehicle?> GetVehicle(int id)
+        public async Task<Vehicle?> Get(int id)
         {
-            return await _vehicleRepository.GetVehicle(id);
+            return await _vehicleRepository.Get(id);
         }
 
         //POST
-        public async Task<int> PostVehicle(Vehicle vehicle)
+        public async Task<int> Create(Vehicle vehicle)
         {
-            return await _vehicleRepository.PostVehicle(vehicle);
+            return await _vehicleRepository.Create(vehicle);
+        }
+
+        public async Task<int> Update(Vehicle vehicle)
+        {
+            return await _vehicleRepository.Update(vehicle);
         }
 
         //DELETE
-        public async Task<int> DeleteVehicle(int vehicleId)
+        public async Task<int> Delete(int vehicleId)
         {
-            return await _vehicleRepository.DeleteVehicle(vehicleId);
+            return await _vehicleRepository.Delete(vehicleId);
         }
     }
 }

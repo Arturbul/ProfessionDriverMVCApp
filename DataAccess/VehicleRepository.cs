@@ -10,7 +10,7 @@ namespace DataAccess
         public VehicleRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<Vehicle>> GetVehicle()
+        public async Task<ICollection<Vehicle>> Get()
         {
             using var context = this.Context;
             var vehicles = await context
@@ -21,7 +21,7 @@ namespace DataAccess
             return await Task.FromResult(vehicles);
         }
 
-        public async Task<Vehicle?> GetVehicle(int id)
+        public async Task<Vehicle?> Get(int id)
         {
             using var context = this.Context;
             var vehicles = await context
@@ -34,7 +34,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<int> PostVehicle(Vehicle vehicle)
+        public async Task<int> Create(Vehicle vehicle)
         {
             using var context = this.Context;
             context.Vehicles.Add(vehicle);
@@ -43,8 +43,17 @@ namespace DataAccess
             return vehicle.VehicleId;
         }
 
+        public async Task<int> Update(Vehicle vehicle)
+        {
+            using var context = this.Context;
+            context.Vehicles.Update(vehicle);
+            await context.SaveChangesAsync();
+
+            return vehicle.VehicleId;
+        }
+
         //DELETE
-        public async Task<int> DeleteVehicle(int vehicleId)
+        public async Task<int> Delete(int vehicleId)
         {
             using var context = this.Context;
             var vehicle = await context
