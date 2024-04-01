@@ -9,7 +9,7 @@ namespace DataAccess
     {
         public VehicleInspectionRepository(ProfessionDriverProjectContext context) : base(context) { }
         //GET
-        public async Task<ICollection<VehicleInspection>> GetVehicleInspection()
+        public async Task<ICollection<VehicleInspection>> Get()
         {
             using var context = this.Context;
             var vehicleInspection = await context
@@ -20,7 +20,7 @@ namespace DataAccess
             return await Task.FromResult(vehicleInspection);
         }
 
-        public async Task<VehicleInspection?> GetVehicleInspection(int id)
+        public async Task<VehicleInspection?> Get(int id)
         {
             using var context = this.Context;
             var vehicleInspection = await context
@@ -33,7 +33,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<int> PostVehicleInspection(VehicleInspection vehicleInspection)
+        public async Task<int> Create(VehicleInspection vehicleInspection)
         {
             using var context = this.Context;
             context.VehicleInspections.Add(vehicleInspection);
@@ -42,8 +42,17 @@ namespace DataAccess
             return vehicleInspection.VehicleInspectionId;
         }
 
+        public async Task<int> Update(VehicleInspection vehicleInspection)
+        {
+            using var context = this.Context;
+            context.VehicleInspections.Update(vehicleInspection);
+            await context.SaveChangesAsync();
+
+            return vehicleInspection.VehicleInspectionId;
+        }
+
         //DELETE
-        public async Task<int> DeleteVehicleInspection(int vehicleInspectionId)
+        public async Task<int> Delete(int vehicleInspectionId)
         {
             using var context = this.Context;
             var vehicleInspection = await context.VehicleInspections.FindAsync(vehicleInspectionId);
