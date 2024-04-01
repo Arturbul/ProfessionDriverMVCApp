@@ -10,7 +10,7 @@ namespace DataAccess
         public LGVRepository(ProfessionDriverProjectContext context) : base(context) { }
 
         //GET
-        public async Task<ICollection<LargeGoodsVehicle>> GetLargeGoodsVehicle()
+        public async Task<ICollection<LargeGoodsVehicle>> Get()
         {
             using var context = this.Context;
             var lgvs = await context
@@ -21,7 +21,7 @@ namespace DataAccess
             return await Task.FromResult(lgvs);
         }
 
-        public async Task<LargeGoodsVehicle?> GetLargeGoodsVehicle(int id)
+        public async Task<LargeGoodsVehicle?> Get(int id)
         {
             using var context = this.Context;
             var lgvs = await context
@@ -34,7 +34,7 @@ namespace DataAccess
         }
 
         //POST
-        public async Task<int> PostLargeGoodsVehicle(LargeGoodsVehicle lgv)
+        public async Task<int> Create(LargeGoodsVehicle lgv)
         {
             using var context = this.Context;
             context.LargeGoodsVehicles.Add(lgv);
@@ -43,8 +43,17 @@ namespace DataAccess
             return lgv.LargeGoodsVehicleId;
         }
 
+        public async Task<int> Update(LargeGoodsVehicle lgv)
+        {
+            using var context = this.Context;
+            context.LargeGoodsVehicles.Update(lgv);
+            await context.SaveChangesAsync();
+
+            return lgv.LargeGoodsVehicleId;
+        }
+
         //DELETE
-        public async Task<int> DeleteLargeGoodsVehicle(int lgvId)
+        public async Task<int> Delete(int lgvId)
         {
             using var context = this.Context;
             var lgv = await context

@@ -13,26 +13,31 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<LargeGoodsVehicle>> GetLargeGoodsVehicle()
+        public async Task<ICollection<LargeGoodsVehicle>> Get()
         {
-            return await _lgvRepository.GetLargeGoodsVehicle();
+            return await _lgvRepository.Get();
         }
 
-        public async Task<LargeGoodsVehicle?> GetLargeGoodsVehicle(int id)
+        public async Task<LargeGoodsVehicle?> Get(int id)
         {
-            return await _lgvRepository.GetLargeGoodsVehicle(id);
+            return await _lgvRepository.Get(id);
         }
 
         //POST
-        public async Task<int> PostLargeGoodsVehicle(LargeGoodsVehicle lgv)
+        public async Task<int> Create(LargeGoodsVehicle lgv)
         {
-            return await _lgvRepository.PostLargeGoodsVehicle(lgv);
+            return await _lgvRepository.Create(lgv);
+        }
+
+        public async Task<int> Update(LargeGoodsVehicle lgv)
+        {
+            return await _lgvRepository.Update(lgv);
         }
 
         //DELETE
-        public async Task<int> DeleteLargeGoodsVehicle(int lgvId)
+        public async Task<int> Delete(int lgvId)
         {
-            return await _lgvRepository.DeleteLargeGoodsVehicle(lgvId);
+            return await _lgvRepository.Delete(lgvId);
         }
     }
 }
