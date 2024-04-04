@@ -1,6 +1,7 @@
 ﻿using Business.Interface;
 using DataAccess.Interface;
 using Domain.Models;
+using Domain.Models.DTO;
 
 namespace Business
 {
@@ -13,23 +14,35 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<Driver>> Get()
+        public async Task<IEnumerable<DriverDTO?>> Get()
         {
-            return await _driverRepository.Get();
+            var drivers = await _driverRepository.Get();
+            return drivers.Select(d => (DriverDTO?)d);
         }
 
-        public async Task<Driver?> Get(int id)
+        public async Task<DriverDTO?> Get(int id)
         {
-            return await _driverRepository.Get(id);
+            var driver = (DriverDTO?)await _driverRepository.Get(id);
+            return driver;
         }
 
         //POST
-        public async Task<int> Create(Driver driver)
+        public async Task<int> Create(DriverDTO driverDTO)
         {
+            var driver = (Driver?)driverDTO;
+            if (driver == null)
+            {
+                return 0;
+            }
             return await _driverRepository.Create(driver);
         }
-        public async Task<int> Update(Driver driver)
+        public async Task<int> Update(DriverDTO driverDTO)
         {
+            var driver = (Driver?)driverDTO;
+            if (driver == null)
+            {
+                return 0;
+            }
             return await _driverRepository.Update(driver);
         }
 
