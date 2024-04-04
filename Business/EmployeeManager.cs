@@ -22,12 +22,8 @@ namespace Business
 
         public async Task<EmployeeDTO?> Get(int id)
         {
-            var employee = await _employeeRepository.Get(id);
-            if (employee == null)
-            {
-                return null;
-            }
-            return (EmployeeDTO?)employee;
+            var employee = (EmployeeDTO?)await _employeeRepository.Get(id);
+            return employee;
         }
 
         //POST
