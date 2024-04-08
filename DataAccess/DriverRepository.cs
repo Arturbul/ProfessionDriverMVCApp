@@ -12,9 +12,9 @@ namespace DataAccess
         //GET
         public async Task<ICollection<Driver>> Get()
         {
-            using var context = this.Context;
-            var drivers = await context
+            var drivers = await this.Context
                                 .Drivers
+                                .OrderBy(e => e.DriverId)
                                 .AsNoTracking()
                                 .ToListAsync();
 
@@ -23,8 +23,7 @@ namespace DataAccess
 
         public async Task<Driver?> Get(int id)
         {
-            using var context = this.Context;
-            var drivers = await context
+            var drivers = await this.Context
                                 .Drivers
                                 .Where(d => d.DriverId == id)
                                 .AsNoTracking()
@@ -37,7 +36,10 @@ namespace DataAccess
         public async Task<int> Create(Driver driver)
         {
             using var context = this.Context;
-            context.Drivers.Add(driver);
+            if (await check_relations(driver))
+            {
+                context.Drivers.Add(driver);
+            }
             await context.SaveChangesAsync();
 
             return driver.DriverId;
@@ -45,7 +47,10 @@ namespace DataAccess
         public async Task<int> Update(Driver driver)
         {
             using var context = this.Context;
-            context.Drivers.Update(driver);
+            if (await check_relations(driver))
+            {
+                context.Drivers.Update(driver);
+            }
             await context.SaveChangesAsync();
 
             return driver.DriverId;
@@ -66,6 +71,14 @@ namespace DataAccess
                 return driver.DriverId;
             }
             return 0;
+        }
+
+        private async Task<bool> check_relations(Driver driver)
+        {
+            var result = await this.Context
+                .Employees
+                .FindAsync(driver.EmployeeId);
+            return result != null ? true : false;
         }
     }
 }

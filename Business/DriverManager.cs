@@ -1,44 +1,47 @@
-﻿using Business.Interface;
+﻿using AutoMapper;
+using Business.Interface;
 using DataAccess.Interface;
 using Domain.Models;
-using Domain.Models.DTO;
+using Domain.ViewModels;
 
 namespace Business
 {
     public class DriverManager : IDriverManager
     {
+        private readonly IMapper _mapper;
         private readonly IDriverRepository _driverRepository;
-        public DriverManager(IDriverRepository driverRepository)
+        public DriverManager(IMapper mapper, IDriverRepository driverRepository)
         {
+            _mapper = mapper;
             _driverRepository = driverRepository;
         }
 
         //GET
-        public async Task<IEnumerable<DriverDTO?>> Get()
+        public async Task<IEnumerable<DriverViewModel>> Get()
         {
             var drivers = await _driverRepository.Get();
-            return drivers.Select(d => (DriverDTO?)d);
+            return _mapper.Map<IEnumerable<DriverViewModel>>(drivers);
         }
 
-        public async Task<DriverDTO?> Get(int id)
+        public async Task<DriverViewModel?> Get(int id)
         {
-            var driver = (DriverDTO?)await _driverRepository.Get(id);
-            return driver;
+            var driver = await _driverRepository.Get(id);
+            return _mapper?.Map<DriverViewModel>(driver);
         }
 
         //POST
-        public async Task<int> Create(DriverDTO driverDTO)
+        public async Task<int> Create(DriverViewModel driverViewModel)
         {
-            var driver = (Driver?)driverDTO;
+            var driver = _mapper.Map<Driver>(driverViewModel);
             if (driver == null)
             {
                 return 0;
             }
             return await _driverRepository.Create(driver);
         }
-        public async Task<int> Update(DriverDTO driverDTO)
+        public async Task<int> Update(DriverViewModel driverViewModel)
         {
-            var driver = (Driver?)driverDTO;
+            var driver = _mapper.Map<Driver>(driverViewModel);
             if (driver == null)
             {
                 return 0;

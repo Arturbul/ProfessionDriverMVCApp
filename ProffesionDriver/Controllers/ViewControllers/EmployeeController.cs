@@ -1,7 +1,6 @@
 ﻿using Business.Interface;
-using Domain.Models.DTO;
+using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using ProfessionDriver.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,24 +9,15 @@ namespace ProfessionDriver.Controllers.ViewControllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeManager _employeeManager;
-        private readonly IEntityManager _entityManager;
-        public EmployeeController(IEmployeeManager employeeManager, IEntityManager entityManager)
+        public EmployeeController(IEmployeeManager employeeManager)
         {
             _employeeManager = employeeManager;
-            _entityManager = entityManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var employees = (await _employeeManager.Get())
-                .Select(e => (EmployeeViewModel?)e)
                 .ToList();
-
-            foreach (var employee in employees)
-            {
-                if (employee == null) continue;
-                employee.Entity = await _entityManager.Get(employee.EntityId);
-            }
             return View(employees);
         }
 
@@ -38,13 +28,11 @@ namespace ProfessionDriver.Controllers.ViewControllers
                 return NotFound();
             }
 
-            var employee = (EmployeeViewModel?)await _employeeManager.Get((int)id);
-
+            var employee = await _employeeManager.Get((int)id);
             if (employee == null)
             {
                 return NotFound();
             }
-            employee.Entity = await _entityManager.Get(employee.EntityId);
             return View(employee);
         }
 
@@ -55,13 +43,11 @@ namespace ProfessionDriver.Controllers.ViewControllers
                 return NotFound();
             }
 
-            var employee = (EmployeeViewModel?)await _employeeManager.Get((int)id);
-
+            var employee = await _employeeManager.Get((int)id);
             if (employee == null)
             {
                 return NotFound();
             }
-            employee.Entity = await _entityManager.Get(employee.EntityId);
             return View(employee);
         }
 
@@ -74,12 +60,8 @@ namespace ProfessionDriver.Controllers.ViewControllers
             }
             if (ModelState.IsValid)
             {
-                var employeeDTO = (EmployeeDTO?)employee;
-                if (employeeDTO != null)
-                {
-                    var result = await _employeeManager.Update(employeeDTO);
-                    return RedirectToAction(nameof(Index));
-                }
+                var result = await _employeeManager.Update(employee);
+                return RedirectToAction(nameof(Index));
             }
             return View(employee);
         }
@@ -94,12 +76,8 @@ namespace ProfessionDriver.Controllers.ViewControllers
         {
             if (ModelState.IsValid)
             {
-                var employeeDTO = (EmployeeDTO?)employee;
-                if (employeeDTO != null)
-                {
-                    var result = await _employeeManager.Create(employeeDTO);
-                    return RedirectToAction(nameof(Index));
-                }
+                var result = await _employeeManager.Create(employee);
+                return RedirectToAction(nameof(Index));
             }
             return View(employee);
         }
@@ -109,7 +87,7 @@ namespace ProfessionDriver.Controllers.ViewControllers
             {
                 return NotFound(id);
             }
-            var employee = (EmployeeViewModel?)await _employeeManager.Get((int)id);
+            var employee = await _employeeManager.Get((int)id);
             if (employee == null)
             {
                 return NotFound();

@@ -1,4 +1,5 @@
 using Domain.Data;
+using Domain.Profiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,9 @@ builder.Services.AddRazorPages();
 
 //DI
 Business.Dependencies.Register(builder.Services);
+
+//AutMapper
+builder.Services.AddAutoMapper(typeof(EntityProfile), typeof(EmployeeProfile), typeof(DriverProfile));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

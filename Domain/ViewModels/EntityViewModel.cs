@@ -1,7 +1,7 @@
 ﻿using Domain.Models.DTO;
 using Newtonsoft.Json;
 
-namespace ProfessionDriver.ViewModels
+namespace Domain.ViewModels
 {
     public class EntityViewModel
     {

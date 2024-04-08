@@ -35,7 +35,10 @@ namespace DataAccess
         public async Task<int> Create(Employee employee)
         {
             using var context = this.Context;
-            context.Employees.Add(employee);
+            if (await check_relations(employee))
+            {
+                context.Employees.Add(employee);
+            }
 
             await context.SaveChangesAsync();
 
@@ -45,7 +48,10 @@ namespace DataAccess
         public async Task<int> Update(Employee employee)
         {
             using var context = this.Context;
-            context.Employees.Update(employee);
+            if (await check_relations(employee))
+            {
+                context.Employees.Update(employee);
+            }
 
             await context.SaveChangesAsync();
 
@@ -67,6 +73,14 @@ namespace DataAccess
                 return employee.EmployeeId;
             }
             return 0;
+        }
+
+        private async Task<bool> check_relations(Employee employee)
+        {
+            var result = await this.Context
+                .Entities
+                .FindAsync(employee.EntityId);
+            return result != null ? true : false;
         }
     }
 }

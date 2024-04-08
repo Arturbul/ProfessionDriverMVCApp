@@ -1,6 +1,5 @@
 ﻿using Business.Interface;
-using Domain.Models;
-using Domain.Models.DTO;
+using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,58 +12,29 @@ namespace ProfessionDriver.Controllers.Api
     public class EmployeeController : Controller
     {
         private readonly IEmployeeManager _employeeManager;
-        private readonly IEntityManager _entityManager;
-        public EmployeeController(IEmployeeManager employeeManager, IEntityManager entityManager)
+        public EmployeeController(IEmployeeManager employeeManager)
         {
             _employeeManager = employeeManager;
-            _entityManager = entityManager;
         }
 
         //GET
         [HttpGet]
-        public async Task<IEnumerable<Employee>> GetEmployees()
+        public async Task<IEnumerable<EmployeeViewModel>> GetEmployees()
         {
-            var employeesDTO = await _employeeManager.Get();
-
-            var entitiesDTO = new List<EntityDTO?>();
-            foreach (var employee in employeesDTO)
-            {
-                var entity = await _entityManager.Get(employee.EntityId);
-                entitiesDTO.Add(entity);
-            }
-
-            return employeesDTO.Select(e => new Employee
-            {
-                EmployeeId = e.EmployeeId,
-                EntityId = e.EntityId,
-                HireDate = e.HireDate,
-                TerminationDate = e.TerminationDate,
-                Entity = (Entity?)entitiesDTO.FirstOrDefault(entity => e.EntityId == entity?.EntityId) ?? new Entity()
-            }).ToList();
+            var employees = (await _employeeManager.Get())
+                .ToList();
+            return employees;
         }
 
         [HttpGet("{id}")]
-        public async Task<Employee?> GetEmployeeById(int id)
+        public async Task<EmployeeViewModel?> GetEmployeeById(int id)
         {
-            var employee = await _employeeManager.Get(id);
-            if (employee == null)
-            {
-                return null;
-            }
-            var entity = await _entityManager.Get(employee.EntityId);
-            return new Employee
-            {
-                EmployeeId = employee.EmployeeId,
-                EntityId = employee.EntityId,
-                HireDate = employee.HireDate,
-                TerminationDate = employee.TerminationDate,
-                Entity = (Entity?)entity ?? new Entity()
-            };
+            var employees = await _employeeManager.Get(id);
+            return employees;
         }
-
         //POST
         [HttpPost]
-        public async Task<IActionResult> PostEmployee([FromBody] EmployeeDTO employee)
+        public async Task<IActionResult> PostEmployee([FromBody] EmployeeViewModel employee)
         {
             if (!ModelState.IsValid)
             {

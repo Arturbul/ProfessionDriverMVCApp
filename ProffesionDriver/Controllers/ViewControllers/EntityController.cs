@@ -1,7 +1,7 @@
 ﻿using Business.Interface;
 using Domain.Models.DTO;
+using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using ProfessionDriver.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -1,12 +1,13 @@
-﻿using Domain.Models.DTO;
+﻿using Domain.ViewModels;
+
 namespace Business.Interface
 {
     public interface IEmployeeManager
     {
-        Task<IEnumerable<EmployeeDTO?>> Get();
-        Task<EmployeeDTO?> Get(int id);
-        Task<int> Create(EmployeeDTO employee);
-        Task<int> Update(EmployeeDTO employee);
+        Task<IEnumerable<EmployeeViewModel>> Get();
+        Task<EmployeeViewModel?> Get(int id);
+        Task<int> Create(EmployeeViewModel employeeViewModel);
+        Task<int> Update(EmployeeViewModel employeeViewModel);
         Task<int> Delete(int employeeId);
     }
 }
