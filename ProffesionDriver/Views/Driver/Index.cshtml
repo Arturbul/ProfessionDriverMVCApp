@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProfessionDriver.ViewModels.DriverViewModel>
+﻿@model IEnumerable<Domain.ViewModels.DriverViewModel>
 @{
     ViewBag.Title = "Drivers";
 }
@@ -22,13 +22,12 @@
             @foreach (var driver in Model)
             {
                 <tr>
-                    <th>@Html.DisplayFor(m => driver.EmployeeId)</th>
+                    <th>@Html.DisplayFor(m => driver.DriverId)</th>
                     @if (driver.Employee != null)
                     {
                         <td>
-                            <a asp-controller="Employee" asp-action="Details" asp-route-id="@driver.Employee.EntityId">
-                                ID: @Html.DisplayFor(m => driver.Employee.EntityId)
-                                EntityId: @Html.DisplayFor(m => driver.Employee.EntityId)
+                            <a asp-controller="Employee" asp-action="Details" asp-route-id="@driver.EmployeeId">
+                                Details: @driver.Employee.ToString()
                             </a>
                         </td>
                     }
