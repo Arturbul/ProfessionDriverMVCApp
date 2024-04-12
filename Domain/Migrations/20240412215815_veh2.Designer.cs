@@ -4,6 +4,7 @@ using Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ProfessionDriverProjectContext))]
-    partial class ProfessionDriverProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240412215815_veh2")]
+    partial class veh2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -43,6 +46,7 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Models.DriverWorkLog", b =>
                 {
                     b.Property<Guid>("DriverWorkLogId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DriverId")
@@ -242,9 +246,13 @@ namespace Domain.Migrations
 
                     b.HasIndex("EntityId");
 
-                    b.HasIndex("VehicleInspectionId");
+                    b.HasIndex("VehicleInspectionId")
+                        .IsUnique()
+                        .HasFilter("[VehicleInspectionId] IS NOT NULL");
 
-                    b.HasIndex("VehicleInsuranceId");
+                    b.HasIndex("VehicleInsuranceId")
+                        .IsUnique()
+                        .HasFilter("[VehicleInsuranceId] IS NOT NULL");
 
                     b.ToTable("Vehicles");
                 });
@@ -390,12 +398,12 @@ namespace Domain.Migrations
                         .HasForeignKey("EntityId");
 
                     b.HasOne("Domain.Models.VehicleInspection", "VehicleInspection")
-                        .WithMany()
-                        .HasForeignKey("VehicleInspectionId");
+                        .WithOne("Vehicle")
+                        .HasForeignKey("Domain.Models.Vehicle", "VehicleInspectionId");
 
                     b.HasOne("Domain.Models.VehicleInsurance", "VehicleInsurance")
-                        .WithMany()
-                        .HasForeignKey("VehicleInsuranceId");
+                        .WithOne("Vehicle")
+                        .HasForeignKey("Domain.Models.Vehicle", "VehicleInsuranceId");
 
                     b.Navigation("Entity");
 
@@ -439,6 +447,18 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Models.LargeGoodsVehicle", b =>
                 {
                     b.Navigation("DriverWorkLogs");
+                });
+
+            modelBuilder.Entity("Domain.Models.VehicleInspection", b =>
+                {
+                    b.Navigation("Vehicle")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.VehicleInsurance", b =>
+                {
+                    b.Navigation("Vehicle")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

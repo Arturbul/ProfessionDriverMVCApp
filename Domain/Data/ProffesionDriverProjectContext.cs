@@ -51,9 +51,9 @@ namespace Domain.Data
             //Relations
 
             modelBuilder.Entity<Driver>()
-            .HasMany(d => d.DriverWorkLogs)
-            .WithOne(wl => wl.Driver)
-            .HasForeignKey(wl => wl.DriverId);
+                .HasMany(d => d.DriverWorkLogs)
+                .WithOne(wl => wl.Driver)
+                .HasForeignKey(wl => wl.DriverId);
 
             modelBuilder.Entity<DriverWorkLog>()
                 .HasOne(wl => wl.DriverWorkLogDetail)
