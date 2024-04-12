@@ -15,11 +15,6 @@ namespace Domain.Models
         public DateTime LogTime { get; set; }
         public string? Place { get; set; }
         public float? Mileage { get; set; }
-
         public Driver Driver { get; set; } = null!;
-
-        public Guid? DriverWorkLogDetailId { get; set; }
-        public DriverWorkLogDetail? DriverWorkLogDetail { get; set; }
-
     }
 }

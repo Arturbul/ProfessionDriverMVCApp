@@ -18,7 +18,7 @@ namespace Business
             services.AddScoped<IVehicleInspectionManager, VehicleInspectionManager>();
             services.AddScoped<IVehicleManager, VehicleManager>();
             services.AddScoped<ILGVManager, LGVManager>();
-            services.AddScoped<IDriverWorkLogDetailManager, DriverWorkLogDetailManager>();
+
             //DI for DataAccess 
             DataAccess.Dependencies.Register(services);
         }

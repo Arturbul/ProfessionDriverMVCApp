@@ -71,7 +71,7 @@ namespace ProfessionDriver.Controllers.Api.WorkLog
                 LogTime = time,
                 Place = place,
                 Mileage = mileage,
-                DriverWorkLogDetailId = workLogDetailId
+                //DriverWorkLogDetailId = workLogDetailId
             };
 
             if (!ModelState.IsValid)

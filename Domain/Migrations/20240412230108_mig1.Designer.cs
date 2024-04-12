@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ProfessionDriverProjectContext))]
-    [Migration("20240322101051_test-2")]
-    partial class test2
+    [Migration("20240412230108_mig1")]
+    partial class mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -46,38 +46,32 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Models.DriverWorkLog", b =>
                 {
                     b.Property<Guid>("DriverWorkLogId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("DriverWorkLogDetailId")
+                    b.Property<Guid?>("EndEntryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("LargeGoodsVehicleId")
+                    b.Property<int>("LargeGoodsVehicleId")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("StartEntryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("DriverWorkLogId");
 
                     b.HasIndex("DriverId");
 
+                    b.HasIndex("EndEntryId");
+
                     b.HasIndex("LargeGoodsVehicleId");
 
+                    b.HasIndex("StartEntryId");
+
                     b.ToTable("DriverWorkLogs");
-                });
-
-            modelBuilder.Entity("Domain.Models.DriverWorkLogDetail", b =>
-                {
-                    b.Property<Guid>("DriverWorkLogDetailId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DriverWorkLogId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("DriverWorkLogDetailId");
-
-                    b.ToTable("DriverWorkLogDetails");
                 });
 
             modelBuilder.Entity("Domain.Models.DriverWorkLogEntry", b =>
@@ -88,9 +82,6 @@ namespace Domain.Migrations
 
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("DriverWorkLogDetailId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LogTime")
                         .HasColumnType("datetime2");
@@ -109,8 +100,6 @@ namespace Domain.Migrations
                     b.HasKey("DriverWorkLogEntryId");
 
                     b.HasIndex("DriverId");
-
-                    b.HasIndex("DriverWorkLogDetailId");
 
                     b.ToTable("DriverWorkLogEntries");
                 });
@@ -242,9 +231,13 @@ namespace Domain.Migrations
 
                     b.HasIndex("EntityId");
 
-                    b.HasIndex("VehicleInspectionId");
+                    b.HasIndex("VehicleInspectionId")
+                        .IsUnique()
+                        .HasFilter("[VehicleInspectionId] IS NOT NULL");
 
-                    b.HasIndex("VehicleInsuranceId");
+                    b.HasIndex("VehicleInsuranceId")
+                        .IsUnique()
+                        .HasFilter("[VehicleInsuranceId] IS NOT NULL");
 
                     b.ToTable("Vehicles");
                 });
@@ -317,22 +310,32 @@ namespace Domain.Migrations
                     b.HasOne("Domain.Models.Driver", "Driver")
                         .WithMany("DriverWorkLogs")
                         .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.DriverWorkLogDetail", "DriverWorkLogDetail")
-                        .WithOne("DriverWorkLog")
-                        .HasForeignKey("Domain.Models.DriverWorkLog", "DriverWorkLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Domain.Models.DriverWorkLogEntry", "EndEntry")
+                        .WithMany()
+                        .HasForeignKey("EndEntryId");
 
-                    b.HasOne("Domain.Models.LargeGoodsVehicle", null)
+                    b.HasOne("Domain.Models.LargeGoodsVehicle", "LargeGoodsVehicle")
                         .WithMany("DriverWorkLogs")
-                        .HasForeignKey("LargeGoodsVehicleId");
+                        .HasForeignKey("LargeGoodsVehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.DriverWorkLogEntry", "StartEntry")
+                        .WithMany()
+                        .HasForeignKey("StartEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Driver");
 
-                    b.Navigation("DriverWorkLogDetail");
+                    b.Navigation("EndEntry");
+
+                    b.Navigation("LargeGoodsVehicle");
+
+                    b.Navigation("StartEntry");
                 });
 
             modelBuilder.Entity("Domain.Models.DriverWorkLogEntry", b =>
@@ -343,13 +346,7 @@ namespace Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.DriverWorkLogDetail", "DriverWorkLogDetail")
-                        .WithMany("DriverWorkLogEntries")
-                        .HasForeignKey("DriverWorkLogDetailId");
-
                     b.Navigation("Driver");
-
-                    b.Navigation("DriverWorkLogDetail");
                 });
 
             modelBuilder.Entity("Domain.Models.Employee", b =>
@@ -387,12 +384,12 @@ namespace Domain.Migrations
                         .HasForeignKey("EntityId");
 
                     b.HasOne("Domain.Models.VehicleInspection", "VehicleInspection")
-                        .WithMany()
-                        .HasForeignKey("VehicleInspectionId");
+                        .WithOne("Vehicle")
+                        .HasForeignKey("Domain.Models.Vehicle", "VehicleInspectionId");
 
                     b.HasOne("Domain.Models.VehicleInsurance", "VehicleInsurance")
-                        .WithMany()
-                        .HasForeignKey("VehicleInsuranceId");
+                        .WithOne("Vehicle")
+                        .HasForeignKey("Domain.Models.Vehicle", "VehicleInsuranceId");
 
                     b.Navigation("Entity");
 
@@ -423,17 +420,21 @@ namespace Domain.Migrations
                     b.Navigation("DriverWorkLogs");
                 });
 
-            modelBuilder.Entity("Domain.Models.DriverWorkLogDetail", b =>
-                {
-                    b.Navigation("DriverWorkLog")
-                        .IsRequired();
-
-                    b.Navigation("DriverWorkLogEntries");
-                });
-
             modelBuilder.Entity("Domain.Models.LargeGoodsVehicle", b =>
                 {
                     b.Navigation("DriverWorkLogs");
+                });
+
+            modelBuilder.Entity("Domain.Models.VehicleInspection", b =>
+                {
+                    b.Navigation("Vehicle")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.VehicleInsurance", b =>
+                {
+                    b.Navigation("Vehicle")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

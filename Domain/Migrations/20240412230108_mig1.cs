@@ -6,23 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class test1 : Migration
+    public partial class mig1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "DriverWorkLogDetails",
-                columns: table => new
-                {
-                    DriverWorkLogDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DriverWorkLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DriverWorkLogDetails", x => x.DriverWorkLogDetailId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Entities",
                 columns: table => new
@@ -176,17 +164,11 @@ namespace Domain.Migrations
                     RegistrationNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     LogTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Place = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Mileage = table.Column<float>(type: "real", nullable: true),
-                    DriverWorkLogDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Mileage = table.Column<float>(type: "real", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DriverWorkLogEntries", x => x.DriverWorkLogEntryId);
-                    table.ForeignKey(
-                        name: "FK_DriverWorkLogEntries_DriverWorkLogDetails_DriverWorkLogDetailId",
-                        column: x => x.DriverWorkLogDetailId,
-                        principalTable: "DriverWorkLogDetails",
-                        principalColumn: "DriverWorkLogDetailId");
                     table.ForeignKey(
                         name: "FK_DriverWorkLogEntries_Drivers_DriverId",
                         column: x => x.DriverId,
@@ -227,29 +209,35 @@ namespace Domain.Migrations
                 {
                     DriverWorkLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DriverId = table.Column<int>(type: "int", nullable: false),
-                    DriverWorkLogDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LargeGoodsVehicleId = table.Column<int>(type: "int", nullable: true)
+                    LargeGoodsVehicleId = table.Column<int>(type: "int", nullable: false),
+                    StartEntryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EndEntryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DriverWorkLogs", x => x.DriverWorkLogId);
                     table.ForeignKey(
-                        name: "FK_DriverWorkLogs_DriverWorkLogDetails_DriverWorkLogId",
-                        column: x => x.DriverWorkLogId,
-                        principalTable: "DriverWorkLogDetails",
-                        principalColumn: "DriverWorkLogDetailId",
+                        name: "FK_DriverWorkLogs_DriverWorkLogEntries_EndEntryId",
+                        column: x => x.EndEntryId,
+                        principalTable: "DriverWorkLogEntries",
+                        principalColumn: "DriverWorkLogEntryId");
+                    table.ForeignKey(
+                        name: "FK_DriverWorkLogs_DriverWorkLogEntries_StartEntryId",
+                        column: x => x.StartEntryId,
+                        principalTable: "DriverWorkLogEntries",
+                        principalColumn: "DriverWorkLogEntryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DriverWorkLogs_Drivers_DriverId",
                         column: x => x.DriverId,
                         principalTable: "Drivers",
-                        principalColumn: "DriverId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DriverId");
                     table.ForeignKey(
                         name: "FK_DriverWorkLogs_LargeGoodsVehicles_LargeGoodsVehicleId",
                         column: x => x.LargeGoodsVehicleId,
                         principalTable: "LargeGoodsVehicles",
-                        principalColumn: "LargeGoodsVehicleId");
+                        principalColumn: "LargeGoodsVehicleId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -263,19 +251,24 @@ namespace Domain.Migrations
                 column: "DriverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DriverWorkLogEntries_DriverWorkLogDetailId",
-                table: "DriverWorkLogEntries",
-                column: "DriverWorkLogDetailId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DriverWorkLogs_DriverId",
                 table: "DriverWorkLogs",
                 column: "DriverId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DriverWorkLogs_EndEntryId",
+                table: "DriverWorkLogs",
+                column: "EndEntryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DriverWorkLogs_LargeGoodsVehicleId",
                 table: "DriverWorkLogs",
                 column: "LargeGoodsVehicleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DriverWorkLogs_StartEntryId",
+                table: "DriverWorkLogs",
+                column: "StartEntryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_EntityId",
@@ -310,46 +303,47 @@ namespace Domain.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_VehicleInspectionId",
                 table: "Vehicles",
-                column: "VehicleInspectionId");
+                column: "VehicleInspectionId",
+                unique: true,
+                filter: "[VehicleInspectionId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_VehicleInsuranceId",
                 table: "Vehicles",
-                column: "VehicleInsuranceId");
+                column: "VehicleInsuranceId",
+                unique: true,
+                filter: "[VehicleInsuranceId] IS NOT NULL");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DriverWorkLogEntries");
-
-            migrationBuilder.DropTable(
                 name: "DriverWorkLogs");
 
             migrationBuilder.DropTable(
-                name: "DriverWorkLogDetails");
-
-            migrationBuilder.DropTable(
-                name: "Drivers");
+                name: "DriverWorkLogEntries");
 
             migrationBuilder.DropTable(
                 name: "LargeGoodsVehicles");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Drivers");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
 
             migrationBuilder.DropTable(
-                name: "Entities");
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "VehicleInspections");
 
             migrationBuilder.DropTable(
                 name: "VehicleInsurances");
+
+            migrationBuilder.DropTable(
+                name: "Entities");
 
             migrationBuilder.DropTable(
                 name: "InsurancePolicies");

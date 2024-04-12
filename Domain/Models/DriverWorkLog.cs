@@ -9,10 +9,13 @@ namespace Domain.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid DriverWorkLogId { get; set; }
         public int DriverId { get; set; }
-        public Guid? DriverWorkLogDetailId { get; set; }
-
+        public LargeGoodsVehicle LargeGoodsVehicle { get; set; } = null!;
         public Driver Driver { get; set; } = null!;
-        public DriverWorkLogDetail? DriverWorkLogDetail { get; set; }
+        [ForeignKey("StartEntryId")]
+        public DriverWorkLogEntry StartEntry { get; set; } = null!;
+
+        [ForeignKey("EndEntryId")]
+        public DriverWorkLogEntry? EndEntry { get; set; }
     }
 }
 //Driver Pauses

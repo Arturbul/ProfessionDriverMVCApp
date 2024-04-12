@@ -37,7 +37,6 @@ namespace ProfessionDriver.Controllers.Api.WorkLog
             var workLog = new DriverWorkLog()
             {
                 DriverId = driverId,
-                DriverWorkLogDetailId = driverWorkLogDetailId
             };
 
             if (!ModelState.IsValid)
