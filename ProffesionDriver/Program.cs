@@ -29,7 +29,11 @@ builder.Services.AddRazorPages();
 Business.Dependencies.Register(builder.Services);
 
 //AutMapper
-builder.Services.AddAutoMapper(typeof(EntityProfile), typeof(EmployeeProfile), typeof(DriverProfile));
+builder.Services.AddAutoMapper(
+    typeof(EntityProfile), typeof(EmployeeProfile), typeof(DriverProfile),
+    typeof(DriverWorkLogEntryProfile), typeof(InsurancePolicyProfile), typeof(LargeGoodsVehicleProfile),
+    typeof(VehicleInspectionProfile), typeof(VehicleInsuranceProfile), typeof(VehicleProfile)
+    );
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
