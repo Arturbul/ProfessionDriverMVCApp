@@ -4,10 +4,10 @@ namespace Business.Interface
 {
     public interface IInsurancePolicyManager
     {
-        Task<ICollection<InsurancePolicy>> Get();
+        Task<IEnumerable<InsurancePolicy>> Get();
         Task<InsurancePolicy?> Get(int id);
-        Task<int> Create(InsurancePolicy insurancePolicy);
-        Task<int> Update(InsurancePolicy insurancePolicy);
+        Task<InsurancePolicy> Create(InsurancePolicy insurancePolicy);
+        Task<InsurancePolicy> Update(InsurancePolicy insurancePolicy);
         Task<int> Delete(int insurancePolicyId);
     }
 }

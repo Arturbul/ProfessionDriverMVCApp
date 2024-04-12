@@ -41,8 +41,8 @@ namespace ProfessionDriver.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            int result = await _employeeManager.Create(employee);
-            if (result == 0)
+            var result = await _employeeManager.Create(employee);
+            if (result != null)
             {
                 return NotFound(result);
             }

@@ -19,7 +19,7 @@ namespace ProfessionDriver.Controllers.Api
 
         //GET
         [HttpGet]
-        public async Task<ICollection<LargeGoodsVehicle>> GetLargeGoodsVehicles()
+        public async Task<IEnumerable<LargeGoodsVehicle>> GetLargeGoodsVehicles()
         {
             return await _manager.Get();
         }
@@ -45,8 +45,8 @@ namespace ProfessionDriver.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            int result = await _manager.Create(lgv);
-            if (result == 0)
+            var result = await _manager.Create(lgv);
+            if (result == null)
             {
                 return NotFound(result);
             }

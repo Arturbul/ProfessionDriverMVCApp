@@ -16,9 +16,8 @@ namespace ProfessionDriver.Controllers.ViewControllers
 
         public async Task<IActionResult> Index()
         {
-            var employees = (await _employeeManager.Get())
-                .ToList();
-            return View(employees);
+            var employees = await _employeeManager.Get();
+            return View(employees.ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -61,7 +60,7 @@ namespace ProfessionDriver.Controllers.ViewControllers
             if (ModelState.IsValid)
             {
                 var result = await _employeeManager.Update(employee);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), result.EmployeeId);
             }
             return View(employee);
         }

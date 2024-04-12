@@ -19,7 +19,7 @@ namespace ProfessionDriver.Controllers.Api.WorkLog
 
         //GET
         [HttpGet]
-        public async Task<ICollection<DriverWorkLogEntry>> Get()
+        public async Task<IEnumerable<DriverWorkLogEntry>> Get()
         {
             return await _manager.Get();
         }
@@ -79,8 +79,8 @@ namespace ProfessionDriver.Controllers.Api.WorkLog
                 return BadRequest(ModelState);
             }
 
-            Guid result = await _manager.Create(entry);
-            if (result == Guid.Empty)
+            var result = await _manager.Create(entry);
+            if (result == null)
             {
                 return NotFound(result);
             }
@@ -91,8 +91,8 @@ namespace ProfessionDriver.Controllers.Api.WorkLog
         [HttpDelete("{logId}")]
         public async Task<IActionResult> Delete(Guid logId)
         {
-            Guid result = await _manager.Delete(logId);
-            if (result == Guid.Empty)
+            var result = await _manager.Delete(logId);
+            if (result == 0)
             {
                 return NotFound(result);
             }

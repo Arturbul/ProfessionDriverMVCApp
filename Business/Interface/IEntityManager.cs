@@ -1,12 +1,9 @@
-﻿using Domain.Models.DTO;
+﻿using Business.Generic.Interface;
+using Domain.Models;
+using Domain.ViewModels;
 namespace Business.Interface
 {
-    public interface IEntityManager
+    public interface IEntityManager : ITManager<Entity, EntityViewModel>
     {
-        Task<IEnumerable<EntityDTO?>> Get();
-        Task<EntityDTO?> Get(int id);
-        Task<int> Create(EntityDTO entity);
-        Task<int> Update(EntityDTO entity);
-        Task<int> Delete(int entityId);
     }
 }

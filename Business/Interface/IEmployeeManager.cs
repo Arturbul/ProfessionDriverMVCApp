@@ -1,13 +1,10 @@
-﻿using Domain.ViewModels;
+﻿using Business.Generic.Interface;
+using Domain.Models;
+using Domain.ViewModels;
 
 namespace Business.Interface
 {
-    public interface IEmployeeManager
+    public interface IEmployeeManager : ITManager<Employee, EmployeeViewModel>
     {
-        Task<IEnumerable<EmployeeViewModel>> Get();
-        Task<EmployeeViewModel?> Get(int id);
-        Task<int> Create(EmployeeViewModel employeeViewModel);
-        Task<int> Update(EmployeeViewModel employeeViewModel);
-        Task<int> Delete(int employeeId);
     }
 }

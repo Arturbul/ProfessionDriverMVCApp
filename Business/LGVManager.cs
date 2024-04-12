@@ -13,7 +13,7 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<LargeGoodsVehicle>> Get()
+        public async Task<IEnumerable<LargeGoodsVehicle>> Get()
         {
             return await _lgvRepository.Get();
         }
@@ -24,12 +24,12 @@ namespace Business
         }
 
         //POST
-        public async Task<int> Create(LargeGoodsVehicle lgv)
+        public async Task<LargeGoodsVehicle> Create(LargeGoodsVehicle lgv)
         {
             return await _lgvRepository.Create(lgv);
         }
 
-        public async Task<int> Update(LargeGoodsVehicle lgv)
+        public async Task<LargeGoodsVehicle> Update(LargeGoodsVehicle lgv)
         {
             return await _lgvRepository.Update(lgv);
         }
@@ -37,7 +37,12 @@ namespace Business
         //DELETE
         public async Task<int> Delete(int lgvId)
         {
-            return await _lgvRepository.Delete(lgvId);
+            var lgv = await _lgvRepository.Get(lgvId);
+            if (lgv == null)
+            {
+                return 0;
+            }
+            return await _lgvRepository.Delete(lgv);
         }
     }
 }

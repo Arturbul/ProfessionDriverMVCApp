@@ -13,7 +13,7 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<Vehicle>> Get()
+        public async Task<IEnumerable<Vehicle>> Get()
         {
             return await _vehicleRepository.Get();
         }
@@ -24,12 +24,12 @@ namespace Business
         }
 
         //POST
-        public async Task<int> Create(Vehicle vehicle)
+        public async Task<Vehicle> Create(Vehicle vehicle)
         {
             return await _vehicleRepository.Create(vehicle);
         }
 
-        public async Task<int> Update(Vehicle vehicle)
+        public async Task<Vehicle> Update(Vehicle vehicle)
         {
             return await _vehicleRepository.Update(vehicle);
         }
@@ -37,7 +37,12 @@ namespace Business
         //DELETE
         public async Task<int> Delete(int vehicleId)
         {
-            return await _vehicleRepository.Delete(vehicleId);
+            var vehicle = await _vehicleRepository.Get(vehicleId);
+            if (vehicle == null)
+            {
+                return 0;
+            }
+            return await _vehicleRepository.Delete(vehicle);
         }
     }
 }

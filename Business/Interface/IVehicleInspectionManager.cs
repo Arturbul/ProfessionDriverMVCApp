@@ -4,10 +4,10 @@ namespace Business.Interface
 {
     public interface IVehicleInspectionManager
     {
-        Task<ICollection<VehicleInspection>> Get();
+        Task<IEnumerable<VehicleInspection>> Get();
         Task<VehicleInspection?> Get(int id);
-        Task<int> Create(VehicleInspection vehicleInspection);
-        Task<int> Update(VehicleInspection vehicleInspection);
+        Task<VehicleInspection> Create(VehicleInspection vehicleInspection);
+        Task<VehicleInspection> Update(VehicleInspection vehicleInspection);
         Task<int> Delete(int vehicleInspectionId);
     }
 }

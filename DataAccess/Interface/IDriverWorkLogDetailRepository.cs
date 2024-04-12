@@ -1,13 +1,10 @@
-﻿using Domain.Models;
+﻿using DataAccess.Generic.Interface;
+using Domain.Models;
 
 namespace DataAccess.Interface
 {
-    public interface IDriverWorkLogDetailRepository
+    public interface IDriverWorkLogDetailRepository : ITRepository<DriverWorkLogDetail>
     {
-        Task<ICollection<DriverWorkLogDetail>> Get();
-        Task<DriverWorkLogDetail?> Get(Guid detailId);
-        Task<Guid> Create(DriverWorkLogDetail detail);
-        Task<Guid> Update(DriverWorkLogDetail detail);
-        Task<Guid> Delete(Guid detailId);
+
     }
 }

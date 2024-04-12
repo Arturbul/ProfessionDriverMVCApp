@@ -1,13 +1,9 @@
-﻿using Domain.Models;
+﻿using DataAccess.Generic.Interface;
+using Domain.Models;
 
 namespace DataAccess.Interface
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository : ITRepository<Employee>
     {
-        Task<IEnumerable<Employee>> Get();
-        Task<Employee?> Get(int id);
-        Task<int> Create(Employee employee);
-        Task<int> Update(Employee employee);
-        Task<int> Delete(int employeeId);
     }
 }

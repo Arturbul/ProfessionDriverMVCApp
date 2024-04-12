@@ -12,7 +12,7 @@ namespace Business
             _vehicleInspectionRepository = repository;
         }
         //GET
-        public async Task<ICollection<VehicleInspection>> Get()
+        public async Task<IEnumerable<VehicleInspection>> Get()
         {
             return await _vehicleInspectionRepository.Get();
         }
@@ -23,11 +23,11 @@ namespace Business
         }
 
         //POST
-        public async Task<int> Create(VehicleInspection vehicleInspection)
+        public async Task<VehicleInspection> Create(VehicleInspection vehicleInspection)
         {
             return await _vehicleInspectionRepository.Create(vehicleInspection);
         }
-        public async Task<int> Update(VehicleInspection vehicleInspection)
+        public async Task<VehicleInspection> Update(VehicleInspection vehicleInspection)
         {
             return await _vehicleInspectionRepository.Update(vehicleInspection);
         }
@@ -35,7 +35,12 @@ namespace Business
         //DELETE
         public async Task<int> Delete(int vehicleInspectionId)
         {
-            return await _vehicleInspectionRepository.Delete(vehicleInspectionId);
+            var inspection = await _vehicleInspectionRepository.Get(vehicleInspectionId);
+            if (inspection == null)
+            {
+                return 0;
+            }
+            return await _vehicleInspectionRepository.Delete(inspection);
         }
     }
 }

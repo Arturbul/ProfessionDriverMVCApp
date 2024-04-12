@@ -10,7 +10,7 @@
 
         public override string ToString()
         {
-            return $"Entity name: {Entity!.EntityName}, EmployeeId: {EmployeeId}, EntityId: {EntityId}";
+            return $"EmployeeId: {EmployeeId}, HireDate: {HireDate}, TerminationDate: {TerminationDate}, EntityId: {EntityId},\n Entity: {Entity}";
         }
     }
 }

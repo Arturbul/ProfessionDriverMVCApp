@@ -1,5 +1,4 @@
 ﻿using Business.Interface;
-using Domain.Models.DTO;
 using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -48,15 +47,15 @@ namespace ProfessionDriver.Controllers.Api
 
         //POST
         [HttpPost]
-        public async Task<IActionResult> Create(EntityDTO entity)
+        public async Task<IActionResult> Create(EntityViewModel entity)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            int result = await _manager.Create(entity);
-            if (result == 0)
+            var result = await _manager.Create(entity);
+            if (result == null)
             {
                 return NotFound(result);
             }

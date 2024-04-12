@@ -12,7 +12,7 @@ namespace Business
             _insurancePolicyRepository = repository;
         }
         //GET
-        public async Task<ICollection<InsurancePolicy>> Get()
+        public async Task<IEnumerable<InsurancePolicy>> Get()
         {
             return await _insurancePolicyRepository.Get();
         }
@@ -23,11 +23,11 @@ namespace Business
         }
 
         //POST
-        public async Task<int> Create(InsurancePolicy insurancePolicy)
+        public async Task<InsurancePolicy> Create(InsurancePolicy insurancePolicy)
         {
             return await _insurancePolicyRepository.Create(insurancePolicy);
         }
-        public async Task<int> Update(InsurancePolicy insurancePolicy)
+        public async Task<InsurancePolicy> Update(InsurancePolicy insurancePolicy)
         {
             return await _insurancePolicyRepository.Update(insurancePolicy);
         }
@@ -35,7 +35,12 @@ namespace Business
         //DELETE
         public async Task<int> Delete(int insurancePolicyId)
         {
-            return await _insurancePolicyRepository.Delete(insurancePolicyId);
+            var policy = await _insurancePolicyRepository.Get(insurancePolicyId);
+            if (policy == null)
+            {
+                return 0;
+            }
+            return await _insurancePolicyRepository.Delete(policy);
         }
     }
 }

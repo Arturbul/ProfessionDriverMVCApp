@@ -4,10 +4,10 @@ namespace Business.Interface
 {
     public interface ILGVManager
     {
-        Task<ICollection<LargeGoodsVehicle>> Get();
+        Task<IEnumerable<LargeGoodsVehicle>> Get();
         Task<LargeGoodsVehicle?> Get(int id);
-        Task<int> Create(LargeGoodsVehicle lgv);
-        Task<int> Update(LargeGoodsVehicle lgv);
+        Task<LargeGoodsVehicle> Create(LargeGoodsVehicle lgv);
+        Task<LargeGoodsVehicle> Update(LargeGoodsVehicle lgv);
         Task<int> Delete(int lgvId);
     }
 }

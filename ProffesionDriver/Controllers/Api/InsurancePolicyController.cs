@@ -17,7 +17,7 @@ namespace ProfessionDriver.Controllers.Api
 
         //GET
         [HttpGet]
-        public async Task<ICollection<InsurancePolicy>> GetInsurancePolicys()
+        public async Task<IEnumerable<InsurancePolicy>> GetInsurancePolicys()
         {
             return await _manager.Get();
         }
@@ -37,8 +37,8 @@ namespace ProfessionDriver.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            int result = await _manager.Create(insurancePolicy);
-            if (result == 0)
+            var result = await _manager.Create(insurancePolicy);
+            if (result == null)
             {
                 return NotFound(result);
             }

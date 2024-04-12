@@ -17,7 +17,6 @@ namespace Domain.Data
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
         public DbSet<VehicleInspection> VehicleInspections { get; set; } = null!;
         public DbSet<VehicleInsurance> VehicleInsurances { get; set; } = null!;
-
         public DbSet<DriverWorkLogDetail> DriverWorkLogDetails { get; set; }
 
         #region Required
@@ -68,5 +67,6 @@ namespace Domain.Data
 
         }
         #endregion
+
     }
 }

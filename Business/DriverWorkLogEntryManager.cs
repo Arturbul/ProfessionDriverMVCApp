@@ -13,7 +13,7 @@ namespace Business
         }
 
         //GET
-        public async Task<ICollection<DriverWorkLogEntry>> Get()
+        public async Task<IEnumerable<DriverWorkLogEntry>> Get()
         {
             return await _workLogEntryRepository.Get();
         }
@@ -24,20 +24,25 @@ namespace Business
         }
 
         //POST
-        public async Task<Guid> Create(DriverWorkLogEntry log)
+        public async Task<DriverWorkLogEntry> Create(DriverWorkLogEntry log)
         {
             return await _workLogEntryRepository.Create(log);
         }
 
-        public async Task<Guid> Update(DriverWorkLogEntry log)
+        public async Task<DriverWorkLogEntry> Update(DriverWorkLogEntry log)
         {
             return await _workLogEntryRepository.Update(log);
         }
 
         //DELETE
-        public async Task<Guid> Delete(Guid LogId)
+        public async Task<int> Delete(Guid logId)
         {
-            return await _workLogEntryRepository.Delete(LogId);
+            var log = await _workLogEntryRepository.Get(logId);
+            if (log == null)
+            {
+                return 0;
+            }
+            return await _workLogEntryRepository.Delete(log);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Business.Interface;
-using Domain.Models.DTO;
 using Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -17,7 +16,7 @@ namespace ProfessionDriver.Controllers.ViewControllers
         public async Task<IActionResult> Index()
         {
             var result = await _manager.Get();
-            return View(result.Select(e => (EntityViewModel?)e));
+            return View(result.ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -42,12 +41,8 @@ namespace ProfessionDriver.Controllers.ViewControllers
         {
             if (ModelState.IsValid)
             {
-                var e = (EntityDTO?)entity;
-                if (e != null)
-                {
-                    var result = await _manager.Create(e);
-                    return RedirectToAction(nameof(Index));
-                }
+                var result = await _manager.Create(entity);
+                return RedirectToAction(nameof(Index));
             }
             return View(entity);
         }
@@ -58,7 +53,7 @@ namespace ProfessionDriver.Controllers.ViewControllers
             {
                 return NotFound(id);
             }
-            var entity = (EntityViewModel?)await _manager.Get((int)id);
+            var entity = await _manager.Get((int)id);
             if (entity == null)
             {
                 return NotFound();
@@ -75,12 +70,8 @@ namespace ProfessionDriver.Controllers.ViewControllers
             }
             if (ModelState.IsValid)
             {
-                var e = (EntityDTO?)entity;
-                if (e != null)
-                {
-                    var result = await _manager.Update(e);
-                    return RedirectToAction(nameof(Index));
-                }
+                var result = await _manager.Update(entity);
+                return RedirectToAction(nameof(Index));
             }
             return View(entity);
         }

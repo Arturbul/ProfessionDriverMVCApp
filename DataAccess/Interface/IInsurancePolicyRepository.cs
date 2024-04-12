@@ -1,13 +1,9 @@
-﻿using Domain.Models;
+﻿using DataAccess.Generic.Interface;
+using Domain.Models;
 
 namespace DataAccess.Interface
 {
-    public interface IInsurancePolicyRepository
+    public interface IInsurancePolicyRepository : ITRepository<InsurancePolicy>
     {
-        Task<ICollection<InsurancePolicy>> Get();
-        Task<InsurancePolicy?> Get(int id);
-        Task<int> Create(InsurancePolicy insurancePolicy);
-        Task<int> Update(InsurancePolicy insurancePolicy);
-        Task<int> Delete(int insurancePolicyId);
     }
 }

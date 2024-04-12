@@ -1,13 +1,9 @@
-﻿using Domain.Models;
+﻿using DataAccess.Generic.Interface;
+using Domain.Models;
 
 namespace DataAccess.Interface
 {
-    public interface IDriverRepository
+    public interface IDriverRepository : ITRepository<Driver>
     {
-        Task<ICollection<Driver>> Get();
-        Task<Driver?> Get(int id);
-        Task<int> Create(Driver driver);
-        Task<int> Update(Driver driver);
-        Task<int> Delete(int driverId);
     }
 }
