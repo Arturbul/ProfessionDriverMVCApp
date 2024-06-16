@@ -3,18 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{86C56236-A089-4272-8930-91F7D9BBD370}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessionDriverApp.Domain", "ProffesionDriverApp.Domain\ProfessionDriverApp.Domain.csproj", "{86C56236-A089-4272-8930-91F7D9BBD370}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{5735DDF5-7A87-40CB-B8B8-CDA829087600}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessionDriverApp.Business", "ProffesionDriverApp.Business\ProfessionDriverApp.Business.csproj", "{5735DDF5-7A87-40CB-B8B8-CDA829087600}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{AD2417D0-5D84-4A1A-8B67-00457BA530A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessionDriverApp.DataAccess", "ProffesionDriverApp.DataAccess\ProfessionDriverApp.DataAccess.csproj", "{AD2417D0-5D84-4A1A-8B67-00457BA530A9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B07150B6-EF24-4A11-9596-9A1846451993}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessionDriver", "ProffesionDriver\ProfessionDriver.csproj", "{E2BAC3DC-BF7B-478B-816D-337B6326D271}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessionDriverApp", "ProffesionDriverApp\ProfessionDriverApp.csproj", "{E2BAC3DC-BF7B-478B-816D-337B6326D271}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessionDriverApp.WebAPI", "ProfessionDriverApp.WebAPI\ProfessionDriverApp.WebAPI.csproj", "{53EEBB1A-4438-407C-8E0D-E9B0F476658D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfessionDriverApp.Razor", "ProfessionDriverApp.Razor\ProfessionDriverApp.Razor.csproj", "{DA758CD9-92D0-43F3-B8DB-50823756852E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +42,14 @@ Global
 		{E2BAC3DC-BF7B-478B-816D-337B6326D271}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2BAC3DC-BF7B-478B-816D-337B6326D271}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2BAC3DC-BF7B-478B-816D-337B6326D271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53EEBB1A-4438-407C-8E0D-E9B0F476658D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53EEBB1A-4438-407C-8E0D-E9B0F476658D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53EEBB1A-4438-407C-8E0D-E9B0F476658D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53EEBB1A-4438-407C-8E0D-E9B0F476658D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA758CD9-92D0-43F3-B8DB-50823756852E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA758CD9-92D0-43F3-B8DB-50823756852E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA758CD9-92D0-43F3-B8DB-50823756852E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA758CD9-92D0-43F3-B8DB-50823756852E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

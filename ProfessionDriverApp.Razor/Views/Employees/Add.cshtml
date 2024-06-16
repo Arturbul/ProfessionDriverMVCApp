@@ -1,0 +1,33 @@
+﻿@model             EmployeeViewModel
+@{
+    ViewBag.Title = "Add new employee";
+}
+<form asp-action="Add">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="EntityId">EntityId</label>
+        <input asp-for="EntityId" />
+        <span asp-validation-for="EntityId"></span>
+    </div>
+    <div>
+        <label asp-for="HireDate">HireDate</label>
+        <input type="date" asp-for="HireDate" />
+        <span asp-validation-for="HireDate"></span>
+    </div>
+    <div>
+        <label asp-for="TerminationDate">HireDate</label>
+        <input type="date" asp-for="TerminationDate" />
+        <span asp-validation-for="TerminationDate"></span>
+    </div>
+    
+    <div>
+        <input type="submit" class="btn btn-primary" value="Submit" />
+    </div>
+</form>
+
+
+<div>
+    <form>
+        <button asp-action="Index" class="btn btn-secondary">Go back</button>
+    </form>
+</div>

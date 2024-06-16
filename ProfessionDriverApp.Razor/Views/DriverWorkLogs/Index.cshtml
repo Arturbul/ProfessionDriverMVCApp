@@ -1,0 +1,45 @@
+﻿@model IEnumerable<DriverWorkLogViewModel>
+@{
+    ViewBag.Title = "Drivers Work Logs";
+}
+<h1>@ViewBag.Title</h1>
+<div>
+    <form>
+        <button asp-action="Add" class="btn btn-success">Create new</button>
+    </form>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.DriverWorkLogId)</th>
+            <th>@Html.DisplayNameFor(m => m.DriverId)</th>
+            <th>@Html.DisplayNameFor(m => m.LargeGoodsVehicle)</th>
+            <th>@Html.DisplayNameFor(m => m.Driver)</th>
+            <th>@Html.DisplayNameFor(m => m.StartEntry)</th>
+            <th>@Html.DisplayNameFor(m => m.EndEntry)</th>
+            <th>Manage</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <th>@Html.DisplayFor(m => log.DriverWorkLogId)</th>
+                    <td>@Html.DisplayFor(m => log.Driver)</td>
+                    <td>@Html.DisplayFor(m => log.LargeGoodsVehicle)</td>
+                    <td>@Html.DisplayFor(m => log.StartEntry)</td>
+                    <td>@Html.DisplayFor(m => log.EndEntry)</td>
+                    <td>
+                        <form>
+                            <button asp-action="Details" asp-route-id="@log.DriverWorkLogId" class="btn btn-primary">Details</button>
+                            <button asp-action="Edit" asp-route-id="@log.DriverWorkLogId" class="btn btn-warning">Edit</button>
+                            <button asp-action="Remove" asp-route-id="@log.DriverWorkLogId" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

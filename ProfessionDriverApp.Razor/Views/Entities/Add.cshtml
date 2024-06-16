@@ -1,0 +1,22 @@
+﻿@model              EntityViewModel
+@{
+    ViewBag.Title = "Add new entity";
+}
+<h1>@ViewBag.Title</h1>
+
+<form asp-action="Add">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="EntityName">Entity name</label>
+        <input asp-for="EntityName" />
+        <span asp-validation-for="EntityName"></span>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </div>
+</form>
+<div>
+    <form>
+        <button asp-action="Index" class="btn btn-secondary">Go back</button>
+    </form>
+</div>

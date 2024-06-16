@@ -1,0 +1,36 @@
+﻿@model             DriverViewModel
+@{
+    ViewBag.Title = "Delete confirmation";
+}
+<h1>@ViewBag.Title</h1>
+<h3>Are you sure you want to <strong>delete</strong> this?</h3>
+<div>
+    <p>
+        <strong>@Html.DisplayNameFor(m => m.DriverId)</strong>
+        @Html.DisplayFor(m => m.DriverId)
+    </p>
+    <p>
+        <strong>@Html.DisplayNameFor(m => m.EmployeeId)</strong>
+        @Html.DisplayFor(m => m.EmployeeId)
+    </p>
+    <p>
+        <strong>@Html.DisplayNameFor(m => m.Employee) brief</strong>
+        @if (Model.Employee != null)
+        {
+            <a asp-controller="Entity" asp-action="Details" asp-route-id="@Model.EmployeeId">
+                @Model.Employee.ToString()
+            </a>
+        }
+    </p>
+</div>
+<form asp-action="Remove">
+    <input type="hidden" asp-for="DriverId" />
+    <input type="submit" value="Remove" class="btn btn-danger" />
+    <button asp-action="Index" class="btn btn-primary">Cancel</button>
+</form>
+
+<div>
+    <form>
+        <button asp-action="Index" class="btn btn-secondary">Go back</button>
+    </form>
+</div>

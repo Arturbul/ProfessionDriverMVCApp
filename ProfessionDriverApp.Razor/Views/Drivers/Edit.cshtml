@@ -1,0 +1,24 @@
+﻿@model             DriverViewModel
+@{
+    ViewBag.Title = "Edit driver";
+}
+<h1>@ViewBag.Title</h1>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" asp-for="DriverId" />
+    <div>
+        <label asp-for="EmployeeId">Employee</label>
+        <select asp-for="EmployeeId" asp-items="ViewBag.EmployeeId"></select>
+        <span asp-validation-for="EmployeeId"></span>
+    </div>
+    <div>
+        <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+</form>
+
+
+<div>
+    <form>
+        <button asp-action="Index" class="btn btn-secondary">Go back</button>
+    </form>
+</div>
