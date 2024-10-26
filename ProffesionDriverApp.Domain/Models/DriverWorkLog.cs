@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProfessionDriverApp.Domain.Models
 {
-    public class DriverWorkLog
+    public class DriverWorkLog : EntityBase
     {
-        [Key] //PRIMARY KEY
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid DriverWorkLogId { get; set; }
         public int DriverId { get; set; }
         public LargeGoodsVehicle LargeGoodsVehicle { get; set; } = null!;
@@ -16,6 +13,7 @@ namespace ProfessionDriverApp.Domain.Models
 
         [ForeignKey("EndEntryId")]
         public DriverWorkLogEntry? EndEntry { get; set; }
+        public override object Key => DriverWorkLogId;
     }
 }
 //Driver Pauses

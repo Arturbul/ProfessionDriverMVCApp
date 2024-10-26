@@ -1,17 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ProfessionDriverApp.Domain.Models
+﻿namespace ProfessionDriverApp.Domain.Models
 {
-    public class Employee
+    public class Employee : EntityBase
     {
-        [Key] //PRIMARY KEY
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmployeeId { get; set; }
         public int EntityId { get; set; }
 
         public DateOnly? HireDate { get; set; }
         public DateOnly? TerminationDate { get; set; }
-        public Entity Entity { get; set; } = null!;
+        public Individual Entity { get; set; } = null!;
+        public override object Key => EmployeeId;
     }
 }

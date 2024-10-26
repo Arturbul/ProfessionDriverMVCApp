@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProffesionDriverApp.Business\ProfessionDriverApp.Business.csproj" />
+    <ProjectReference Include="..\ProffesionDriverApp.Application\ProfessionDriverApp.Application.csproj" />
     <ProjectReference Include="..\ProffesionDriverApp.Domain\ProfessionDriverApp.Domain.csproj" />
   </ItemGroup>
 

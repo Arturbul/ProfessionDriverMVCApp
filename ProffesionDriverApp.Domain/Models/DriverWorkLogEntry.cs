@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProfessionDriverApp.Domain.Models
 {
-    public class DriverWorkLogEntry
+    public class DriverWorkLogEntry : EntityBase
     {
-        [Key] //PRIMARY KEY
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid DriverWorkLogEntryId { get; set; }
         public int DriverId { get; set; }
         [StringLength(12)]
@@ -16,5 +13,6 @@ namespace ProfessionDriverApp.Domain.Models
         public string? Place { get; set; }
         public float? Mileage { get; set; }
         public Driver Driver { get; set; } = null!;
+        public override object Key => DriverWorkLogEntryId;
     }
 }

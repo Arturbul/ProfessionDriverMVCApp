@@ -1,12 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ProfessionDriverApp.Domain.Models
+﻿namespace ProfessionDriverApp.Domain.Models
 {
-    public class LargeGoodsVehicle
+    public class LargeGoodsVehicle : EntityBase
     {
-        [Key] //PRIMARY KEY
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LargeGoodsVehicleId { get; set; }
         public int VehicleId { get; set; }
         public int? TrailerId { get; set; }
@@ -14,5 +9,6 @@ namespace ProfessionDriverApp.Domain.Models
         public Vehicle Vehicle { get; set; } = null!;
         public Vehicle? Trailer { get; set; }
         public IList<DriverWorkLog>? DriverWorkLogs { get; set; }
+        public override object Key => LargeGoodsVehicleId;
     }
 }

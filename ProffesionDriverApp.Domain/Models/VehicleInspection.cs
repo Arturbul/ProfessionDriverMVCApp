@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 namespace ProfessionDriverApp.Domain.Models
 {
-    public class VehicleInspection
+    public class VehicleInspection : EntityBase
     {
-        [Key] //PRIMARY KEY
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VehicleInspectionId { get; set; }
 
         [MaxLength(12)]
@@ -13,5 +10,6 @@ namespace ProfessionDriverApp.Domain.Models
         public Vehicle Vehicle { get; set; } = null!;
         public DateOnly? DateFrom { get; set; }
         public DateOnly DateTo { get; set; }
+        public override object Key => VehicleInspectionId;
     }
 }

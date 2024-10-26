@@ -1,16 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ProfessionDriverApp.Domain.Models
+﻿namespace ProfessionDriverApp.Domain.Models
 {
-    public class Driver
+    public class Driver : EntityBase
     {
-        [Key] //PRIMARY KEY
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DriverId { get; set; }
         public int EmployeeId { get; set; }
 
         public Employee Employee { get; set; } = null!;
-        public ICollection<DriverWorkLog>? DriverWorkLogs { get; set; }
+        public IList<DriverWorkLog>? DriverWorkLogs { get; set; }
+        public override object Key => DriverId;
     }
 }
