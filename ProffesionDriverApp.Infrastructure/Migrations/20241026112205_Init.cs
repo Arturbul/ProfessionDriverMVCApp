@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProfessionDriverApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,12 +56,16 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Entities",
+                name: "Individuals",
                 columns: table => new
                 {
                     IndividualId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IndividualName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Creator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Modified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -70,7 +74,7 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Entities", x => x.IndividualId);
+                    table.PrimaryKey("PK_Individuals", x => x.IndividualId);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,6 +234,10 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     EntityId = table.Column<int>(type: "int", nullable: false),
                     HireDate = table.Column<DateOnly>(type: "date", nullable: true),
                     TerminationDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Creator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Modified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -240,9 +248,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeId);
                     table.ForeignKey(
-                        name: "FK_Employees_Entities_EntityId",
+                        name: "FK_Employees_Individuals_EntityId",
                         column: x => x.EntityId,
-                        principalTable: "Entities",
+                        principalTable: "Individuals",
                         principalColumn: "IndividualId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -325,9 +333,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.VehicleId);
                     table.ForeignKey(
-                        name: "FK_Vehicles_Entities_EntityId",
+                        name: "FK_Vehicles_Individuals_EntityId",
                         column: x => x.EntityId,
-                        principalTable: "Entities",
+                        principalTable: "Individuals",
                         principalColumn: "IndividualId");
                     table.ForeignKey(
                         name: "FK_Vehicles_VehicleInspections_VehicleInspectionId",
@@ -604,7 +612,7 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                 name: "VehicleInsurances");
 
             migrationBuilder.DropTable(
-                name: "Entities");
+                name: "Individuals");
 
             migrationBuilder.DropTable(
                 name: "InsurancePolicies");

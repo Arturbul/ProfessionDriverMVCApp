@@ -2,10 +2,12 @@
 {
     public class Address : IEquatable<Address>
     {
-        public string Street { get; }
-        public string City { get; }
-        public string PostalCode { get; }
-        public string Country { get; }
+        public string City { get; set; } = "";
+        public string? Street { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Country { get; set; }
+
+        private Address() { }
 
         public Address(string street, string city, string postalCode, string country)
         {

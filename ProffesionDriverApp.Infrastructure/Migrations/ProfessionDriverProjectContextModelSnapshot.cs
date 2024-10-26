@@ -411,9 +411,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IndividualName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -423,9 +420,12 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<string>("Modifier")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IndividualId");
 
-                    b.ToTable("Entities");
+                    b.ToTable("Individuals");
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.InsurancePolicy", b =>
@@ -796,7 +796,66 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("ProfessionDriverApp.Domain.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("EmployeeId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Street")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("EmployeeId");
+
+                            b1.ToTable("Employees");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.Navigation("Address");
+
                     b.Navigation("Entity");
+                });
+
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Individual", b =>
+                {
+                    b.OwnsOne("ProfessionDriverApp.Domain.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("IndividualId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Street")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("IndividualId");
+
+                            b1.ToTable("Individuals");
+
+                            b1.WithOwner()
+                                .HasForeignKey("IndividualId");
+                        });
+
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>

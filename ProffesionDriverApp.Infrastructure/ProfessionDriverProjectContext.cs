@@ -13,7 +13,7 @@ namespace ProfessionDriverApp.Infrastructure
         public DbSet<DriverWorkLog> DriverWorkLogs { get; set; } = null!;
         public DbSet<DriverWorkLogEntry> DriverWorkLogEntries { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
-        public DbSet<Individual> Entities { get; set; } = null!;
+        public DbSet<Individual> Individuals { get; set; } = null!;
         public DbSet<InsurancePolicy> InsurancePolicies { get; set; } = null!;
         public DbSet<LargeGoodsVehicle> LargeGoodsVehicles { get; set; } = null!;
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
@@ -32,6 +32,11 @@ namespace ProfessionDriverApp.Infrastructure
                 .HasForeignKey(wl => wl.DriverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Individual>()
+                .OwnsOne(a => a.Address);
+
+            modelBuilder.Entity<Employee>()
+                .OwnsOne(a => a.Address);
         }
         #endregion
 

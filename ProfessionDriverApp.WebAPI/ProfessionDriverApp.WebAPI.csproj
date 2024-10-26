@@ -16,8 +16,4 @@
     <ProjectReference Include="..\ProffesionDriverApp.Domain\ProfessionDriverApp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="RequestModels\" />
-  </ItemGroup>
-
 </Project>
