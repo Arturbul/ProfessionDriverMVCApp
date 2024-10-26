@@ -7,11 +7,26 @@ namespace ProfessionDriverApp.Application.Configurations
 {
     public class Dependencies
     {
+        private static void EntitiesServiciesRegister(IServiceCollection services)
+        {
+            services.AddScoped<IIndividualService, IndividualService>();
+        }
+        private static void MapperProfilesRegister(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(IndividualProfile));
+        }
+        private static void UserAuthServiciesRegister(IServiceCollection services)
+        {
+            services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IUserService, UserService>();
+        }
+
         public static void Register(IServiceCollection services)
         {
-            //add scope dependency for EntityManager to handle HTTP request and create single instance of EntityManager to handle request with same object
-            services.AddScoped<IIndividualService, IndividualService>();
-            services.AddAutoMapper(typeof(IndividualProfile));
+            UserAuthServiciesRegister(services);
+            EntitiesServiciesRegister(services);
+            MapperProfilesRegister(services);
 
             //DI for DataAccess 
             Infrastructure.Configurations.Dependencies.Register(services);

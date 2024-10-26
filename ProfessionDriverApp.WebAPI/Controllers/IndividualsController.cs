@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 
@@ -38,6 +39,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
 
 
         //DELETE
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

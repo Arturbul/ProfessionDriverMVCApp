@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ProfessionDriverApp.Domain.Models;
 
 namespace ProfessionDriverApp.Infrastructure
 {
-    public class ProfessionDriverProjectContext : DbContext
+    public class ProfessionDriverProjectContext : IdentityDbContext
     {
         public ProfessionDriverProjectContext(DbContextOptions<ProfessionDriverProjectContext> options)
         : base(options) { }
+        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Driver> Drivers { get; set; } = null!;
         public DbSet<DriverWorkLog> DriverWorkLogs { get; set; } = null!;
         public DbSet<DriverWorkLogEntry> DriverWorkLogEntries { get; set; } = null!;
@@ -18,9 +20,11 @@ namespace ProfessionDriverApp.Infrastructure
         public DbSet<VehicleInspection> VehicleInspections { get; set; } = null!;
         public DbSet<VehicleInsurance> VehicleInsurances { get; set; } = null!;
 
-        #region Required
+        #region OnModelCreating
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             //Relations
             modelBuilder.Entity<Driver>()
                 .HasMany(d => d.DriverWorkLogs)
