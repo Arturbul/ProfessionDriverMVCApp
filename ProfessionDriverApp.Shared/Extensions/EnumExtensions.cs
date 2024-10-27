@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ProfessionDriverMVCApp.Tools
+namespace ProfessionDriverApp.Shared.Extensions
 {
     public static class EnumExtensions
     {

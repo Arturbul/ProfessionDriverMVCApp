@@ -6,34 +6,34 @@ using ProfessionDriverApp.Application.Interfaces;
 namespace ProfessionDriverApp.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/individuals")]
-    public class IndividualsController : Controller
+    [Route("api/employees")]
+    public class EmployeeController : Controller
     {
-        private readonly IIndividualService _individualService;
-        public IndividualsController(IIndividualService manager)
+        private readonly IEmployeeService _employeeService;
+        public EmployeeController(IEmployeeService manager)
         {
-            _individualService = manager;
+            _employeeService = manager;
         }
 
         //GET
         [HttpGet]
-        public async Task<IEnumerable<IndividualDTO>> Get()
+        public async Task<IEnumerable<EmployeeDTO>> Get()
         {
             return null;
         }
 
         [HttpGet("{id}")]
-        public async Task<IndividualDTO?> Get(int id)
+        public async Task<EmployeeDTO?> Get(int id)
         {
             var userName = User.Identity?.Name; // Pobieranie nazwy użytkownika
-            var a = await _individualService.Get();
+            var a = await _employeeService.Get();
             return null;
 
         }
 
         //POST
         [HttpPost]
-        public async Task<IActionResult> Create(IndividualDTO entity)
+        public async Task<IActionResult> Create(EmployeeDTO entity)
         {
             return null;
 

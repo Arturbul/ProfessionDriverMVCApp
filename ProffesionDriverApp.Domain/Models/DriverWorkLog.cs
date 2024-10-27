@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ProfessionDriverApp.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProfessionDriverApp.Domain.Models
 {
-    public class DriverWorkLog : EntityBase
+    public class DriverWorkLog : EntityBase, ICompanyScope
     {
         public Guid DriverWorkLogId { get; set; }
         public int DriverId { get; set; }
@@ -13,6 +14,7 @@ namespace ProfessionDriverApp.Domain.Models
 
         [ForeignKey("EndEntryId")]
         public DriverWorkLogEntry? EndEntry { get; set; }
+        public int CompanyId { get; set; }
         public override object Key => DriverWorkLogId;
     }
 }

@@ -20,9 +20,16 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
             _userContextService = userContextService;
         }
 
-        public IQueryable<T> Queryable(EntityStatusFilter entityStatus = EntityStatusFilter.Exists)
+        public IQueryable<T> Queryable(bool filterCompany = true, EntityStatusFilter entityStatus = EntityStatusFilter.Exists)
         {
             var entities = _dbSet.AsQueryable();
+
+            if (filterCompany && typeof(ICompanyScope).IsAssignableFrom(typeof(T)))
+            {
+                var currentCompanyId = _userContextService.GetUserCompany();
+                entities = entities.Where(e => ((ICompanyScope)e).CompanyId == currentCompanyId);
+            }
+
             if (entityStatus == EntityStatusFilter.All)
             {
                 return entities;
@@ -44,25 +51,42 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
             return !entity.IsDeleted ? entity : null;
         }
 
-        public async void Add(T entity)
+        public void Add(T entity)
         {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            entity.IsDeleted = false;
             entity.Created = DateTime.UtcNow;
-            entity.Creator = _userContextService.GetUserName() ?? "unknown";
-            await _dbSet.AddAsync(entity);
+            entity.Creator = userName;
+            _dbSet.Add(entity);
         }
 
         public void Update(T entity)
         {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            entity.IsDeleted = false;
             entity.Modified = DateTime.UtcNow;
-            entity.Modifier = _userContextService.GetUserName() ?? "unknown";
+            entity.Modifier = userName;
             _dbSet.Update(entity);
         }
 
         public void Delete(T entity)
         {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
             entity.IsDeleted = true;
             entity.Modified = DateTime.UtcNow;
-            entity.Modifier = _userContextService.GetUserName() ?? "unknown";
+            entity.Modifier = userName;
         }
     }
 }

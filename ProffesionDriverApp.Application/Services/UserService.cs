@@ -67,13 +67,13 @@ namespace ProfessionDriverApp.Application.Services
             // Return the generated JWT token
             return _jwtService.WriteToken(token);
         }
-        public async Task<string> AssignUserToRole(AssignUserToRoleRequest roleRequest)
+        public async Task<string> AssignUserToRole(AssignUserToRoleRequest request)
         {
-            var user = await _userManager.FindByNameAsync(roleRequest.UserName);
+            var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
                 throw new InvalidOperationException("Could not find user");
 
-            await _userRoleService.AssignRoleToUserAsync(user, roleRequest.Role);
+            await _userRoleService.AssignRoleToUserAsync(user, request.Role);
 
             var token = await _jwtService.GenerateJwtAsync(user);
             return _jwtService.WriteToken(token);

@@ -67,9 +67,12 @@ internal class Program
         ProfessionDriverApp.Application.Configurations.Dependencies.Register(builder.Services);
 
         //JWT
-        builder.Services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<ProfessionDriverProjectContext>()
-                .AddDefaultTokenProviders();
+        builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                })
+               .AddEntityFrameworkStores<ProfessionDriverProjectContext>()
+               .AddDefaultTokenProviders();
 
         var secret = builder.Configuration["JWT:Secret"] ?? throw new InvalidOperationException("Secret not configured");
         builder.Services.AddAuthentication(options =>

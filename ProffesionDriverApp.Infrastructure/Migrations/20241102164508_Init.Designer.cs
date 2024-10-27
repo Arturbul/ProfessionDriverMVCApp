@@ -12,7 +12,7 @@ using ProfessionDriverApp.Infrastructure;
 namespace ProfessionDriverApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ProfessionDriverProjectContext))]
-    [Migration("20241026112205_Init")]
+    [Migration("20241102164508_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -232,6 +232,39 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Company", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"));
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Creator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Companies");
+                });
+
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Driver", b =>
                 {
                     b.Property<int>("DriverId")
@@ -239,6 +272,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DriverId"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -261,7 +297,10 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.HasKey("DriverId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
 
                     b.ToTable("Drivers");
                 });
@@ -271,6 +310,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<Guid>("DriverWorkLogId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -367,15 +409,18 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("int");
 
                     b.Property<DateOnly?>("HireDate")
                         .HasColumnType("date");
@@ -389,46 +434,17 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<string>("Modifier")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateOnly?>("TerminationDate")
                         .HasColumnType("date");
 
                     b.HasKey("EmployeeId");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Individual", b =>
-                {
-                    b.Property<int>("IndividualId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IndividualId"));
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Creator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("Modified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Modifier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IndividualId");
-
-                    b.ToTable("Individuals");
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.InsurancePolicy", b =>
@@ -441,6 +457,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.Property<string>("AccountNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -473,6 +492,8 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.HasKey("InsurancePolicyId");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("InsurancePolicies");
                 });
 
@@ -483,6 +504,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LargeGoodsVehicleId"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -511,6 +535,8 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.HasKey("LargeGoodsVehicleId");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("TrailerId");
 
                     b.HasIndex("VehicleId");
@@ -529,12 +555,18 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("EntityId")
                         .HasColumnType("int");
@@ -567,7 +599,7 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.HasKey("VehicleId");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("VehicleInspectionId")
                         .IsUnique()
@@ -587,6 +619,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehicleInspectionId"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -617,6 +652,8 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.HasKey("VehicleInspectionId");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("VehicleInspections");
                 });
 
@@ -629,6 +666,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehicleInsuranceId"));
 
                     b.Property<int?>("AC_PolicyInsurancePolicyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Created")
@@ -668,8 +708,14 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -681,6 +727,16 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique()
+                        .HasFilter("[EmployeeId] IS NOT NULL");
 
                     b.HasDiscriminator().HasValue("AppUser");
                 });
@@ -736,12 +792,49 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Company", b =>
+                {
+                    b.OwnsOne("ProfessionDriverApp.Domain.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("CompanyId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Street")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("CompanyId");
+
+                            b1.ToTable("Companies");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CompanyId");
+                        });
+
+                    b.Navigation("Address");
+                });
+
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Driver", b =>
                 {
-                    b.HasOne("ProfessionDriverApp.Domain.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", null)
+                        .WithMany("Drivers")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Employee", "Employee")
+                        .WithOne()
+                        .HasForeignKey("ProfessionDriverApp.Domain.Models.Driver", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -762,7 +855,7 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.HasOne("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", "LargeGoodsVehicle")
                         .WithMany("DriverWorkLogs")
                         .HasForeignKey("LargeGoodsVehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ProfessionDriverApp.Domain.Models.DriverWorkLogEntry", "StartEntry")
@@ -793,9 +886,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Employee", b =>
                 {
-                    b.HasOne("ProfessionDriverApp.Domain.Models.Individual", "Entity")
-                        .WithMany()
-                        .HasForeignKey("EntityId")
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", "Company")
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -827,42 +920,26 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.Navigation("Address");
 
-                    b.Navigation("Entity");
+                    b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Individual", b =>
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.InsurancePolicy", b =>
                 {
-                    b.OwnsOne("ProfessionDriverApp.Domain.ValueObjects.Address", "Address", b1 =>
-                        {
-                            b1.Property<int>("IndividualId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Country")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("PostalCode")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Street")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("IndividualId");
-
-                            b1.ToTable("Individuals");
-
-                            b1.WithOwner()
-                                .HasForeignKey("IndividualId");
-                        });
-
-                    b.Navigation("Address");
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", null)
+                        .WithMany("InsurancePolicies")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>
                 {
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", null)
+                        .WithMany("Vehicles")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProfessionDriverApp.Domain.Models.Vehicle", "Trailer")
                         .WithMany()
                         .HasForeignKey("TrailerId");
@@ -880,9 +957,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Vehicle", b =>
                 {
-                    b.HasOne("ProfessionDriverApp.Domain.Models.Individual", "Entity")
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EntityId");
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("ProfessionDriverApp.Domain.Models.VehicleInspection", "VehicleInspection")
                         .WithOne("Vehicle")
@@ -892,11 +969,20 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .WithOne("Vehicle")
                         .HasForeignKey("ProfessionDriverApp.Domain.Models.Vehicle", "VehicleInsuranceId");
 
-                    b.Navigation("Entity");
+                    b.Navigation("Employee");
 
                     b.Navigation("VehicleInspection");
 
                     b.Navigation("VehicleInsurance");
+                });
+
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.VehicleInspection", b =>
+                {
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", null)
+                        .WithMany("VehicleInspections")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.VehicleInsurance", b =>
@@ -916,9 +1002,43 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Navigation("OC_Policy");
                 });
 
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.AppUser", b =>
+                {
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Employee", "Employee")
+                        .WithOne("AppUser")
+                        .HasForeignKey("ProfessionDriverApp.Domain.Models.AppUser", "EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Company", b =>
+                {
+                    b.Navigation("Drivers");
+
+                    b.Navigation("Employees");
+
+                    b.Navigation("InsurancePolicies");
+
+                    b.Navigation("VehicleInspections");
+
+                    b.Navigation("Vehicles");
+                });
+
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Driver", b =>
                 {
                     b.Navigation("DriverWorkLogs");
+                });
+
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Employee", b =>
+                {
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>

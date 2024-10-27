@@ -1,6 +1,6 @@
 ﻿namespace ProfessionDriverApp.Application.Interfaces
 {
-    public interface IIndividualService
+    public interface IEmployeeService
     {
         Task<IList<int>> Get();
     }

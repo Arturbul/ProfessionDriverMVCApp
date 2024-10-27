@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProfessionDriverApp.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProfessionDriverApp.Domain.Models
 {
-    public class Vehicle : EntityBase
+    public class Vehicle : EntityBase, ICompanyScope
     {
         public int VehicleId { get; set; }
 
@@ -14,9 +15,10 @@ namespace ProfessionDriverApp.Domain.Models
         public int? ManufactureYear { get; set; }
         public int? VehicleInsuranceId { get; set; }
         public int? VehicleInspectionId { get; set; }
-        public Individual? Entity { get; set; }
+        public Employee? Employee { get; set; }
         public VehicleInsurance? VehicleInsurance { get; set; }
         public VehicleInspection? VehicleInspection { get; set; }
+        public int CompanyId { get; set; }
         public override object Key => VehicleId;
     }
 }

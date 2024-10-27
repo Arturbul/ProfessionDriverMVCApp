@@ -8,8 +8,8 @@ namespace ProfessionDriverApp.Domain.Profiles
     {
         public IndividualProfile()
         {
-            CreateMap<Individual, IndividualDTO>();
-            CreateMap<IndividualDTO, Individual>();
+            CreateMap<Employee, EmployeeDTO>();
+            CreateMap<EmployeeDTO, Employee>();
         }
     }
 }

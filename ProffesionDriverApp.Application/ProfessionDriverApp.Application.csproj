@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProfessionDriverApp.Shared\ProfessionDriverApp.Shared.csproj" />
     <ProjectReference Include="..\ProffesionDriverApp.Domain\ProfessionDriverApp.Domain.csproj" />
     <ProjectReference Include="..\ProffesionDriverApp.Infrastructure\ProfessionDriverApp.Infrastructure.csproj" />
   </ItemGroup>
