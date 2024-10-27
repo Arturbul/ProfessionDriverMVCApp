@@ -1,4 +1,5 @@
-﻿using ProfessionDriverApp.Domain.Models;
+﻿using ProfessionDriverApp.Domain.Interfaces;
+using ProfessionDriverApp.Domain.Models;
 using ProfessionDriverApp.Infrastructure.Interfaces;
 using ProfessionDriverApp.Infrastructure.Repositories;
 
@@ -7,10 +8,12 @@ namespace ProfessionDriverApp.Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ProfessionDriverProjectContext _dbContext;
+        private readonly IUserContextService _userContextService;
 
-        public UnitOfWork(ProfessionDriverProjectContext dbContext)
+        public UnitOfWork(ProfessionDriverProjectContext dbContext, IUserContextService userContextService)
         {
             _dbContext = dbContext;
+            _userContextService = userContextService;
         }
 
         private readonly Dictionary<Type, object> _repositories = new();
@@ -22,7 +25,7 @@ namespace ProfessionDriverApp.Infrastructure
             if (!_repositories.ContainsKey(typeof(T)))
             {
                 var repositoryType = typeof(TRepository<>);
-                _repositories.Add(typeof(T), Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T))!, _dbContext)!);
+                _repositories.Add(typeof(T), Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T))!, _dbContext, _userContextService)!);
             }
             return (ITRepository<T>)_repositories[typeof(T)];
         }

@@ -2,5 +2,6 @@
 {
     public interface IIndividualService
     {
+        Task<IList<int>> Get();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProfessionDriverApp.Domain.Interfaces;
 using ProfessionDriverApp.Domain.Models;
 using ProfessionDriverApp.Domain.ValueObjects;
 using ProfessionDriverApp.Infrastructure.Interfaces;
@@ -10,11 +11,13 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
     {
         private readonly ProfessionDriverProjectContext _context;
         private readonly DbSet<T> _dbSet;
+        private readonly IUserContextService _userContextService;
 
-        public TRepository(ProfessionDriverProjectContext context)
+        public TRepository(ProfessionDriverProjectContext context, IUserContextService userContextService)
         {
             _context = context;
             _dbSet = context.Set<T>();
+            _userContextService = userContextService;
         }
 
         public IQueryable<T> Queryable(EntityStatusFilter entityStatus = EntityStatusFilter.Exists)
@@ -44,15 +47,14 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
         public async void Add(T entity)
         {
             entity.Created = DateTime.UtcNow;
-            //entity.Creator
+            entity.Creator = _userContextService.GetUserName() ?? "unknown";
             await _dbSet.AddAsync(entity);
         }
 
-        // Aktualizacja encji
         public void Update(T entity)
         {
             entity.Modified = DateTime.UtcNow;
-            //entity.Modifier
+            entity.Modifier = _userContextService.GetUserName() ?? "unknown";
             _dbSet.Update(entity);
         }
 
@@ -60,6 +62,7 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
         {
             entity.IsDeleted = true;
             entity.Modified = DateTime.UtcNow;
+            entity.Modifier = _userContextService.GetUserName() ?? "unknown";
         }
     }
 }

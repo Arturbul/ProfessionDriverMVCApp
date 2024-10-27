@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Application.Services;
+using ProfessionDriverApp.Domain.Interfaces;
 using ProfessionDriverApp.Domain.Profiles;
 
 namespace ProfessionDriverApp.Application.Configurations
@@ -20,6 +21,7 @@ namespace ProfessionDriverApp.Application.Configurations
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IUserRoleService, UserRoleService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserContextService, UserContextService>();
         }
 
         public static void Register(IServiceCollection services)

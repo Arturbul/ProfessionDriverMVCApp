@@ -9,10 +9,10 @@ namespace ProfessionDriverApp.WebAPI.Controllers
     [Route("api/individuals")]
     public class IndividualsController : Controller
     {
-        private readonly IIndividualService _manager;
+        private readonly IIndividualService _individualService;
         public IndividualsController(IIndividualService manager)
         {
-            _manager = manager;
+            _individualService = manager;
         }
 
         //GET
@@ -25,6 +25,8 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IndividualDTO?> Get(int id)
         {
+            var userName = User.Identity?.Name; // Pobieranie nazwy użytkownika
+            var a = await _individualService.Get();
             return null;
 
         }
