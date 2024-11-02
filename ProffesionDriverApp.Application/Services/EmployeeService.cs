@@ -5,12 +5,12 @@ using ProfessionDriverApp.Infrastructure.Interfaces;
 
 namespace ProfessionDriverApp.Application.Services
 {
-    internal class IndividualService : IIndividualService
+    internal class EmployeeService : IEmployeeService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public IndividualService(IUnitOfWork unitOfWork, IMapper mapper)
+        public EmployeeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -18,7 +18,7 @@ namespace ProfessionDriverApp.Application.Services
 
         public async Task<IList<int>> Get()
         {
-            _unitOfWork.Repository<Individual>().Add(new Individual());
+            _unitOfWork.Repository<Employee>().Add(new Employee());
             return null;
         }
     }

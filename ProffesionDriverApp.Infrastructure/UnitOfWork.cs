@@ -9,15 +9,13 @@ namespace ProfessionDriverApp.Infrastructure
     {
         private readonly ProfessionDriverProjectContext _dbContext;
         private readonly IUserContextService _userContextService;
+        private readonly Dictionary<Type, object> _repositories = new();
 
         public UnitOfWork(ProfessionDriverProjectContext dbContext, IUserContextService userContextService)
         {
             _dbContext = dbContext;
             _userContextService = userContextService;
         }
-
-        private readonly Dictionary<Type, object> _repositories = new();
-
 
         public ITRepository<T> Repository<T>()
             where T : EntityBase

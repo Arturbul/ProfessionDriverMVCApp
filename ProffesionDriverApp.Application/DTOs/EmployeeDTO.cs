@@ -1,6 +1,6 @@
 ﻿namespace ProfessionDriverApp.Application.DTOs
 {
-    public class IndividualDTO
+    public class EmployeeDTO
     {
         public int IndividualId { get; set; }
         public string? IndividualName { get; set; }

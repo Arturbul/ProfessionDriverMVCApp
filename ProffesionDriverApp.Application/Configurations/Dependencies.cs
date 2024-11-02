@@ -10,7 +10,8 @@ namespace ProfessionDriverApp.Application.Configurations
     {
         private static void EntitiesServiciesRegister(IServiceCollection services)
         {
-            services.AddScoped<IIndividualService, IndividualService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<ICompanyService, CompanyService>();
         }
         private static void MapperProfilesRegister(IServiceCollection services)
         {

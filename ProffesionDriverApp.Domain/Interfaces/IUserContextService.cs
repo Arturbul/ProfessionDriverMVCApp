@@ -3,5 +3,6 @@
     public interface IUserContextService
     {
         string? GetUserName();
+        int? GetUserCompany();
     }
 }

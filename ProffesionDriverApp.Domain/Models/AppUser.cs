@@ -8,5 +8,11 @@ namespace ProfessionDriverApp.Domain.Models
         public string LastName { get; set; } = null!;
         public DateTime? Created { get; set; }
         public bool IsDeleted { get; set; } = false;
+
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; }
+
+        public int? EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
     }
 }

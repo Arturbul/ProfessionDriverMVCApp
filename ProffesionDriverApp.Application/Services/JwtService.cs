@@ -33,10 +33,11 @@ namespace ProfessionDriverApp.Application.Services
             }
 
             var authClaims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.GroupSid, user.CompanyId.ToString()??"")
+            };
 
             // Fetch user roles and add them as claims
             var userRoles = await _userManager.GetRolesAsync(user);
