@@ -78,7 +78,7 @@ namespace ProfessionDriverApp.Application.Services
         /// </summary>
         /// <param name="token">JWT string.</param>
         /// <returns>ClaimsPrincipal if the token is valid, null otherwise</returns>
-        public ClaimsPrincipal? ValidateJwt(string token)
+        public bool ValidateJwt(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new InvalidOperationException("Secret not configured"));
@@ -96,11 +96,11 @@ namespace ProfessionDriverApp.Application.Services
                     ClockSkew = TimeSpan.FromSeconds(5),
                 }, out SecurityToken validatedToken);
 
-                return principal;
+                return validatedToken != null;
             }
             catch (Exception)
             {
-                return null;
+                throw new SecurityTokenValidationException();
             }
         }
     }

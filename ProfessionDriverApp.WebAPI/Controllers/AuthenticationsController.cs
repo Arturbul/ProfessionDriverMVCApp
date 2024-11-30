@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using ProfessionDriverApp.Application.DTOs.Auth;
 using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Application.Requests;
@@ -18,15 +19,17 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         private readonly ILogger<AuthenticationsController> _logger;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUserService _userService;
+        private readonly IJwtService _jwtService;
         private readonly IUserRoleService _userRoleService;
 
-        public AuthenticationsController(IConfiguration configuration, ILogger<AuthenticationsController> logger, UserManager<AppUser> userManager, IUserRoleService userRoleService, IUserService userService)
+        public AuthenticationsController(IConfiguration configuration, ILogger<AuthenticationsController> logger, UserManager<AppUser> userManager, IUserRoleService userRoleService, IUserService userService, IJwtService jwtService)
         {
             _configuration = configuration;
             _logger = logger;
             _userManager = userManager;
             _userRoleService = userRoleService;
             _userService = userService;
+            _jwtService = jwtService;
         }
 
         /// <summary>
@@ -121,6 +124,30 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             {
                 _logger.LogError(ex, "Error assigning role to user.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while assigning role.");
+            }
+        }
+
+        [HttpPost("valid")]
+        public IActionResult ValidToken([FromHeader] string Authorization)
+        {
+            try
+            {
+                var token = Authorization?.Replace("Bearer ", "").Trim();
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    return BadRequest("Token is missing or malformed.");
+                }
+                var result = _jwtService.ValidateJwt(token);
+                return Ok(new { valid = result });
+            }
+            catch (SecurityTokenValidationException)
+            {
+                return ValidationProblem("Token is undefined or expired.");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using ProfessionDriverApp.Domain.Models;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace ProfessionDriverApp.Application.Interfaces
 {
@@ -8,6 +7,6 @@ namespace ProfessionDriverApp.Application.Interfaces
     {
         public Task<JwtSecurityToken> GenerateJwtAsync(AppUser user);
         public object WriteToken(JwtSecurityToken token);
-        public ClaimsPrincipal? ValidateJwt(string token);
+        public bool ValidateJwt(string token);
     }
 }
