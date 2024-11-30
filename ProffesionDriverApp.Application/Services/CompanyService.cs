@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProfessionDriverApp.Application.Interfaces;
-using ProfessionDriverApp.Application.Requests;
+using ProfessionDriverApp.Application.Requests.Create;
+using ProfessionDriverApp.Application.Requests.Update;
 using ProfessionDriverApp.Domain.Interfaces;
 using ProfessionDriverApp.Domain.Models;
 using ProfessionDriverApp.Infrastructure.Interfaces;

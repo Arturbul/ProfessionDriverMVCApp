@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using ProfessionDriverApp.Application.DTOs.Auth;
 using ProfessionDriverApp.Application.Interfaces;
-using ProfessionDriverApp.Application.Requests;
+using ProfessionDriverApp.Application.Requests.Update;
 using ProfessionDriverApp.Domain.Models;
 using System.Text.RegularExpressions;
 

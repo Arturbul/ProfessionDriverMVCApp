@@ -1,6 +1,6 @@
 ﻿using ProfessionDriverApp.Domain.ValueObjects;
 
-namespace ProfessionDriverApp.Application.Requests
+namespace ProfessionDriverApp.Application.Requests.Update
 {
     public class LinkUserToEmployeeRequest
     {

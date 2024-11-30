@@ -1,4 +1,5 @@
-﻿using ProfessionDriverApp.Application.Requests;
+﻿using ProfessionDriverApp.Application.Requests.Create;
+using ProfessionDriverApp.Application.Requests.Update;
 
 namespace ProfessionDriverApp.Application.Interfaces
 {

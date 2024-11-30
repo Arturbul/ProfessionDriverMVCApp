@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ProfessionDriverApp.Application.DTOs.Auth;
 using ProfessionDriverApp.Application.Interfaces;
-using ProfessionDriverApp.Application.Requests;
+using ProfessionDriverApp.Application.Requests.Update;
 using ProfessionDriverApp.Domain.Models;
 
 namespace ProfessionDriverApp.WebAPI.Controllers

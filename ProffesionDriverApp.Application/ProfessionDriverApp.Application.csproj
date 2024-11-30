@@ -29,4 +29,9 @@
     <ProjectReference Include="..\ProffesionDriverApp.Infrastructure\ProfessionDriverApp.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Requests\Delete\" />
+    <Folder Include="Requests\Query\" />
+  </ItemGroup>
+
 </Project>

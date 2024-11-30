@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
-using ProfessionDriverApp.Application.Requests;
+using ProfessionDriverApp.Application.Requests.Create;
+using ProfessionDriverApp.Application.Requests.Update;
 
 namespace ProfessionDriverApp.WebAPI.Controllers
 {

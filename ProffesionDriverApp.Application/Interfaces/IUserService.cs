@@ -1,5 +1,5 @@
 ﻿using ProfessionDriverApp.Application.DTOs.Auth;
-using ProfessionDriverApp.Application.Requests;
+using ProfessionDriverApp.Application.Requests.Update;
 
 namespace ProfessionDriverApp.Application.Interfaces
 {
