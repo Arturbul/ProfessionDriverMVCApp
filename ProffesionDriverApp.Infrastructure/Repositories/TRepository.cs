@@ -7,7 +7,7 @@ using ProfessionDriverApp.Infrastructure.Interfaces;
 namespace ProfessionDriverApp.Infrastructure.Repositories
 {
     public class TRepository<T> : ITRepository<T>
-        where T : EntityBase
+        where T : class
     {
         private readonly ProfessionDriverProjectContext _context;
         private readonly DbSet<T> _dbSet;
@@ -30,54 +30,100 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
                 entities = entities.Where(e => ((ICompanyScope)e).CompanyId == currentCompanyId);
             }
 
-            if (entityStatus == EntityStatusFilter.All)
+            if (entityStatus != EntityStatusFilter.All && typeof(EntityBase).IsAssignableFrom(typeof(T)))
             {
-                return entities;
+                var baseEntities = entities.Cast<EntityBase>();
+
+                var filtered = entityStatus == EntityStatusFilter.Exists
+                    ? baseEntities.Where(a => a.IsDeleted == false)
+                    : baseEntities.Where(a => a.IsDeleted == true);
+
+                entities = filtered.Cast<T>();
             }
-            return entityStatus == EntityStatusFilter.Exists
-                ? entities.Where(a => a.IsDeleted == false)
-                    : entities.Where(a => a.IsDeleted == true);
+            return entities;
         }
 
         public async Task<T?> GetByIdAsync(int id, EntityStatusFilter entityStatus = EntityStatusFilter.Exists)
         {
             var entity = await _dbSet.FindAsync(id);
-            if (entityStatus == EntityStatusFilter.All || entity == null)
-                return entity;
+            if (entity == null)
+                return null;
 
-            if (entityStatus == EntityStatusFilter.Deleted)
-                return entity.IsDeleted ? entity : null;
+            if (entity is EntityBase baseEntity)
+            {
+                if (entityStatus == EntityStatusFilter.Deleted && !baseEntity.IsDeleted)
+                    return null;
 
-            return !entity.IsDeleted ? entity : null;
+                if (entityStatus == EntityStatusFilter.Exists && baseEntity.IsDeleted)
+                    return null;
+            }
+
+            return entity as T;
         }
 
         public void Add(T entity)
         {
-            var userName = _userContextService.GetUserName();
-            if (userName == null)
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            if (entity is EntityBase entityBase)
             {
-                throw new UnauthorizedAccessException();
+                FillEntityBase(entityBase);
             }
-            entity.IsDeleted = false;
-            entity.Created = DateTime.UtcNow;
-            entity.Creator = userName;
+
             _dbSet.Add(entity);
         }
 
         public void Update(T entity)
         {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            if (entity is EntityBase entityBase)
+            {
+                FillEntityBase(entityBase);
+            }
+            _dbSet.Update(entity);
+        }
+
+        public async Task Delete(int id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+
+            if (entity == null)
+                throw new KeyNotFoundException($"Entity with ID {id} not found.");
+
+            if (entity is EntityBase baseEntity)
+            {
+                DeleteEntityBase(baseEntity);
+                _dbSet.Update(entity);
+            }
+            else
+            {
+                _dbSet.Remove(entity); // Hard delete
+            }
+        }
+
+        public void FillEntityBase<TEntityBase>(TEntityBase entity)
+            where TEntityBase : EntityBase
+        {
             var userName = _userContextService.GetUserName();
             if (userName == null)
             {
                 throw new UnauthorizedAccessException();
             }
             entity.IsDeleted = false;
+            if (!entity.Created.HasValue || string.IsNullOrEmpty(entity.Creator))
+            {
+                entity.Created = DateTime.UtcNow;
+                entity.Creator = userName;
+            }
             entity.Modified = DateTime.UtcNow;
             entity.Modifier = userName;
-            _dbSet.Update(entity);
         }
 
-        public void Delete(T entity)
+        public void DeleteEntityBase<TEntityBase>(TEntityBase entity)
+            where TEntityBase : EntityBase
         {
             var userName = _userContextService.GetUserName();
             if (userName == null)
@@ -88,5 +134,6 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
             entity.Modified = DateTime.UtcNow;
             entity.Modifier = userName;
         }
+
     }
 }

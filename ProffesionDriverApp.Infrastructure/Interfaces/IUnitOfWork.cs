@@ -1,10 +1,8 @@
-﻿using ProfessionDriverApp.Domain.Models;
-
-namespace ProfessionDriverApp.Infrastructure.Interfaces
+﻿namespace ProfessionDriverApp.Infrastructure.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        public ITRepository<T> Repository<T>() where T : EntityBase;
+        public ITRepository<T> Repository<T>() where T : class;
         public Task<int> SaveToDatabaseAsync();
     }
 }

@@ -69,7 +69,7 @@ namespace ProfessionDriverApp.Application.Services
 
         public async Task Create(CreateCompanyRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.ManagerLogin);
+            var user = await _userManager.FindByNameAsync(request.ManagerUserName);
             if (user == null)
                 throw new InvalidOperationException("Could not find user.");
             if (user.CompanyId.HasValue)

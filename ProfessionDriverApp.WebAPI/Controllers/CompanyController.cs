@@ -87,7 +87,6 @@ namespace ProfessionDriverApp.WebAPI.Controllers
     }
 }
 
-// endpoint dla pobrania nueprzypisanych uzytkownikow
 // endpoint dla pobrania konkretnego uzytkownika po -> identifier
 // endpoint dla przypisania uzytkownika do firmy
 // enpoint dla przypisania uzytkownika do firmy i przypisania do firmy
