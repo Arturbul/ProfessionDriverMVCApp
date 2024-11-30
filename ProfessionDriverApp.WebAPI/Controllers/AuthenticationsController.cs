@@ -59,15 +59,28 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register(RegistrationModel model)
         {
-            var result = await _userService.RegisterUserAsync(model);
-
-            if (result.Succeeded)
+            try
             {
-                return CreatedAtAction(nameof(Register), new { userName = model.UserName }, model);
+                var result = await _userService.RegisterUserAsync(model);
+                if (result == null)
+                {
+                    return BadRequest();
+                }
+                return StatusCode(201, result);
             }
-
-            // Zwracanie błędów jako 400 Bad Request
-            return BadRequest(result.Errors.Select(e => e.Description));
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogWarning("Login failed for user: {UserName}. Reason: {Message}", model.Email, e.Message);
+                return Conflict();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         /// <summary>
@@ -94,17 +107,19 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                 _logger.LogInformation("Login succeeded for user: {UserName}", model.Identifier);
                 return Ok(token);
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (UnauthorizedAccessException ex)
             {
                 // Log unauthorized access attempt
                 _logger.LogWarning("Login failed for user: {UserName}. Reason: {Message}", model.Identifier, ex.Message);
-                return Unauthorized(new { message = "Invalid username, email, or password" });
+                return Unauthorized();
             }
             catch (Exception ex)
             {
-                // Log any other exceptions that might occur
-                _logger.LogError(ex, "An error occurred during login for user: {UserName}", model.Identifier);
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred. Please try again later." });
+                return BadRequest(ex?.Message ?? "Unexpected error");
             }
         }
 

@@ -23,23 +23,37 @@ namespace ProfessionDriverApp.Application.Services
             _userRoleService = roleService;
         }
 
-        public async Task<IdentityResult> RegisterUserAsync(RegistrationModel model)
+        public async Task<object> RegisterUserAsync(RegistrationModel model)
         {
-            var existingUser = await _userManager.FindByNameAsync(model.UserName);
+            var existingUser = await _userManager.FindByNameAsync(model.Login);
             if (existingUser != null)
             {
-                return IdentityResult.Failed(new IdentityError { Description = "User already exists." });
+                throw new InvalidOperationException("User with that login already exists.");
+            }
+
+            existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
+            {
+                throw new InvalidOperationException("User with that email already exists.");
             }
 
             var newUser = new AppUser
             {
-                UserName = model.UserName,
+                UserName = model.Login,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
-            return result;
+            if (!result.Succeeded)
+            {
+                throw new NullReferenceException(nameof(result));
+            }
+
+            var token = await _jwtService.GenerateJwtAsync(newUser);
+
+            // Return the generated JWT token
+            return _jwtService.WriteToken(token);
         }
 
         public async Task<object> Login(LoginModel model)
@@ -63,7 +77,7 @@ namespace ProfessionDriverApp.Application.Services
             // If user is not found or password is incorrect, throw an exception
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                throw new UnauthorizedAccessException("403");
+                throw new InvalidOperationException("Incorrect identifier or password.");
             }
 
             // Generate JWT token for the authenticated user
