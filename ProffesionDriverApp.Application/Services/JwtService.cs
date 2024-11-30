@@ -66,9 +66,11 @@ namespace ProfessionDriverApp.Application.Services
         /// </summary>
         /// <param name="token">JwtSecurityToken object.</param>
         /// <returns>JWT string</returns>
-        public string WriteToken(JwtSecurityToken token)
+        public object WriteToken(JwtSecurityToken token)
         {
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return new { token = jwtToken };
         }
 
         /// <summary>

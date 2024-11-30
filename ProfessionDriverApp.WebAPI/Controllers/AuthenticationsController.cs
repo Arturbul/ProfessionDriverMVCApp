@@ -11,7 +11,7 @@ using ProfessionDriverApp.Domain.Models;
 namespace ProfessionDriverApp.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/authentications")]
+    [Route("api/auth")]
     public class AuthenticationsController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -88,19 +88,19 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                 var token = await _userService.Login(model);
 
                 // Return the JWT token if login is successful
-                _logger.LogInformation("Login succeeded for user: {UserName}", model.UserName ?? model.Email);
+                _logger.LogInformation("Login succeeded for user: {UserName}", model.Identifier);
                 return Ok(token);
             }
             catch (UnauthorizedAccessException ex)
             {
                 // Log unauthorized access attempt
-                _logger.LogWarning("Login failed for user: {UserName}. Reason: {Message}", model.UserName ?? model.Email, ex.Message);
+                _logger.LogWarning("Login failed for user: {UserName}. Reason: {Message}", model.Identifier, ex.Message);
                 return Unauthorized(new { message = "Invalid username, email, or password" });
             }
             catch (Exception ex)
             {
                 // Log any other exceptions that might occur
-                _logger.LogError(ex, "An error occurred during login for user: {UserName}", model.UserName ?? model.Email);
+                _logger.LogError(ex, "An error occurred during login for user: {UserName}", model.Identifier);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred. Please try again later." });
             }
         }

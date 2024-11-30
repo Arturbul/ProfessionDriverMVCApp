@@ -103,13 +103,28 @@ internal class Program
 
         builder.Services.AddHttpContextAccessor();
 
+        // CORS
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAllOrigins", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
+
         var app = builder.Build();
+
+        app.UseCors("AllowAllOrigins");
 
         using (var scope = app.Services.CreateScope())
         {
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             await EnsureRolesAsync(roleManager);
         }
+
+
 
         app.UseHttpsRedirection();
 

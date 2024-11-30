@@ -4,6 +4,7 @@ using ProfessionDriverApp.Application.DTOs.Auth;
 using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Application.Requests;
 using ProfessionDriverApp.Domain.Models;
+using System.Text.RegularExpressions;
 
 namespace ProfessionDriverApp.Application.Services
 {
@@ -41,18 +42,22 @@ namespace ProfessionDriverApp.Application.Services
             return result;
         }
 
-        public async Task<string> Login(LoginModel model)
+        public async Task<object> Login(LoginModel model)
         {
             AppUser? user = null;
 
             // Find user by username or email
-            if (!string.IsNullOrEmpty(model.UserName))
+            if (!string.IsNullOrEmpty(model.Identifier))
             {
-                user = await _userManager.FindByNameAsync(model.UserName);
-            }
-            else if (!string.IsNullOrEmpty(model.Email))
-            {
-                user = await _userManager.FindByEmailAsync(model.Email);
+                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                if (Regex.IsMatch(model.Identifier, emailPattern))
+                {
+                    user = await _userManager.FindByEmailAsync(model.Identifier);
+                }
+                else
+                {
+                    user = await _userManager.FindByNameAsync(model.Identifier);
+                }
             }
 
             // If user is not found or password is incorrect, throw an exception
@@ -67,7 +72,7 @@ namespace ProfessionDriverApp.Application.Services
             // Return the generated JWT token
             return _jwtService.WriteToken(token);
         }
-        public async Task<string> AssignUserToRole(AssignUserToRoleRequest request)
+        public async Task<object> AssignUserToRole(AssignUserToRoleRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
