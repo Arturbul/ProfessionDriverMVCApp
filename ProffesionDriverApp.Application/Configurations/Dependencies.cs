@@ -17,7 +17,7 @@ namespace ProfessionDriverApp.Application.Configurations
         }
         private static void MapperProfilesRegister(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(IndividualProfile), typeof(AppUserProfile));
+            services.AddAutoMapper(typeof(IndividualProfile), typeof(AppUserProfile), typeof(CompanyServiceProfile));
         }
         private static void UserAuthServiciesRegister(IServiceCollection services)
         {

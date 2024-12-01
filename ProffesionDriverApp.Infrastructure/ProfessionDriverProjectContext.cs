@@ -42,6 +42,10 @@ namespace ProfessionDriverApp.Infrastructure
             modelBuilder.Entity<Company>()
                 .OwnsOne(a => a.Address);
 
+            modelBuilder.Entity<Company>()
+                .HasIndex(a => a.Name)
+                .IsUnique();
+
             modelBuilder.Entity<Employee>()
                 .HasOne(a => a.AppUser)
                 .WithOne(a => a.Employee)

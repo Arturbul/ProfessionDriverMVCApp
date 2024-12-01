@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Application.Requests.Create;
 using ProfessionDriverApp.Application.Requests.Update;
@@ -18,38 +17,75 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         }
 
         //GET
+        [Authorize]
         [HttpGet]
-        public async Task<IEnumerable<EmployeeDTO>> Get()
+        public async Task<IActionResult> GetBasics()
         {
-            return null;
+            try
+            {
+                var entities = await _companyService.CompaniesBasics();
+                if (entities == null)
+                {
+                    return NoContent();
+                }
+                return Ok(entities);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
         }
 
-        [HttpGet("{id}")]
-        public async Task<EmployeeDTO?> Get(int id)
+        [Authorize]
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetDetails(string name)
         {
-            return null;
+            try
+            {
+                var entity = await _companyService.CompanyBasic(name);
+                if (entity == null)
+                {
+                    return NoContent();
+                }
+                return Ok(entity);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
         }
 
         //POST
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateCompanyRequest request)
         {
             try
             {
                 await _companyService.Create(request);
+                return CreatedAtAction(nameof(GetDetails), new { name = request.Name }, new { name = request.Name });
             }
             catch (UnauthorizedAccessException e)
             {
-                throw new UnauthorizedAccessException(e.Message);
+                return Unauthorized(e.Message);
             }
             catch (InvalidOperationException e)
             {
-                throw new InvalidOperationException(e.Message);
+                return Conflict(e.Message);
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                return BadRequest(e.Message);
             }
             return Ok();
         }
@@ -63,15 +99,15 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             }
             catch (InvalidOperationException e)
             {
-                throw new InvalidOperationException(e.Message, e);
+                return Conflict(e.Message);
             }
             catch (UnauthorizedAccessException e)
             {
-                throw new UnauthorizedAccessException(e.Message, e);
+                return Unauthorized(e.Message);
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message, e);
+                return BadRequest(e.Message);
             }
             return Ok();
         }

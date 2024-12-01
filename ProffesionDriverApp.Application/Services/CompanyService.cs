@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Application.Requests.Create;
 using ProfessionDriverApp.Application.Requests.Update;
@@ -75,6 +76,12 @@ namespace ProfessionDriverApp.Application.Services
             if (user.CompanyId.HasValue)
                 throw new InvalidOperationException("User already assign to company.");
 
+            if (await _unitOfWork.Repository<Company>().Queryable(filterCompany: false)
+                    .AnyAsync(a => a.Name.ToLower().Trim() == request.Name.ToLower().Trim()))
+            {
+                throw new InvalidOperationException("Company with that name already exists.");
+            }
+
             var profile = new Company
             {
                 Name = request.Name,
@@ -109,6 +116,78 @@ namespace ProfessionDriverApp.Application.Services
             profile.AddEmployee(employeeProfile);
             _unitOfWork.Repository<Company>().Add(profile);
             await _unitOfWork.SaveToDatabaseAsync();
+        }
+
+        public async Task<IList<CompanyBasicDTO?>?> CompaniesWithDetails()
+        {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var companies = _unitOfWork.Repository<Company>()
+                    .Queryable(filterCompany: false);
+
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return _mapper.Map<IList<CompanyBasicDTO?>>(companies);
+            }
+
+            //return list of companies where user is an employee
+            companies
+                .Include(a => a.Employees)
+                .Where(a => a.Employees
+                    .Any(b => b.AppUserId == user.Id));
+
+            return _mapper.Map<IList<CompanyBasicDTO?>>(companies);
+        }
+
+        public async Task<IList<CompanyBasicDTO?>?> CompaniesBasics()
+        {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var companies = _unitOfWork.Repository<Company>()
+                    .Queryable(filterCompany: false);
+
+            return _mapper.Map<IList<CompanyBasicDTO?>>(companies);
+        }
+
+        public async Task<CompanyBasicDTO?> CompanyBasic(string name)
+        {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var company = await _unitOfWork.Repository<Company>()
+                    .Queryable(filterCompany: false)
+                    .SingleOrDefaultAsync(a => a.Name == name);
+
+            return _mapper.Map<CompanyBasicDTO?>(company);
         }
     }
 }
