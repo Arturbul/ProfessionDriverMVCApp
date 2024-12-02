@@ -95,7 +95,7 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
 
             if (entity is EntityBase baseEntity)
             {
-                DeleteEntityBase(baseEntity);
+                DeleteFlagEntityBase(baseEntity);
                 _dbSet.Update(entity);
             }
             else
@@ -122,7 +122,7 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
             entity.Modifier = userName;
         }
 
-        public void DeleteEntityBase<TEntityBase>(TEntityBase entity)
+        public void DeleteFlagEntityBase<TEntityBase>(TEntityBase entity)
             where TEntityBase : EntityBase
         {
             var userName = _userContextService.GetUserName();

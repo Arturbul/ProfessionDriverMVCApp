@@ -16,7 +16,7 @@ namespace ProfessionDriverApp.Application.Services
         {
         }
 
-        public async Task<IList<AppUserUnassignedDTO?>> Unassigned()
+        public async Task<IList<AppUserUnassignedDTO?>?> Unassigned()
         {
             var now = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -25,14 +25,14 @@ namespace ProfessionDriverApp.Application.Services
                 .Include(a => a.Employee)
                 .Where(a => a.CompanyId == null &&
                             (a.Employee == null ||
-                             (a.Employee.TerminationDate == null || a.Employee.TerminationDate > now) &&
+                             (a.Employee.TerminationDate == null || a.Employee.TerminationDate <= now) &&
                              a.Employee.HireDate <= now &&
                              (a.Employee.CompanyId != 0 || !a.Employee.Company.IsDeleted)))
                 .ToListAsync();
 
             if (!entities.Any())
             {
-                throw new NullReferenceException("No entities");
+                return null;
             }
 
             var mapped = _mapper.Map<IList<AppUserUnassignedDTO?>>(entities);
@@ -43,24 +43,19 @@ namespace ProfessionDriverApp.Application.Services
             return mapped;
         }
 
-        public async Task<AppUserDTO> GetAppUser(string identifier)
+        public async Task<AppUserDTO?> GetAppUser(string? identifier)
         {
-            var entity = await _unitOfWork.Repository<AppUser>()
-                .Queryable()
-                .FirstOrDefaultAsync(a =>
-                    a.NormalizedEmail == _userManager.NormalizeEmail(identifier)
-                    || a.NormalizedUserName == _userManager.NormalizeName(identifier));
-            if (entity == null)
+            var user = await _userContextService.GetAppUser();
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
             {
-                throw new NullReferenceException("No entities");
+                user = await _unitOfWork.Repository<AppUser>()
+                    .Queryable()
+                    .FirstOrDefaultAsync(a =>
+                        a.NormalizedEmail == _userManager.NormalizeEmail(identifier)
+                        || a.NormalizedUserName == _userManager.NormalizeName(identifier));
             }
 
-            var mapped = _mapper.Map<AppUserDTO>(entity);
-            if (entity == null)
-            {
-                throw new InvalidOperationException("Error mapping");
-            }
-            return mapped;
+            return _mapper.Map<AppUserDTO?>(user);
         }
     }
 }

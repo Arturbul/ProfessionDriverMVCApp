@@ -10,7 +10,7 @@ namespace ProfessionDriverApp.Infrastructure.Interfaces
         Task<T?> GetByIdAsync(int id, EntityStatusFilter entityStatus = EntityStatusFilter.Exists);
         Task Delete(int id);
         void FillEntityBase<TEntityBase>(TEntityBase entity) where TEntityBase : EntityBase;
-        void DeleteEntityBase<TEntityBase>(TEntityBase entity) where TEntityBase : EntityBase;
+        void DeleteFlagEntityBase<TEntityBase>(TEntityBase entity) where TEntityBase : EntityBase;
         void Add(T entity);
         void Update(T entity);
     }

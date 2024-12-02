@@ -37,8 +37,8 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             }
         }
 
-        [HttpGet("{identifier}")]
-        public async Task<IActionResult> UserDetails(string identifier)
+        [HttpGet("details")]
+        public async Task<IActionResult> UserDetails(string? identifier)
         {
             try
             {
@@ -47,12 +47,15 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             }
             catch (InvalidOperationException e)
             {
-
                 return NoContent();
             }
             catch (NullReferenceException e)
             {
                 return Conflict(e.Message);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return Unauthorized(e.Message);
             }
             catch (Exception ex)
             {
@@ -61,6 +64,3 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         }
     }
 }
-
-// endpoint dla przypisania uzytkownika do firmy
-// enpoint dla przypisania uzytkownika do firmy i przypisania do firmy

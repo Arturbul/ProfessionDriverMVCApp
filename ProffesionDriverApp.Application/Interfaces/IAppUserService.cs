@@ -4,7 +4,7 @@ namespace ProfessionDriverApp.Application.Interfaces
 {
     public interface IAppUserService
     {
-        Task<AppUserDTO> GetAppUser(string identifier);
-        Task<IList<AppUserUnassignedDTO?>> Unassigned();
+        Task<AppUserDTO?> GetAppUser(string? identifier);
+        Task<IList<AppUserUnassignedDTO?>?> Unassigned();
     }
 }

@@ -1,10 +1,7 @@
-﻿using ProfessionDriverApp.Domain.ValueObjects;
-
-namespace ProfessionDriverApp.Application.DTOs
+﻿namespace ProfessionDriverApp.Application.DTOs
 {
-    public class CompanyBasicDTO
+    public class CompanyBasicDTO : AddressDTO
     {
         public string? Name { get; set; }
-        public Address? Address { get; set; }
     }
 }

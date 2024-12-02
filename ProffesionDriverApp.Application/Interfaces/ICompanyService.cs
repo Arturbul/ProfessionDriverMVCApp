@@ -9,7 +9,10 @@ namespace ProfessionDriverApp.Application.Interfaces
         Task Create(CreateCompanyRequest request);
         Task AssignUserToCompanyEmployee(LinkUserToEmployeeRequest request);
         Task<IList<CompanyBasicDTO?>?> CompaniesWithDetails();
-        Task<CompanyBasicDTO?> CompanyBasic(string name);
+        Task<CompanyBasicDTO> CompanyBasic(string? name);
         Task<IList<CompanyBasicDTO?>?> CompaniesBasics();
+        Task OffCompanyProfile(int id);
+        Task OffCompanyProfileWithEmployees(int id);
+        Task UpdateCompanyBasics(string? name, UpdateCompanyRequest request);
     }
 }

@@ -169,7 +169,7 @@ namespace ProfessionDriverApp.Application.Services
             return _mapper.Map<IList<CompanyBasicDTO?>>(companies);
         }
 
-        public async Task<CompanyBasicDTO?> CompanyBasic(string name)
+        public async Task<CompanyBasicDTO> CompanyBasic(string? name)
         {
             var userName = _userContextService.GetUserName();
             if (userName == null)
@@ -183,11 +183,120 @@ namespace ProfessionDriverApp.Application.Services
                 throw new UnauthorizedAccessException();
             }
 
-            var company = await _unitOfWork.Repository<Company>()
+            Company? company = null;
+            if (!string.IsNullOrEmpty(name) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                company = await _unitOfWork.Repository<Company>()
                     .Queryable(filterCompany: false)
                     .SingleOrDefaultAsync(a => a.Name == name);
+            }
+            else
+            {
+                company = await _unitOfWork.Repository<Company>()
+                   .Queryable()
+                   .FirstOrDefaultAsync();
+            }
 
-            return _mapper.Map<CompanyBasicDTO?>(company);
+            if (company == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            return _mapper.Map<CompanyBasicDTO>(company);
+        }
+
+        public async Task OffCompanyProfile(int id)
+        {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null || !(await _userManager.IsInRoleAsync(user, "Admin")))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var query = _unitOfWork.Repository<Company>().Queryable(filterCompany: false);
+            if (!(await query.AnyAsync(a => a.CompanyId == id)))
+            {
+                throw new InvalidOperationException("Invalid company id.");
+            }
+
+            await _unitOfWork.Repository<Company>().Delete(id);
+            var result = await _unitOfWork.SaveToDatabaseAsync();
+            if (result == 0)
+            {
+                throw new DbUpdateException("Cannot detete entity from database.");
+            }
+        }
+
+        public async Task OffCompanyProfileWithEmployees(int id)
+        {
+            var userName = _userContextService.GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null || !(await _userManager.IsInRoleAsync(user, "Admin")))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var query = _unitOfWork.Repository<Company>().Queryable(filterCompany: false);
+            if (!(await query.AnyAsync(a => a.CompanyId == id)))
+            {
+                throw new InvalidOperationException("Invalid company id.");
+            }
+
+            var profile = await query.Include(a => a.Employees)
+                .ThenInclude(a => a.AppUser)
+                .AsTracking()
+                .FirstOrDefaultAsync(a => a.CompanyId == id);
+            if (profile == null)
+            {
+                throw new NullReferenceException("Cannot get company profile.");
+            }
+
+            foreach (var employee in profile.Employees)
+            {
+                profile.RemoveEmployee(employee);
+            }
+
+            await _unitOfWork.Repository<Company>().Delete(id);
+            var result = await _unitOfWork.SaveToDatabaseAsync();
+            if (result == 0)
+            {
+                throw new DbUpdateException("Cannot detete entity from database.");
+            }
+        }
+
+        public async Task UpdateCompanyBasics(string? name, UpdateCompanyRequest request)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            Company? company = null;
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                company = await _unitOfWork.Repository<Company>().Queryable(filterCompany: false).FirstOrDefaultAsync(a => a.Name == name);
+            }
+            else
+            {
+                company = await _unitOfWork.Repository<Company>().Queryable().FirstOrDefaultAsync();
+            }
+
+            if (company == null)
+            {
+                throw new NullReferenceException("Company not found.");
+            }
+
+            _mapper.Map(request, company);
+
+            _unitOfWork.Repository<Company>().Update(company);
+            await _unitOfWork.SaveToDatabaseAsync();
         }
     }
 }

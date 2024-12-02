@@ -9,6 +9,7 @@ namespace ProfessionDriverApp.Application.Mappers
         public AppUserProfile()
         {
             CreateMap<AppUser, AppUserUnassignedDTO>().ReverseMap();
+            CreateMap<AppUser, AppUserDTO>().ReverseMap();
         }
     }
 }
