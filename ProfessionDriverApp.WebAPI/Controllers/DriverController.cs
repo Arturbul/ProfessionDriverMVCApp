@@ -18,7 +18,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         [Authorize]
         [HttpGet("distance")]
         public async Task<IActionResult> GetDistance(
-                 string? driverName,
+                 string? driverUserName,
                  string? filterType = null,
                  DateTime? startDate = null,
                  DateTime? endDate = null)
@@ -68,9 +68,9 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                     return BadRequest("StartDate cannot be greater than EndDate.");
                 }
 
-                var entity = await _workLogService.TotalDistanceDriver(driverName, rangeStart, rangeEnd);
+                var result = await _workLogService.TotalDistanceDriver(driverUserName, rangeStart, rangeEnd);
 
-                return Ok(entity);
+                return Ok(result);
             }
             catch (UnauthorizedAccessException)
             {
@@ -92,7 +92,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         [Authorize]
         [HttpGet("worked-hours")]
         public async Task<IActionResult> GetWorkedHours(
-                string? driverName,
+                string? driverUserName,
                 string? filterType = null,
                 DateTime? startDate = null,
                 DateTime? endDate = null)
@@ -146,7 +146,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                 }
 
                 // Wywołanie serwisu liczącego przepracowane godziny
-                var workedHours = await _workLogService.TotalWorkedHours(driverName, rangeStart, rangeEnd);
+                var workedHours = await _workLogService.TotalWorkedHours(driverUserName, rangeStart, rangeEnd);
 
                 return Ok(new
                 {
