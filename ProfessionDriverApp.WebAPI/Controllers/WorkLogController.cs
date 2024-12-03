@@ -21,8 +21,8 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         {
             try
             {
-                var entity = await _workLogService.TotalDistance(companyName);
-                return Ok(123);
+                var entity = await _workLogService.TotalDistanceCompany(companyName);
+                return Ok(entity);
             }
             catch (UnauthorizedAccessException)
             {
