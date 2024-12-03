@@ -207,38 +207,41 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             {
                 var logs = await _workLogService.GetRecentDriverWorkLogs(driverUserName, logCount);
                 logs = new List<DriverWorkLogSummaryDTO>
-                {
-                    new DriverWorkLogSummaryDTO
-                    {
-                        StartPlace = "Warsaw",
-                        EndPlace = "Krakow",
-                        TotalDistance = 295.5f,
-                        TotalHours = 4.5f,
-                        VehicleNumber = "WZ12345",
-                        TrailerNumber = "TR1234",
-                        VehicleBrand = "Volvo"
-                    },
-                    new DriverWorkLogSummaryDTO
-                    {
-                        StartPlace = "Gdansk",
-                        EndPlace = "Szczecin",
-                        TotalDistance = 340.0f,
-                        TotalHours = 5.2f,
-                        VehicleNumber = "GD54321",
-                        TrailerNumber = "TR5678",
-                        VehicleBrand = "Scania"
-                    },
-                    new DriverWorkLogSummaryDTO
-                    {
-                        StartPlace = "Poznan",
-                        EndPlace = "Wroclaw",
-                        TotalDistance = 180.75f,
-                        TotalHours = 3.0f,
-                        VehicleNumber = "PO98765",
-                        //TrailerNumber = "TR9012",
-                        VehicleBrand = "Mercedes"
-                    }
-                };
+                 {
+                     new DriverWorkLogSummaryDTO
+                     {
+                         DriverWorkLogId = Guid.NewGuid(),
+                         StartPlace = "Warsaw",
+                         EndPlace = "Krakow",
+                         TotalDistance = 295.5f,
+                         TotalHours = 4.5f,
+                         VehicleNumber = "WZ12345",
+                         TrailerNumber = "TR1234",
+                         VehicleBrand = "Volvo"
+                     },
+                     new DriverWorkLogSummaryDTO
+                     {
+                         DriverWorkLogId = Guid.NewGuid(),
+                         StartPlace = "Gdansk",
+                         EndPlace = "Szczecin",
+                         TotalDistance = 340.0f,
+                         TotalHours = 5.2f,
+                         VehicleNumber = "GD54321",
+                         TrailerNumber = "TR5678",
+                         VehicleBrand = "Scania"
+                     },
+                     new DriverWorkLogSummaryDTO
+                     {
+                         DriverWorkLogId = Guid.NewGuid(),
+                         StartPlace = "Poznan",
+                         EndPlace = "Wroclaw",
+                         TotalDistance = 180.75f,
+                         TotalHours = 3.0f,
+                         VehicleNumber = "PO98765",
+                         //TrailerNumber = "TR9012",
+                         VehicleBrand = "Mercedes"
+                     }
+                 };
                 return Ok(logs);
             }
             catch (UnauthorizedAccessException)

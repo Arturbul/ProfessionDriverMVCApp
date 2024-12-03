@@ -172,6 +172,7 @@ namespace ProfessionDriverApp.Application.Services
                 .Take(logCount)
                 .Select(dw => new DriverWorkLogSummaryDTO
                 {
+                    DriverWorkLogId = dw.DriverWorkLogId,
                     StartPlace = dw.StartEntry.Place,
                     EndPlace = dw.EndEntry!.Place,
                     TotalDistance = dw.EndEntry != null && dw.StartEntry.Mileage.HasValue && dw.EndEntry.Mileage.HasValue

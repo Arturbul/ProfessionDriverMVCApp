@@ -2,6 +2,7 @@
 {
     public class DriverWorkLogSummaryDTO
     {
+        public Guid DriverWorkLogId { get; set; }
         public string? StartPlace { get; set; }
         public string? EndPlace { get; set; }
         public float? TotalDistance { get; set; }
