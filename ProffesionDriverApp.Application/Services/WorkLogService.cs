@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Domain.Interfaces;
 using ProfessionDriverApp.Domain.Models;
@@ -143,6 +144,49 @@ namespace ProfessionDriverApp.Application.Services
                 .ToList();
 
             return allMonthsWithDistance.Cast<object>().ToList();
+        }
+
+        public async Task<List<DriverWorkLogSummaryDTO>> GetRecentDriverWorkLogs(string? driverUserName, int logCount = 5)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<DriverWorkLog> query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false)
+                .Include(dw => dw.LargeGoodsVehicle)
+                .ThenInclude(lgv => lgv.Vehicle)
+                .Include(dw => dw.LargeGoodsVehicle.Trailer)
+                .Include(dw => dw.StartEntry)
+                .Include(dw => dw.EndEntry);
+
+            if (!string.IsNullOrEmpty(driverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                query = query.Where(dw => dw.Driver.Employee!.AppUser!.UserName == driverUserName);
+            }
+            else
+            {
+                query = query.Where(dw => dw.Driver.Employee!.AppUser!.UserName == _userContextService.GetUserName());
+            }
+
+            var logs = await query
+                .OrderByDescending(dw => dw.StartEntry.LogTime)
+                .Where(dw => !dw.IsDeleted && dw.EndEntry != null)
+                .Take(logCount)
+                .Select(dw => new DriverWorkLogSummaryDTO
+                {
+                    StartPlace = dw.StartEntry.Place,
+                    EndPlace = dw.EndEntry!.Place,
+                    TotalDistance = dw.EndEntry != null && dw.StartEntry.Mileage.HasValue && dw.EndEntry.Mileage.HasValue
+                        ? dw.EndEntry.Mileage.Value - dw.StartEntry.Mileage.Value
+                        : null,
+                    TotalHours = dw.EndEntry != null
+                        ? (float)(dw.EndEntry.LogTime - dw.StartEntry.LogTime).TotalHours
+                        : null,
+                    VehicleNumber = dw.LargeGoodsVehicle.Vehicle.RegistrationNumber,
+                    TrailerNumber = dw.LargeGoodsVehicle.Trailer != null ? dw.LargeGoodsVehicle.Trailer.RegistrationNumber : "",
+                    VehicleBrand = dw.LargeGoodsVehicle.Vehicle.Brand
+                })
+                .ToListAsync();
+
+            return logs;
         }
     }
 }

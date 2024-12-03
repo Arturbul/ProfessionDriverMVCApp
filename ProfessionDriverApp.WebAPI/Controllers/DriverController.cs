@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 
 namespace ProfessionDriverApp.WebAPI.Controllers
@@ -171,22 +172,74 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             try
             {
                 var distances = await _workLogService.DistanceDriverYear(driverUserName);
-                //distances = new List<object> //testing
-                // {
-                //     new { month = "Jan", distance = 2000  },
-                //     new { month = "Feb", distance = 1800  },
-                //     new { month = "Mar", distance = 2200  },
-                //     new { month = "Apr", distance = 0  },
-                //     new { month = "May", distance = 2500  },
-                //     new { month = "Jun", distance = 0  },
-                //     new { month = "Jul", distance = 3200  },
-                //     new { month = "Aug", distance = 0  },
-                //     new { month = "Sep", distance = 2500  },
-                //     new { month = "Oct", distance = 0  },
-                //     new { month = "Nov", distance = 0  },
-                //     new { month = "Dec", distance = 4800  }
-                // };
+                distances = new List<object> //testing
+                 {
+                     new { month = "Jan", distance = 2000  },
+                     new { month = "Feb", distance = 1800  },
+                     new { month = "Mar", distance = 2200  },
+                     new { month = "Apr", distance = 0  },
+                     new { month = "May", distance = 2500  },
+                     new { month = "Jun", distance = 0  },
+                     new { month = "Jul", distance = 3200  },
+                     new { month = "Aug", distance = 0  },
+                     new { month = "Sep", distance = 2500  },
+                     new { month = "Oct", distance = 0  },
+                     new { month = "Nov", distance = 0  },
+                     new { month = "Dec", distance = 4800  }
+                 };
                 return Ok(distances);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("User either has no company or unauthorized.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("driver-worklogs/recent")]
+        public async Task<IActionResult> GetRecentDriverWorkLogs(int logCount = 5, string? driverUserName = null)
+        {
+            try
+            {
+                var logs = await _workLogService.GetRecentDriverWorkLogs(driverUserName, logCount);
+                logs = new List<DriverWorkLogSummaryDTO>
+                {
+                    new DriverWorkLogSummaryDTO
+                    {
+                        StartPlace = "Warsaw",
+                        EndPlace = "Krakow",
+                        TotalDistance = 295.5f,
+                        TotalHours = 4.5f,
+                        VehicleNumber = "WZ12345",
+                        TrailerNumber = "TR1234",
+                        VehicleBrand = "Volvo"
+                    },
+                    new DriverWorkLogSummaryDTO
+                    {
+                        StartPlace = "Gdansk",
+                        EndPlace = "Szczecin",
+                        TotalDistance = 340.0f,
+                        TotalHours = 5.2f,
+                        VehicleNumber = "GD54321",
+                        TrailerNumber = "TR5678",
+                        VehicleBrand = "Scania"
+                    },
+                    new DriverWorkLogSummaryDTO
+                    {
+                        StartPlace = "Poznan",
+                        EndPlace = "Wroclaw",
+                        TotalDistance = 180.75f,
+                        TotalHours = 3.0f,
+                        VehicleNumber = "PO98765",
+                        //TrailerNumber = "TR9012",
+                        VehicleBrand = "Mercedes"
+                    }
+                };
+                return Ok(logs);
             }
             catch (UnauthorizedAccessException)
             {
