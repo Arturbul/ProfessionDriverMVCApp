@@ -5,6 +5,7 @@ using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Domain.Interfaces;
 using ProfessionDriverApp.Domain.Models;
 using ProfessionDriverApp.Infrastructure.Interfaces;
+using System.Globalization;
 
 namespace ProfessionDriverApp.Application.Services
 {
@@ -101,6 +102,47 @@ namespace ProfessionDriverApp.Application.Services
                 .SumAsync(workLog => EF.Functions.DateDiffMinute(workLog.StartEntry.LogTime, workLog.EndEntry.LogTime));
 
             return TimeSpan.FromMinutes(totalWorkedHours);
+        }
+
+        public async Task<List<object>> DistanceDriverYear(string? driverUserName)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            var query = _unitOfWork.Repository<Driver>().Queryable(filterCompany: false);
+            if (!string.IsNullOrEmpty(driverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                query = query.Where(a => a.Employee!.AppUser!.UserName == driverUserName);
+            }
+            else
+            {
+                query = query.Where(a => a.Employee!.AppUser!.UserName == _userContextService.GetUserName());
+            }
+
+            var currentYear = DateTime.UtcNow.Year;
+            var result = await query
+                .SelectMany(driver => driver.DriverWorkLogs
+                    .Where(workLog => !workLog.IsDeleted
+                        && workLog.EndEntry != null
+                        && workLog.StartEntry.LogTime.Year == currentYear))
+                .GroupBy(workLog => workLog.StartEntry.LogTime.Month)
+                .Select(group => new
+                {
+                    Month = group.Key,
+                    Distance = group.Sum(workLog =>
+                        workLog.EndEntry!.Mileage.GetValueOrDefault() - workLog.StartEntry.Mileage.GetValueOrDefault())
+                })
+                .ToListAsync();
+
+            var monthNames = CultureInfo.InvariantCulture.DateTimeFormat.AbbreviatedMonthNames;
+            var allMonthsWithDistance = Enumerable.Range(1, 12)
+                .Select(month => new
+                {
+                    month = monthNames[month - 1],
+                    distance = result.FirstOrDefault(r => r.Month == month)?.Distance ?? 0
+                })
+                .ToList();
+
+            return allMonthsWithDistance.Cast<object>().ToList();
         }
     }
 }

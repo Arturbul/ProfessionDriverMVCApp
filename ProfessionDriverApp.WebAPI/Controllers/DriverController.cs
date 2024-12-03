@@ -163,5 +163,39 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize]
+        [HttpGet("distance/year")]
+        public async Task<IActionResult> GetDistanceByYear(string? driverUserName)
+        {
+            try
+            {
+                var distances = await _workLogService.DistanceDriverYear(driverUserName);
+                //distances = new List<object> //testing
+                // {
+                //     new { month = "Jan", distance = 2000  },
+                //     new { month = "Feb", distance = 1800  },
+                //     new { month = "Mar", distance = 2200  },
+                //     new { month = "Apr", distance = 0  },
+                //     new { month = "May", distance = 2500  },
+                //     new { month = "Jun", distance = 0  },
+                //     new { month = "Jul", distance = 3200  },
+                //     new { month = "Aug", distance = 0  },
+                //     new { month = "Sep", distance = 2500  },
+                //     new { month = "Oct", distance = 0  },
+                //     new { month = "Nov", distance = 0  },
+                //     new { month = "Dec", distance = 4800  }
+                // };
+                return Ok(distances);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("User either has no company or unauthorized.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
