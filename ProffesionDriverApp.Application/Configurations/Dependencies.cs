@@ -14,6 +14,7 @@ namespace ProfessionDriverApp.Application.Configurations
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IAppUserService, AppUserService>();
+            services.AddScoped<IWorkLogService, WorkLogService>();
         }
         private static void MapperProfilesRegister(IServiceCollection services)
         {

@@ -298,5 +298,28 @@ namespace ProfessionDriverApp.Application.Services
             _unitOfWork.Repository<Company>().Update(company);
             await _unitOfWork.SaveToDatabaseAsync();
         }
+
+        public async Task<float> TotalDistance(string? name)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            var query = _unitOfWork.Repository<Company>().Queryable(filterCompany: false);
+            if (!string.IsNullOrEmpty(name) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                query.Where(a => a.Name == name);
+            }
+            else
+            {
+                query.Where(a => a.CompanyId == _userContextService.GetUserCompany());
+            }
+
+            var totalMileage = await query
+                .SelectMany(company => company.Drivers)
+                .SelectMany(driver => driver.DriverWorkLogs
+                    .Where(workLog => !workLog.IsDeleted && workLog.EndEntry != null))
+                .SumAsync(workLog => workLog.EndEntry!.Mileage.GetValueOrDefault() - workLog.StartEntry.Mileage.GetValueOrDefault());
+
+            return totalMileage;
+        }
     }
 }

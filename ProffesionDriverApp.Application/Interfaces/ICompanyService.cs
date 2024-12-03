@@ -14,5 +14,6 @@ namespace ProfessionDriverApp.Application.Interfaces
         Task OffCompanyProfile(int id);
         Task OffCompanyProfileWithEmployees(int id);
         Task UpdateCompanyBasics(string? name, UpdateCompanyRequest request);
+        Task<float> TotalDistance(string? name);
     }
 }
