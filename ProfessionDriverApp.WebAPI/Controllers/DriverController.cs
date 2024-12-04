@@ -240,6 +240,28 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                          VehicleNumber = "PO98765",
                          //TrailerNumber = "TR9012",
                          VehicleBrand = "Mercedes"
+                     },
+                     new DriverWorkLogSummaryDTO
+                     {
+                         DriverWorkLogId = Guid.NewGuid(),
+                         StartPlace = "Poznan",
+                         EndPlace = "Wroclaw",
+                         TotalDistance = 180.75f,
+                         TotalHours = 3.0f,
+                         VehicleNumber = "PO98765",
+                         //TrailerNumber = "TR9012",
+                         VehicleBrand = "Mercedes"
+                     },
+                     new DriverWorkLogSummaryDTO
+                     {
+                         DriverWorkLogId = Guid.NewGuid(),
+                         StartPlace = "Poznan",
+                         EndPlace = "Wroclaw",
+                         TotalDistance = 180.75f,
+                         TotalHours = 3.0f,
+                         VehicleNumber = "PO98765",
+                         //TrailerNumber = "TR9012",
+                         VehicleBrand = "Mercedes"
                      }
                  };
                 return Ok(logs);
