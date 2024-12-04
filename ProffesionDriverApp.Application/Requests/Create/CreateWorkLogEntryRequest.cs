@@ -6,6 +6,9 @@ namespace ProfessionDriverApp.Application.Requests.Create
     {
         [StringLength(12)]
         public string RegistrationNumber { get; set; } = null!;
+
+        [StringLength(12)]
+        public string? RegistrationNumberTrailer { get; set; }
         [Required]
         public DateTime LogTime { get; set; }
         public string? Place { get; set; }
