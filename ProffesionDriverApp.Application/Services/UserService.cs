@@ -25,10 +25,10 @@ namespace ProfessionDriverApp.Application.Services
 
         public async Task<object> RegisterUserAsync(RegistrationModel model)
         {
-            var existingUser = await _userManager.FindByNameAsync(model.Login);
+            var existingUser = await _userManager.FindByNameAsync(model.UserName);
             if (existingUser != null)
             {
-                throw new InvalidOperationException("User with that login already exists.");
+                throw new InvalidOperationException("User with that user name already exists.");
             }
 
             existingUser = await _userManager.FindByEmailAsync(model.Email);
@@ -39,7 +39,9 @@ namespace ProfessionDriverApp.Application.Services
 
             var newUser = new AppUser
             {
-                UserName = model.Login,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                UserName = model.UserName,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };

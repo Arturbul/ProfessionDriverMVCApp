@@ -29,5 +29,20 @@ namespace ProfessionDriverApp.Application.Services
             return _httpContextAccessor.HttpContext?.User?.Identity?.Name;
         }
 
+        public async Task<AppUser> GetAppUser()
+        {
+            var userName = GetUserName();
+            if (userName == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            return user;
+        }
     }
 }

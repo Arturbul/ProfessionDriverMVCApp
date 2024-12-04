@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ProfessionDriverApp.Application.Interfaces;
+using ProfessionDriverApp.Application.Mappers;
 using ProfessionDriverApp.Application.Services;
 using ProfessionDriverApp.Domain.Interfaces;
 using ProfessionDriverApp.Domain.Profiles;
@@ -12,10 +13,12 @@ namespace ProfessionDriverApp.Application.Configurations
         {
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IAppUserService, AppUserService>();
+            services.AddScoped<IWorkLogService, WorkLogService>();
         }
         private static void MapperProfilesRegister(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(IndividualProfile));
+            services.AddAutoMapper(typeof(IndividualProfile), typeof(AppUserProfile), typeof(CompanyServiceProfile));
         }
         private static void UserAuthServiciesRegister(IServiceCollection services)
         {

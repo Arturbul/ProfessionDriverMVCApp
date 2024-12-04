@@ -45,12 +45,15 @@ namespace ProfessionDriverApp.Domain.Models
         }
 
 
-        public void RemoveEmployee(int employeeId)
+        public void RemoveEmployee(Employee employee)
         {
-            var employee = Employees.FirstOrDefault(e => e.EmployeeId == employeeId);
             if (employee == null)
             {
                 return;
+            }
+            if (employee.CompanyId != CompanyId)
+            {
+                throw new InvalidOperationException("Employee is not assigned to this company.");
             }
 
             if (employee.AppUser != null)
@@ -59,7 +62,7 @@ namespace ProfessionDriverApp.Domain.Models
             {
                 employee.TerminationDate = DateOnly.FromDateTime(DateTime.UtcNow);
             }
-            Employees.Remove(employee);
+            //Employees.Remove(employee); // possible enumerator exceptions
         }
     }
 }

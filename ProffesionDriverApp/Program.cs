@@ -124,8 +124,6 @@ internal class Program
             await EnsureRolesAsync(roleManager);
         }
 
-
-
         app.UseHttpsRedirection();
 
         // Configure the HTTP request pipeline.

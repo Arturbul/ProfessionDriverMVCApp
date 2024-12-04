@@ -1,5 +1,4 @@
 ﻿using ProfessionDriverApp.Domain.Interfaces;
-using ProfessionDriverApp.Domain.Models;
 using ProfessionDriverApp.Infrastructure.Interfaces;
 using ProfessionDriverApp.Infrastructure.Repositories;
 
@@ -18,7 +17,7 @@ namespace ProfessionDriverApp.Infrastructure
         }
 
         public ITRepository<T> Repository<T>()
-            where T : EntityBase
+             where T : class
         {
             if (!_repositories.ContainsKey(typeof(T)))
             {
