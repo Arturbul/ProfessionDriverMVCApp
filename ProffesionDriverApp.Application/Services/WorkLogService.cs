@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
+using ProfessionDriverApp.Application.Requests.Create;
 using ProfessionDriverApp.Domain.Interfaces;
 using ProfessionDriverApp.Domain.Models;
 using ProfessionDriverApp.Infrastructure.Interfaces;
@@ -151,9 +152,7 @@ namespace ProfessionDriverApp.Application.Services
             var user = await _userContextService.GetAppUser();
 
             IQueryable<DriverWorkLog> query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false)
-                .Include(dw => dw.LargeGoodsVehicle)
-                .ThenInclude(lgv => lgv.Vehicle)
-                .Include(dw => dw.LargeGoodsVehicle.Trailer)
+                .Include(dw => dw.TransportUnit)
                 .Include(dw => dw.StartEntry)
                 .Include(dw => dw.EndEntry);
 
@@ -181,13 +180,157 @@ namespace ProfessionDriverApp.Application.Services
                     TotalHours = dw.EndEntry != null
                         ? (float)(dw.EndEntry.LogTime - dw.StartEntry.LogTime).TotalHours
                         : null,
-                    VehicleNumber = dw.LargeGoodsVehicle.Vehicle.RegistrationNumber,
-                    TrailerNumber = dw.LargeGoodsVehicle.Trailer != null ? dw.LargeGoodsVehicle.Trailer.RegistrationNumber : "",
-                    VehicleBrand = dw.LargeGoodsVehicle.Vehicle.Brand
+                    VehicleNumber = dw.TransportUnit.RegistrationNumber,
+                    TrailerNumber = dw.TransportUnit.RegistrationNumberTrailer != null ? dw.TransportUnit.RegistrationNumberTrailer : "",
+                    VehicleBrand = dw.TransportUnit.Brand,
+                    TrailerBrand = dw.TransportUnit.TrailerBrand != null ? dw.TransportUnit.TrailerBrand : "",
                 })
                 .ToListAsync();
 
             return logs;
         }
+
+        public async Task<string> MakeWorkLogEntry(bool started, CreateWorkLogEntryRequest request)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<DriverWorkLog> query;
+            if (!string.IsNullOrEmpty(request.DriverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                user = await _userManager.FindByNameAsync(request.DriverUserName);
+                if (user == null || user.DriverId == null || user.CompanyId == null)
+                {
+                    throw new InvalidOperationException("User does not have a Driver Profile or not attached to a Company.");
+                }
+                query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false).Where(a => a.DriverId == user.DriverId);
+            }
+            else
+            {
+                if (user == null || user.DriverId == null || user.CompanyId == null)
+                {
+                    throw new InvalidOperationException("User does not have a Driver Profile or not attached to a Company.");
+                }
+                query = _unitOfWork.Repository<DriverWorkLog>().Queryable().Where(a => a.DriverId == user.DriverId);
+            }
+
+            var latestWorkLog = await query
+                .Include(a => a.StartEntry)
+                .Include(a => a.EndEntry)
+                .OrderByDescending(dw => dw.StartEntry.LogTime)
+                .FirstOrDefaultAsync();
+
+            if (started)
+            {
+                if (latestWorkLog == null || (latestWorkLog.EndEntry != null && latestWorkLog.EndEntry.LogTime > DateTime.MinValue))
+                {
+                    throw new InvalidOperationException("Could not find latest work log or is already ended.");
+                }
+                var endEntry = _mapper.Map<DriverWorkLogEntry>(request);
+                endEntry.DriverId = user.DriverId.Value;
+                _unitOfWork.Repository<DriverWorkLogEntry>().Add(endEntry);
+
+                latestWorkLog.EndEntry = endEntry;
+                _unitOfWork.Repository<DriverWorkLog>().FillEntityBase(latestWorkLog);
+                await _unitOfWork.SaveToDatabaseAsync();
+
+                return latestWorkLog.DriverWorkLogId.ToString();
+            }
+
+            if (latestWorkLog != null && !(latestWorkLog.EndEntry != null && latestWorkLog.EndEntry.LogTime > DateTime.MinValue))
+            {
+                throw new InvalidOperationException("Could not make a new work log when previous is not ended.");
+            }
+
+            // entry
+            var startEntry = _mapper.Map<DriverWorkLogEntry>(request);
+            startEntry.DriverId = user.DriverId.Value;
+            _unitOfWork.Repository<DriverWorkLogEntry>().Add(startEntry);
+
+            //transport unit
+            var newUnit = _mapper.Map<TransportUnit>(request);
+            newUnit.CompanyId = user.CompanyId.Value;
+            _unitOfWork.Repository<TransportUnit>().Add(newUnit);
+
+            // DriverWorkLog
+            var newWorkLog = new DriverWorkLog
+            {
+                TransportUnit = newUnit,
+                StartEntry = startEntry,
+                DriverId = user.DriverId.Value,
+                CompanyId = user.CompanyId.Value,
+            };
+            _unitOfWork.Repository<DriverWorkLog>().Add(newWorkLog);
+
+            await _unitOfWork.SaveToDatabaseAsync();
+
+            return newWorkLog.DriverWorkLogId.ToString();
+        }
+
+        public async Task<IList<DriverWorkLogDTO?>?> GetWorkLogs(string? driverUserName)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<DriverWorkLog> query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false)
+                .Include(a => a.TransportUnit)
+                .Include(a => a.StartEntry)
+                .Include(a => a.EndEntry);
+            //.Include(a => a.Driver.Employee.AppUser);
+
+            if (!string.IsNullOrWhiteSpace(driverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                user = await _userManager.FindByNameAsync(driverUserName);
+            }
+            if (user == null || !user.DriverId.HasValue)
+            {
+                throw new InvalidOperationException("User is not driver or unauthorized.");
+            }
+            query.Where(a => a.CompanyId == user.CompanyId);
+
+            var workLogs = await query.ToListAsync();
+
+            return _mapper.Map<IList<DriverWorkLogDTO?>?>(workLogs);
+        }
+
+        public async Task<DriverWorkLogDTO?> GetWorkLog(string? id)
+        {
+            DriverWorkLog? result = await GetWorkLogFromDb(id);
+
+            return _mapper.Map<DriverWorkLogDTO?>(result);
+        }
+
+        private async Task<DriverWorkLog?> GetWorkLogFromDb(string? id)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<DriverWorkLog> query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false)
+                .Include(a => a.TransportUnit)
+                .Include(a => a.StartEntry)
+                .Include(a => a.EndEntry);
+
+            DriverWorkLog? result = null;
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                result = await query.FirstOrDefaultAsync(a => a.DriverWorkLogId.ToString() == id);
+            }
+            else
+            {
+                result = await query.Where(a => a.CompanyId == user.CompanyId)
+                    .FirstOrDefaultAsync(a => a.DriverWorkLogId.ToString() == id);
+            }
+
+            return result;
+        }
+
+        //public async Task<string> UpdateDriverWorkLogEntry(string id, CreateWorkLogEntryRequest request)
+        //{
+        //    var prev = await GetWorkLogFromDb(id);
+        //    if (prev == null)
+        //    {
+        //        throw new InvalidOperationException("WOrklog not found or unauthorized.");
+        //    }
+        //    _mapper.Map(request, prev);
+
+        //    //TODO
+        //}
     }
 }

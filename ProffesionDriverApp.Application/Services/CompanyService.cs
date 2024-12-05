@@ -44,7 +44,6 @@ namespace ProfessionDriverApp.Application.Services
                 // Optionally create a new Employee record if none exists
                 employee = new Employee
                 {
-                    Name = request.EmployeeName,
                     HireDate = request.HireDate,
                     AppUserId = user.Id,
                     AppUser = user,
@@ -184,7 +183,7 @@ namespace ProfessionDriverApp.Application.Services
             }
 
             Company? company = null;
-            if (!string.IsNullOrEmpty(name) && await _userManager.IsInRoleAsync(user, "Admin"))
+            if (!string.IsNullOrWhiteSpace(name) && await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 company = await _unitOfWork.Repository<Company>()
                     .Queryable(filterCompany: false)

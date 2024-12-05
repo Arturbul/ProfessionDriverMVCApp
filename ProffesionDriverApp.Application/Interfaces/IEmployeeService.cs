@@ -1,7 +1,9 @@
-﻿namespace ProfessionDriverApp.Application.Interfaces
+﻿using ProfessionDriverApp.Application.DTOs;
+
+namespace ProfessionDriverApp.Application.Interfaces
 {
     public interface IEmployeeService
     {
-        Task<IList<int>> Get();
+        Task<IList<EmployeeDTO?>?> GetEmployees(string? companyName);
     }
 }

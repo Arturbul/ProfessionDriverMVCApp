@@ -14,5 +14,8 @@ namespace ProfessionDriverApp.Domain.Models
 
         public int? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
+
+        public int? DriverId { get; set; }
+        public Driver? Driver { get; set; }
     }
 }

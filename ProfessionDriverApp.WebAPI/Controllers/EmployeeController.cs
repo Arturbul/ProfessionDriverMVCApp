@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 
 namespace ProfessionDriverApp.WebAPI.Controllers
@@ -16,37 +15,23 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         }
 
         //GET
-        [HttpGet]
-        public async Task<IEnumerable<EmployeeDTO>> Get()
-        {
-            return null;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<EmployeeDTO?> Get(int id)
-        {
-            var userName = User.Identity?.Name; // Pobieranie nazwy użytkownika
-            var a = await _employeeService.Get();
-            return null;
-
-        }
-
-        //POST
-        [HttpPost]
-        public async Task<IActionResult> Create(EmployeeDTO entity)
-        {
-            return null;
-
-        }
-
-
-        //DELETE
         [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetEmployees(string? companyName)
         {
-            return Ok(1);
-
+            try
+            {
+                var result = await _employeeService.GetEmployees(companyName);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("User either has no company or unauthorized.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

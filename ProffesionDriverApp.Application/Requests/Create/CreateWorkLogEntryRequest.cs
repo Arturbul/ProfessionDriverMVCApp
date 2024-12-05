@@ -1,19 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProfessionDriverApp.Domain.Models
+namespace ProfessionDriverApp.Application.Requests.Create
 {
-    public class DriverWorkLogEntry : EntityBase
+    public class CreateWorkLogEntryRequest
     {
-        public Guid DriverWorkLogEntryId { get; set; }
-        public int DriverId { get; set; }
         [StringLength(12)]
         public string RegistrationNumber { get; set; } = null!;
+
+        [StringLength(12)]
         public string? RegistrationNumberTrailer { get; set; }
         [Required]
         public DateTime LogTime { get; set; }
         public string? Place { get; set; }
         public float? Mileage { get; set; }
-        public Driver Driver { get; set; } = null!;
-        public override object Key => DriverWorkLogEntryId;
+        public string? DriverUserName { get; set; } //if not attached, get userName form JWT
     }
 }

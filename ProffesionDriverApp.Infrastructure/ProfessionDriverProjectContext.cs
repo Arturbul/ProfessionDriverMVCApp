@@ -19,6 +19,7 @@ namespace ProfessionDriverApp.Infrastructure
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
         public DbSet<VehicleInspection> VehicleInspections { get; set; } = null!;
         public DbSet<VehicleInsurance> VehicleInsurances { get; set; } = null!;
+        public DbSet<TransportUnit> TransportUnits { get; set; } = null!;
 
         #region OnModelCreating
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,6 +29,10 @@ namespace ProfessionDriverApp.Infrastructure
             modelBuilder.Entity<AppUser>()
                .HasIndex(u => u.Email)
                .IsUnique();
+
+            modelBuilder.Entity<Vehicle>()
+             .HasIndex(u => u.RegistrationNumber)
+             .IsUnique();
 
             //Relations
             modelBuilder.Entity<Driver>()
@@ -58,8 +63,14 @@ namespace ProfessionDriverApp.Infrastructure
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<DriverWorkLog>()
-                .HasOne(a => a.LargeGoodsVehicle)
+                .HasOne(a => a.TransportUnit)
                 .WithMany(a => a.DriverWorkLogs)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Driver>()
+                .HasOne(a => a.Employee)
+                .WithOne(a => a.Driver)
+                .HasForeignKey<Driver>(d => d.EmployeeId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
         #endregion

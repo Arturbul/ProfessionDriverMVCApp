@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProfessionDriverApp.Infrastructure;
 
@@ -11,9 +12,11 @@ using ProfessionDriverApp.Infrastructure;
 namespace ProfessionDriverApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ProfessionDriverProjectContext))]
-    partial class ProfessionDriverProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20241205144803_ModelUpdate2")]
+    partial class ModelUpdate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,7 +333,7 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LargeGoodsVehicleVehicleId")
+                    b.Property<int>("LargeGoodsVehicleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Modified")
@@ -342,20 +345,15 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<Guid>("StartEntryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TransportUnitId")
-                        .HasColumnType("int");
-
                     b.HasKey("DriverWorkLogId");
 
                     b.HasIndex("DriverId");
 
                     b.HasIndex("EndEntryId");
 
-                    b.HasIndex("LargeGoodsVehicleVehicleId");
+                    b.HasIndex("LargeGoodsVehicleId");
 
                     b.HasIndex("StartEntryId");
-
-                    b.HasIndex("TransportUnitId");
 
                     b.ToTable("DriverWorkLogs");
                 });
@@ -430,9 +428,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DriverId")
-                        .HasColumnType("int");
-
                     b.Property<DateOnly?>("HireDate")
                         .HasColumnType("date");
 
@@ -443,6 +438,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Modifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly?>("TerminationDate")
@@ -505,16 +503,13 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.ToTable("InsurancePolicies");
                 });
 
-            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.TransportUnit", b =>
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>
                 {
-                    b.Property<int>("TransportUnitId")
+                    b.Property<int>("LargeGoodsVehicleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransportUnitId"));
-
-                    b.Property<string>("Brand")
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LargeGoodsVehicleId"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -540,14 +535,27 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RegistrationNumberTrailer")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TrailerBrand")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly?>("TachoExpiryDate")
+                        .HasColumnType("date");
 
-                    b.HasKey("TransportUnitId");
+                    b.Property<int?>("TrailerId")
+                        .HasColumnType("int");
 
-                    b.ToTable("TransportUnits");
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LargeGoodsVehicleId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("TrailerId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("LargeGoodsVehicles");
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Vehicle", b =>
@@ -561,8 +569,8 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<string>("Brand")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -570,11 +578,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.Property<string>("Creator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -604,11 +607,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
 
                     b.HasKey("VehicleId");
 
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("RegistrationNumber")
-                        .IsUnique();
-
                     b.HasIndex("VehicleInspectionId")
                         .IsUnique()
                         .HasFilter("[VehicleInspectionId] IS NOT NULL");
@@ -618,10 +616,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .HasFilter("[VehicleInsuranceId] IS NOT NULL");
 
                     b.ToTable("Vehicles");
-
-                    b.HasDiscriminator().HasValue("Vehicle");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.VehicleInspection", b =>
@@ -758,19 +752,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("AppUser");
                 });
 
-            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>
-                {
-                    b.HasBaseType("ProfessionDriverApp.Domain.Models.Vehicle");
-
-                    b.Property<int>("LargeGoodsVehicleId")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly?>("TachoExpiryDate")
-                        .HasColumnType("date");
-
-                    b.HasDiscriminator().HasValue("LargeGoodsVehicle");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -862,9 +843,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("ProfessionDriverApp.Domain.Models.Employee", "Employee")
-                        .WithOne("Driver")
+                        .WithOne()
                         .HasForeignKey("ProfessionDriverApp.Domain.Models.Driver", "EmployeeId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -882,9 +863,11 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("EndEntryId");
 
-                    b.HasOne("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", null)
+                    b.HasOne("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", "LargeGoodsVehicle")
                         .WithMany("DriverWorkLogs")
-                        .HasForeignKey("LargeGoodsVehicleVehicleId");
+                        .HasForeignKey("LargeGoodsVehicleId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("ProfessionDriverApp.Domain.Models.DriverWorkLogEntry", "StartEntry")
                         .WithMany()
@@ -892,19 +875,13 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProfessionDriverApp.Domain.Models.TransportUnit", "TransportUnit")
-                        .WithMany("DriverWorkLogs")
-                        .HasForeignKey("TransportUnitId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Driver");
 
                     b.Navigation("EndEntry");
 
-                    b.Navigation("StartEntry");
+                    b.Navigation("LargeGoodsVehicle");
 
-                    b.Navigation("TransportUnit");
+                    b.Navigation("StartEntry");
                 });
 
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.DriverWorkLogEntry", b =>
@@ -966,14 +943,29 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Vehicle", b =>
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>
                 {
-                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", "Company")
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Company", null)
                         .WithMany("Vehicles")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Vehicle", "Trailer")
+                        .WithMany()
+                        .HasForeignKey("TrailerId");
+
+                    b.HasOne("ProfessionDriverApp.Domain.Models.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
+
+                    b.Navigation("Trailer");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Vehicle", b =>
+                {
                     b.HasOne("ProfessionDriverApp.Domain.Models.VehicleInspection", "VehicleInspection")
                         .WithOne("Vehicle")
                         .HasForeignKey("ProfessionDriverApp.Domain.Models.Vehicle", "VehicleInspectionId");
@@ -981,8 +973,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                     b.HasOne("ProfessionDriverApp.Domain.Models.VehicleInsurance", "VehicleInsurance")
                         .WithOne("Vehicle")
                         .HasForeignKey("ProfessionDriverApp.Domain.Models.Vehicle", "VehicleInsuranceId");
-
-                    b.Navigation("Company");
 
                     b.Navigation("VehicleInspection");
 
@@ -1058,11 +1048,9 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
             modelBuilder.Entity("ProfessionDriverApp.Domain.Models.Employee", b =>
                 {
                     b.Navigation("AppUser");
-
-                    b.Navigation("Driver");
                 });
 
-            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.TransportUnit", b =>
+            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>
                 {
                     b.Navigation("DriverWorkLogs");
                 });
@@ -1077,11 +1065,6 @@ namespace ProfessionDriverApp.Infrastructure.Migrations
                 {
                     b.Navigation("Vehicle")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ProfessionDriverApp.Domain.Models.LargeGoodsVehicle", b =>
-                {
-                    b.Navigation("DriverWorkLogs");
                 });
 #pragma warning restore 612, 618
         }
