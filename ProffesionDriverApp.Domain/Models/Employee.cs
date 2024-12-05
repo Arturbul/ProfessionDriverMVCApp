@@ -7,7 +7,6 @@ namespace ProfessionDriverApp.Domain.Models
     {
         public int EmployeeId { get; set; }
 
-        public string? Name { get; set; }
         public Address? Address { get; set; }
 
         public DateOnly? HireDate { get; set; }
@@ -21,6 +20,10 @@ namespace ProfessionDriverApp.Domain.Models
 
         public string? AppUserId { get; set; }
         public AppUser? AppUser { get; set; }
+
+        public int? DriverId { get; set; }
+        public Driver? Driver { get; set; }
+
         public override object Key => EmployeeId;
     }
 }

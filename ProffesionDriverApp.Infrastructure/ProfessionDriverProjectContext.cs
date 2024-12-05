@@ -62,6 +62,12 @@ namespace ProfessionDriverApp.Infrastructure
                 .HasOne(a => a.TransportUnit)
                 .WithMany(a => a.DriverWorkLogs)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Driver>()
+                .HasOne(a => a.Employee)
+                .WithOne(a => a.Driver)
+                .HasForeignKey<Driver>(d => d.EmployeeId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
         #endregion
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProfessionDriverApp.Infrastructure;
 
@@ -11,9 +12,11 @@ using ProfessionDriverApp.Infrastructure;
 namespace ProfessionDriverApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ProfessionDriverProjectContext))]
-    partial class ProfessionDriverProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20241205181428_ModelUpdate7")]
+    partial class ModelUpdate7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
