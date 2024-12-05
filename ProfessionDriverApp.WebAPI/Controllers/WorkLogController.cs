@@ -37,11 +37,49 @@ namespace ProfessionDriverApp.WebAPI.Controllers
 
         [Authorize]
         [HttpPost("{starter:bool}")]
-        public async Task<IActionResult> CreateWorkLogEntry(bool starter, CreateWorkLogEntryRequest request)
+        public async Task<IActionResult> CreateWorkLogEntry(bool started, CreateWorkLogEntryRequest request)
         {
             try
             {
-                var entity = await _workLogService.MakeWorkLogEntry(starter, request);
+                var entity = await _workLogService.MakeWorkLogEntry(started, request);
+                return Ok(entity);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("User either has no company or unauthorized.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetWorkLogs(string? driverUserName)
+        {
+            try
+            {
+                var entity = await _workLogService.GetWorkLogs(driverUserName);
+                return Ok(entity);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("User either has no company or unauthorized.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetWorkLog(string id)
+        {
+            try
+            {
+                var entity = await _workLogService.GetWorkLog(id);
                 return Ok(entity);
             }
             catch (UnauthorizedAccessException)

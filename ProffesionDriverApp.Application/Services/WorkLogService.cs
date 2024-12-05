@@ -182,7 +182,8 @@ namespace ProfessionDriverApp.Application.Services
                         : null,
                     VehicleNumber = dw.TransportUnit.RegistrationNumber,
                     TrailerNumber = dw.TransportUnit.RegistrationNumberTrailer != null ? dw.TransportUnit.RegistrationNumberTrailer : "",
-                    VehicleBrand = dw.TransportUnit.Brand
+                    VehicleBrand = dw.TransportUnit.Brand,
+                    TrailerBrand = dw.TransportUnit.TrailerBrand != null ? dw.TransportUnit.TrailerBrand : "",
                 })
                 .ToListAsync();
 
@@ -263,6 +264,54 @@ namespace ProfessionDriverApp.Application.Services
             await _unitOfWork.SaveToDatabaseAsync();
 
             return newWorkLog.DriverWorkLogId.ToString();
+        }
+
+        public async Task<IList<DriverWorkLogDTO?>?> GetWorkLogs(string? driverUserName)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<DriverWorkLog> query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false)
+                .Include(a => a.TransportUnit)
+                .Include(a => a.StartEntry)
+                .Include(a => a.EndEntry);
+            //.Include(a => a.Driver.Employee.AppUser);
+
+            if (!string.IsNullOrWhiteSpace(driverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                user = await _userManager.FindByNameAsync(driverUserName);
+            }
+            if (user == null || !user.DriverId.HasValue)
+            {
+                throw new InvalidOperationException("User is not driver or unauthorized.");
+            }
+            query.Where(a => a.CompanyId == user.CompanyId);
+
+            var workLogs = await query.ToListAsync();
+
+            return _mapper.Map<IList<DriverWorkLogDTO?>?>(workLogs);
+        }
+
+        public async Task<DriverWorkLogDTO?> GetWorkLog(string? id)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<DriverWorkLog> query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false)
+                .Include(a => a.TransportUnit)
+                .Include(a => a.StartEntry)
+                .Include(a => a.EndEntry);
+
+            DriverWorkLog? result = null;
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                result = await query.FirstOrDefaultAsync(a => a.DriverWorkLogId.ToString() == id);
+            }
+            else
+            {
+                result = await query.Where(a => a.CompanyId == user.CompanyId)
+                    .FirstOrDefaultAsync(a => a.DriverWorkLogId.ToString() == id);
+            }
+
+            return _mapper.Map<DriverWorkLogDTO?>(result);
         }
     }
 }
