@@ -293,6 +293,13 @@ namespace ProfessionDriverApp.Application.Services
 
         public async Task<DriverWorkLogDTO?> GetWorkLog(string? id)
         {
+            DriverWorkLog? result = await GetWorkLogFromDb(id);
+
+            return _mapper.Map<DriverWorkLogDTO?>(result);
+        }
+
+        private async Task<DriverWorkLog?> GetWorkLogFromDb(string? id)
+        {
             var user = await _userContextService.GetAppUser();
 
             IQueryable<DriverWorkLog> query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false)
@@ -311,7 +318,19 @@ namespace ProfessionDriverApp.Application.Services
                     .FirstOrDefaultAsync(a => a.DriverWorkLogId.ToString() == id);
             }
 
-            return _mapper.Map<DriverWorkLogDTO?>(result);
+            return result;
         }
+
+        //public async Task<string> UpdateDriverWorkLogEntry(string id, CreateWorkLogEntryRequest request)
+        //{
+        //    var prev = await GetWorkLogFromDb(id);
+        //    if (prev == null)
+        //    {
+        //        throw new InvalidOperationException("WOrklog not found or unauthorized.");
+        //    }
+        //    _mapper.Map(request, prev);
+
+        //    //TODO
+        //}
     }
 }

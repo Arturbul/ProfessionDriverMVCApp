@@ -9,7 +9,7 @@ namespace ProfessionDriverApp.Application.Mappers
     {
         public WorkLogProfile()
         {
-            CreateMap<CreateWorkLogEntryRequest, DriverWorkLogEntry>();
+            CreateMap<CreateWorkLogEntryRequest, DriverWorkLogEntry>().ReverseMap();
 
             // Mapowanie z DriverWorkLog na DriverWorkLogDTO
             CreateMap<DriverWorkLog, DriverWorkLogDTO>()

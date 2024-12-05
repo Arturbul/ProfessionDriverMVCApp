@@ -91,5 +91,25 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> CreateWorkLogEntry(string id, CreateWorkLogEntryRequest request)
+        {
+            try
+            {
+                var entity = await _workLogService.MakeWorkLogEntry(id, request);
+                return Ok(entity);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("User either has no company or unauthorized.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
