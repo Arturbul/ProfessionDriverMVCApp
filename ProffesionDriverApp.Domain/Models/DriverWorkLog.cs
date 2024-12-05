@@ -6,8 +6,8 @@ namespace ProfessionDriverApp.Domain.Models
     public class DriverWorkLog : EntityBase, ICompanyScope
     {
         public Guid DriverWorkLogId { get; set; }
+        public TransportUnit TransportUnit { get; set; } = null!;
         public int DriverId { get; set; }
-        public LargeGoodsVehicle LargeGoodsVehicle { get; set; } = null!;
         public Driver Driver { get; set; } = null!;
         [ForeignKey("StartEntryId")]
         public DriverWorkLogEntry StartEntry { get; set; } = null!;

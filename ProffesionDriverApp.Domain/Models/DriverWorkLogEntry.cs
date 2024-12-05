@@ -8,6 +8,7 @@ namespace ProfessionDriverApp.Domain.Models
         public int DriverId { get; set; }
         [StringLength(12)]
         public string RegistrationNumber { get; set; } = null!;
+        public string? RegistrationNumberTrailer { get; set; }
         [Required]
         public DateTime LogTime { get; set; }
         public string? Place { get; set; }

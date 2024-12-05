@@ -15,10 +15,11 @@ namespace ProfessionDriverApp.Application.Configurations
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<IWorkLogService, WorkLogService>();
+            services.AddScoped<IVehicleService, VehicleService>();
         }
         private static void MapperProfilesRegister(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(IndividualProfile), typeof(AppUserProfile), typeof(CompanyServiceProfile));
+            services.AddAutoMapper(typeof(IndividualProfile), typeof(AppUserProfile), typeof(CompanyServiceProfile), typeof(VehicleProfile), typeof(WorkLogProfile), typeof(TransportUnitProfile));
         }
         private static void UserAuthServiciesRegister(IServiceCollection services)
         {

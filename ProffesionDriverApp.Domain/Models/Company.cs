@@ -11,7 +11,7 @@ namespace ProfessionDriverApp.Domain.Models
 
         public IList<Employee> Employees { get; set; } = new List<Employee>();
         public IList<Driver> Drivers { get; set; } = new List<Driver>();
-        public IList<LargeGoodsVehicle> Vehicles { get; set; } = new List<LargeGoodsVehicle>();
+        public IList<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
         public IList<InsurancePolicy> InsurancePolicies { get; set; } = new List<InsurancePolicy>();
         public IList<VehicleInspection> VehicleInspections { get; set; } = new List<VehicleInspection>();
 
