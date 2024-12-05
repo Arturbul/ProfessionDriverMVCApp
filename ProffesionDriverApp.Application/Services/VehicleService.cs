@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 using ProfessionDriverApp.Application.Requests.Create;
 using ProfessionDriverApp.Domain.Interfaces;
@@ -56,6 +58,42 @@ namespace ProfessionDriverApp.Application.Services
 
                 return newVehicle.VehicleId;
             }
+        }
+
+        public async Task<IList<VehicleDTO>?> GetVehicles(string? companyName)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<Vehicle>? query;
+            if (!string.IsNullOrWhiteSpace(companyName) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                query = _unitOfWork.Repository<Vehicle>().Queryable(filterCompany: false).Where(a => a.Company.Name == companyName);
+            }
+            else
+            {
+                query = _unitOfWork.Repository<Vehicle>().Queryable();
+            }
+
+            var result = await query.ProjectTo<VehicleDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            return result;
+        }
+
+        public async Task<VehicleDTO?> GetVehicle(string registrationNumber)
+        {
+            var user = await _userContextService.GetAppUser();
+
+            IQueryable<Vehicle>? query;
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                query = _unitOfWork.Repository<Vehicle>().Queryable(filterCompany: false).Where(a => a.RegistrationNumber == registrationNumber);
+            }
+            else
+            {
+                query = _unitOfWork.Repository<Vehicle>().Queryable().Where(a => a.RegistrationNumber == registrationNumber);
+            }
+
+            var result = await query.ProjectTo<VehicleDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+            return result;
         }
     }
 }

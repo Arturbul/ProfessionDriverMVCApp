@@ -30,6 +30,10 @@ namespace ProfessionDriverApp.Infrastructure
                .HasIndex(u => u.Email)
                .IsUnique();
 
+            modelBuilder.Entity<Vehicle>()
+             .HasIndex(u => u.RegistrationNumber)
+             .IsUnique();
+
             //Relations
             modelBuilder.Entity<Driver>()
                 .HasMany(d => d.DriverWorkLogs)
