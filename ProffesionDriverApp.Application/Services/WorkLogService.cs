@@ -190,6 +190,7 @@ namespace ProfessionDriverApp.Application.Services
             return logs;
         }
 
+        // TODO wyodrębnic metode do pobrania latestDriverWorkLog by połączyć z FE
         public async Task<string> MakeWorkLogEntry(bool started, CreateWorkLogEntryRequest request)
         {
             var user = await _userContextService.GetAppUser();

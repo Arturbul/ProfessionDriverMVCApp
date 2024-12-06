@@ -95,12 +95,14 @@ namespace ProfessionDriverApp.WebAPI.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> CreateWorkLogEntry(string id, CreateWorkLogEntryRequest request)
+        public async Task<IActionResult> UpdateWorkLogEntry(string id, CreateWorkLogEntryRequest request)
         {
             try
             {
-                var entity = await _workLogService.MakeWorkLogEntry(id, request);
-                return Ok(entity);
+                /*var entity = await _workLogService.MakeWorkLogEntry(id, request);
+                return Ok(entity);*/
+                //TODO
+                return Ok(1);
             }
             catch (UnauthorizedAccessException)
             {
@@ -111,5 +113,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        //TODO GET CURRENT WORKLOG - to get worklog if is not ended.
     }
 }
