@@ -36,7 +36,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost("{starter:bool}")]
+        [HttpPost("{started:bool}")]
         public async Task<IActionResult> CreateWorkLogEntry(bool started, CreateWorkLogEntryRequest request)
         {
             try
@@ -92,17 +92,18 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             }
         }
 
-
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWorkLogEntry(string id, CreateWorkLogEntryRequest request)
+        [HttpGet("latest")]
+        public async Task<IActionResult> GetLatestWorkLog(string? driverUserName, bool? active = null)
         {
             try
             {
-                /*var entity = await _workLogService.MakeWorkLogEntry(id, request);
-                return Ok(entity);*/
-                //TODO
-                return Ok(1);
+                var entity = await _workLogService.GetLatestWorkLog(driverUserName, active);
+                return Ok(entity);
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
             }
             catch (UnauthorizedAccessException)
             {
@@ -114,6 +115,25 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             }
         }
 
-        //TODO GET CURRENT WORKLOG - to get worklog if is not ended.
+        /*  [Authorize]
+          [HttpPut("{id}")]
+          public async Task<IActionResult> UpdateWorkLogEntry(string id, CreateWorkLogEntryRequest request)
+          {
+              try
+              {
+                  *//*var entity = await _workLogService.MakeWorkLogEntry(id, request);
+                  return Ok(entity);*//*
+                  //TODO
+                  return Ok(1);
+              }
+              catch (UnauthorizedAccessException)
+              {
+                  return Unauthorized("User either has no company or unauthorized.");
+              }
+              catch (Exception e)
+              {
+                  return BadRequest(e.Message);
+              }
+          }*/
     }
 }
