@@ -4,9 +4,11 @@ namespace ProfessionDriverApp.Application.Requests.Create
 {
     public class CreateWorkLogEntryRequest
     {
+        public string? Brand { get; set; }
         [StringLength(12)]
         public string RegistrationNumber { get; set; } = null!;
 
+        public string? TrailerBrand { get; set; }
         [StringLength(12)]
         public string? RegistrationNumberTrailer { get; set; }
         [Required]
