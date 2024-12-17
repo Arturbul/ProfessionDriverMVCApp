@@ -36,7 +36,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost("{starter:bool}")]
+        [HttpPost("{started:bool}")]
         public async Task<IActionResult> CreateWorkLogEntry(bool started, CreateWorkLogEntryRequest request)
         {
             try

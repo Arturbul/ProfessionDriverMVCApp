@@ -195,39 +195,38 @@ namespace ProfessionDriverApp.Application.Services
         {
             var user = await _userContextService.GetAppUser();
 
-            IQueryable<DriverWorkLog> query;
             if (!string.IsNullOrEmpty(request.DriverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 user = await _userManager.FindByNameAsync(request.DriverUserName);
-                if (user == null || user.DriverId == null || user.CompanyId == null)
-                {
-                    throw new InvalidOperationException("User does not have a Driver Profile or not attached to a Company.");
-                }
-                query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: false).Where(a => a.DriverId == user.DriverId);
             }
-            else
+
+            if (user == null)
             {
-                if (user == null || user.DriverId == null || user.CompanyId == null)
-                {
-                    throw new InvalidOperationException("User does not have a Driver Profile or not attached to a Company.");
-                }
-                query = _unitOfWork.Repository<DriverWorkLog>().Queryable().Where(a => a.DriverId == user.DriverId);
+                throw new NullReferenceException("Could not find user.");
             }
 
-            var latestWorkLog = await query
-                .Include(a => a.StartEntry)
-                .Include(a => a.EndEntry)
-                .OrderByDescending(dw => dw.StartEntry.LogTime)
-                .FirstOrDefaultAsync();
+            var latestWorkLog = (await GetLatestsWorkLogsFromDb(user: user, current: true))?.FirstOrDefault();
 
+            bool isDeclaredEndEntry = latestWorkLog != null && latestWorkLog?.EndEntry != null && latestWorkLog.EndEntry.LogTime > DateTime.MinValue;
             if (started)
             {
-                if (latestWorkLog == null || (latestWorkLog.EndEntry != null && latestWorkLog.EndEntry.LogTime > DateTime.MinValue))
+                if (latestWorkLog == null || isDeclaredEndEntry)
                 {
                     throw new InvalidOperationException("Could not find latest work log or is already ended.");
                 }
+                // - Fupdate dedicated validator for worklogentries
+                if (request.Mileage < latestWorkLog.StartEntry.Mileage)
+                {
+                    throw new InvalidOperationException($"Current mileage {request.Mileage} is lower then started mileage {latestWorkLog.StartEntry.Mileage}.");
+                }
+
+                if (request.LogTime < latestWorkLog.StartEntry.LogTime)
+                {
+                    throw new InvalidOperationException($"Current log time {request.LogTime} is lower then started log time {latestWorkLog.StartEntry.LogTime}.");
+                }
+
                 var endEntry = _mapper.Map<DriverWorkLogEntry>(request);
-                endEntry.DriverId = user.DriverId.Value;
+                endEntry.DriverId = user!.DriverId!.Value;
                 _unitOfWork.Repository<DriverWorkLogEntry>().Add(endEntry);
 
                 latestWorkLog.EndEntry = endEntry;
@@ -237,19 +236,19 @@ namespace ProfessionDriverApp.Application.Services
                 return latestWorkLog.DriverWorkLogId.ToString();
             }
 
-            if (latestWorkLog != null && !(latestWorkLog.EndEntry != null && latestWorkLog.EndEntry.LogTime > DateTime.MinValue))
+            if (latestWorkLog != null && !isDeclaredEndEntry)
             {
                 throw new InvalidOperationException("Could not make a new work log when previous is not ended.");
             }
 
             // entry
             var startEntry = _mapper.Map<DriverWorkLogEntry>(request);
-            startEntry.DriverId = user.DriverId.Value;
+            startEntry.DriverId = user!.DriverId!.Value;
             _unitOfWork.Repository<DriverWorkLogEntry>().Add(startEntry);
 
             //transport unit
             var newUnit = _mapper.Map<TransportUnit>(request);
-            newUnit.CompanyId = user.CompanyId.Value;
+            newUnit.CompanyId = user!.CompanyId!.Value;
             _unitOfWork.Repository<TransportUnit>().Add(newUnit);
 
             // DriverWorkLog
@@ -275,7 +274,6 @@ namespace ProfessionDriverApp.Application.Services
                 .Include(a => a.TransportUnit)
                 .Include(a => a.StartEntry)
                 .Include(a => a.EndEntry);
-            //.Include(a => a.Driver.Employee.AppUser);
 
             if (!string.IsNullOrWhiteSpace(driverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
             {
@@ -320,6 +318,34 @@ namespace ProfessionDriverApp.Application.Services
             }
 
             return result;
+        }
+
+        private async Task<IList<DriverWorkLog>?> GetLatestsWorkLogsFromDb(AppUser user, int? count = null, bool? current = null)
+        {
+            if (user.DriverId == null || user.CompanyId == null)
+            {
+                throw new InvalidOperationException("User does not have a Driver Profile or not attached to a Company.");
+            }
+
+            bool filterDriverByAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+            var query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: !filterDriverByAdmin)
+                .Where(a => a.DriverId == user.DriverId);
+
+            if (current.HasValue && current.Value)
+            {
+                query = query.Where(a => a.EndEntry == null);
+            }
+
+            var latestWorkLog = await query
+                .Include(a => a.TransportUnit)
+                .Include(a => a.StartEntry)
+                .Include(a => a.EndEntry)
+                .OrderByDescending(dw => dw.StartEntry.LogTime)
+                .Take(count ?? 1)
+                .ToListAsync();
+
+            return latestWorkLog;
         }
 
         //public async Task<string> UpdateDriverWorkLogEntry(string id, CreateWorkLogEntryRequest request)
