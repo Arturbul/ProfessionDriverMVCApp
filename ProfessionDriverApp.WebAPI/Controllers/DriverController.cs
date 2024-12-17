@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProfessionDriverApp.Application.DTOs;
 using ProfessionDriverApp.Application.Interfaces;
 
 namespace ProfessionDriverApp.WebAPI.Controllers
@@ -91,7 +90,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("worked-hours")]
+        [HttpGet("hours")]
         public async Task<IActionResult> GetWorkedHours(
                 string? driverUserName,
                 string? filterType = null,
@@ -200,13 +199,13 @@ namespace ProfessionDriverApp.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("driver-worklogs/recent")]
+        [HttpGet("worklogs/recent")]
         public async Task<IActionResult> GetRecentDriverWorkLogs(int logCount = 5, string? driverUserName = null)
         {
             try
             {
                 var logs = await _workLogService.GetRecentDriverWorkLogs(driverUserName, logCount);
-                logs = new List<DriverWorkLogSummaryDTO>
+                /*logs = new List<DriverWorkLogSummaryDTO>
                  {
                      new DriverWorkLogSummaryDTO
                      {
@@ -263,7 +262,7 @@ namespace ProfessionDriverApp.WebAPI.Controllers
                          //TrailerNumber = "TR9012",
                          VehicleBrand = "Mercedes"
                      }
-                 };
+                 };*/
                 return Ok(logs);
             }
             catch (UnauthorizedAccessException)

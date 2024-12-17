@@ -8,6 +8,7 @@ namespace ProfessionDriverApp.Application.Interfaces
     public interface IWorkLogService
     {
         Task<List<object>> DistanceDriverYear(string? driverUserName);
+        Task<DriverWorkLogDTO?> GetLatestWorkLog(string? driverUserName = null, bool? active = null);
         Task<List<DriverWorkLogSummaryDTO>> GetRecentDriverWorkLogs(string? driverUserName, int logCount = 5);
         Task<DriverWorkLogDTO?> GetWorkLog(string? id);
         Task<IList<DriverWorkLogDTO?>?> GetWorkLogs(string? driverUserName);

@@ -180,9 +180,9 @@ namespace ProfessionDriverApp.Application.Services
                     TotalHours = dw.EndEntry != null
                         ? (float)(dw.EndEntry.LogTime - dw.StartEntry.LogTime).TotalHours
                         : null,
-                    VehicleNumber = dw.TransportUnit.RegistrationNumber,
+                    VehicleNumber = dw.TransportUnit.RegistrationNumber ?? "",
                     TrailerNumber = dw.TransportUnit.RegistrationNumberTrailer != null ? dw.TransportUnit.RegistrationNumberTrailer : "",
-                    VehicleBrand = dw.TransportUnit.Brand,
+                    VehicleBrand = dw.TransportUnit.Brand ?? "",
                     TrailerBrand = dw.TransportUnit.TrailerBrand != null ? dw.TransportUnit.TrailerBrand : "",
                 })
                 .ToListAsync();
@@ -190,7 +190,6 @@ namespace ProfessionDriverApp.Application.Services
             return logs;
         }
 
-        // TODO wyodrębnic metode do pobrania latestDriverWorkLog by połączyć z FE
         public async Task<string> MakeWorkLogEntry(bool started, CreateWorkLogEntryRequest request)
         {
             var user = await _userContextService.GetAppUser();
@@ -205,7 +204,7 @@ namespace ProfessionDriverApp.Application.Services
                 throw new NullReferenceException("Could not find user.");
             }
 
-            var latestWorkLog = (await GetLatestsWorkLogsFromDb(user: user, current: true))?.FirstOrDefault();
+            var latestWorkLog = (await GetLatestsWorkLogsFromDb(user: user, active: true))?.FirstOrDefault();
 
             bool isDeclaredEndEntry = latestWorkLog != null && latestWorkLog?.EndEntry != null && latestWorkLog.EndEntry.LogTime > DateTime.MinValue;
             if (started)
@@ -297,6 +296,23 @@ namespace ProfessionDriverApp.Application.Services
             return _mapper.Map<DriverWorkLogDTO?>(result);
         }
 
+        public async Task<DriverWorkLogDTO?> GetLatestWorkLog(string? driverUserName = null, bool? active = null) //to get not ended-> active true, for ended only-> false else null
+        {
+            var user = await _userContextService.GetAppUser();
+            if (!string.IsNullOrEmpty(driverUserName) && await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                user = await _userManager.FindByNameAsync(driverUserName);
+            }
+
+            if (user == null)
+            {
+                throw new NullReferenceException("Could not find user.");
+            }
+
+            var latestWorkLog = (await GetLatestsWorkLogsFromDb(user: user, active: active))?.FirstOrDefault();
+            return _mapper.Map<DriverWorkLogDTO>(latestWorkLog);
+        }
+
         private async Task<DriverWorkLog?> GetWorkLogFromDb(string? id)
         {
             var user = await _userContextService.GetAppUser();
@@ -320,7 +336,7 @@ namespace ProfessionDriverApp.Application.Services
             return result;
         }
 
-        private async Task<IList<DriverWorkLog>?> GetLatestsWorkLogsFromDb(AppUser user, int? count = null, bool? current = null)
+        private async Task<IList<DriverWorkLog>?> GetLatestsWorkLogsFromDb(AppUser user, int? count = null, bool? active = null)
         {
             if (user.DriverId == null || user.CompanyId == null)
             {
@@ -332,9 +348,9 @@ namespace ProfessionDriverApp.Application.Services
             var query = _unitOfWork.Repository<DriverWorkLog>().Queryable(filterCompany: !filterDriverByAdmin)
                 .Where(a => a.DriverId == user.DriverId);
 
-            if (current.HasValue && current.Value)
+            if (active.HasValue)
             {
-                query = query.Where(a => a.EndEntry == null);
+                query = query.Where(a => active.Value ? a.EndEntry == null : a.EndEntry != null);
             }
 
             var latestWorkLog = await query
