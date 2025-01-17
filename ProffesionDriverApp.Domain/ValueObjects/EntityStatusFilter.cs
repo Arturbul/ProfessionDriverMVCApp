@@ -2,8 +2,8 @@
 {
     public enum EntityStatusFilter
     {
-        Exists,
-        All,
-        Deleted
+        Exists,  // Tylko aktywne rekordy
+        All,     // Wszystkie rekordy
+        Deleted  // Tylko usunięte rekordy
     }
 }

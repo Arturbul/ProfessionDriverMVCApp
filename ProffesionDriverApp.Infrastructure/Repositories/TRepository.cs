@@ -9,13 +9,11 @@ namespace ProfessionDriverApp.Infrastructure.Repositories
     public class TRepository<T> : ITRepository<T>
         where T : class
     {
-        private readonly ProfessionDriverProjectContext _context;
         private readonly DbSet<T> _dbSet;
         private readonly IUserContextService _userContextService;
 
         public TRepository(ProfessionDriverProjectContext context, IUserContextService userContextService)
         {
-            _context = context;
             _dbSet = context.Set<T>();
             _userContextService = userContextService;
         }

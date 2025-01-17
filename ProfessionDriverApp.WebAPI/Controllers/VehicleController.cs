@@ -23,7 +23,6 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             try
             {
                 var entities = await _vehicleService.GetVehicles(companyName);
-                //return CreatedAtAction(nameof(GetDetails), new { registrationNumber = request.RegistrationNumber }, new { registrationNumber = request.RegistrationNumber });
                 return Ok(entities);
             }
             catch (UnauthorizedAccessException)

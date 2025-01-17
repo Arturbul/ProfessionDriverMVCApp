@@ -152,21 +152,6 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             try
             {
                 var distances = await _workLogService.DistanceDriverYear(driverUserName);
-                /* distances = new List<object> //testing
-                  {
-                      new { month = "Jan", distance = 2000  },
-                      new { month = "Feb", distance = 1800  },
-                      new { month = "Mar", distance = 2200  },
-                      new { month = "Apr", distance = 0  },
-                      new { month = "May", distance = 2500  },
-                      new { month = "Jun", distance = 0  },
-                      new { month = "Jul", distance = 3200  },
-                      new { month = "Aug", distance = 0  },
-                      new { month = "Sep", distance = 16000  },
-                      new { month = "Oct", distance = 9999  },
-                      new { month = "Nov", distance = 99  },
-                      new { month = "Dec", distance = 4800  }
-                  };*/
                 return Ok(distances);
             }
             catch (UnauthorizedAccessException)
@@ -186,64 +171,6 @@ namespace ProfessionDriverApp.WebAPI.Controllers
             try
             {
                 var logs = await _workLogService.GetRecentDriverWorkLogs(driverUserName, logCount);
-                /*logs = new List<DriverWorkLogSummaryDTO>
-                 {
-                     new DriverWorkLogSummaryDTO
-                     {
-                         DriverWorkLogId = Guid.NewGuid(),
-                         StartPlace = "Warsaw",
-                         EndPlace = "Krakow",
-                         TotalDistance = 295.5f,
-                         TotalHours = 4.5f,
-                         VehicleNumber = "WZ12345",
-                         TrailerNumber = "TR1234",
-                         VehicleBrand = "Volvo"
-                     },
-                     new DriverWorkLogSummaryDTO
-                     {
-                         DriverWorkLogId = Guid.NewGuid(),
-                         StartPlace = "Gdansk",
-                         EndPlace = "Szczecin",
-                         TotalDistance = 340.0f,
-                         TotalHours = 5.2f,
-                         VehicleNumber = "GD54321",
-                         TrailerNumber = "TR5678",
-                         VehicleBrand = "Scania"
-                     },
-                     new DriverWorkLogSummaryDTO
-                     {
-                         DriverWorkLogId = Guid.NewGuid(),
-                         StartPlace = "Poznan",
-                         EndPlace = "Wroclaw",
-                         TotalDistance = 180.75f,
-                         TotalHours = 3.0f,
-                         VehicleNumber = "PO98765",
-                         //TrailerNumber = "TR9012",
-                         VehicleBrand = "Mercedes"
-                     },
-                     new DriverWorkLogSummaryDTO
-                     {
-                         DriverWorkLogId = Guid.NewGuid(),
-                         StartPlace = "Poznan",
-                         EndPlace = "Wroclaw",
-                         TotalDistance = 180.75f,
-                         TotalHours = 3.0f,
-                         VehicleNumber = "PO98765",
-                         //TrailerNumber = "TR9012",
-                         VehicleBrand = "Mercedes"
-                     },
-                     new DriverWorkLogSummaryDTO
-                     {
-                         DriverWorkLogId = Guid.NewGuid(),
-                         StartPlace = "Poznan",
-                         EndPlace = "Wroclaw",
-                         TotalDistance = 180.75f,
-                         TotalHours = 3.0f,
-                         VehicleNumber = "PO98765",
-                         //TrailerNumber = "TR9012",
-                         VehicleBrand = "Mercedes"
-                     }
-                 };*/
                 return Ok(logs);
             }
             catch (UnauthorizedAccessException)
